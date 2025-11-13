@@ -10,4 +10,6 @@ public interface ProductoDAO {
     Producto save(Producto producto);
     Producto update(Producto producto);
     void deleteById(Integer id);
+
+    List<Producto> findByUsuarioId(Integer idUsuario);
 }

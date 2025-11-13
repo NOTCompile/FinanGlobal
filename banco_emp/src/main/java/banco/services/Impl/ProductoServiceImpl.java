@@ -49,4 +49,10 @@ public class ProductoServiceImpl implements ProductoService {
     public void deleteById(Integer id) {
         productoDAO.deleteById(id);
     }
+    @Override
+    @Transactional(readOnly = true)
+    public List<Producto> findByUsuarioId(Integer idUsuario) {
+        // Lógica de negocio aquí, si es necesario, antes de llamar al DAO
+        return productoDAO.findByUsuarioId(idUsuario);
+    }
 }

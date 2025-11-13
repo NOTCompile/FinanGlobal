@@ -18,11 +18,17 @@ public class ProductoDAOImpl implements ProductoDAO {
     }
 
     private static final String SELECT_FIELDS = "id, nombre, valor_solicitado, id_tipo";
-
+    private static final String SELECT_FIELDS_U = "id, nombre, valor_solicitado, id_tipo, id_usuario";
     @Override
     public List<Producto> findAll() {
         String sql = "SELECT " + SELECT_FIELDS + " FROM producto";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Producto.class));
+    }
+
+    @Override
+    public List<Producto> findByUsuarioId(Integer idUsuario) {
+        String sql = "SELECT " + SELECT_FIELDS_U + " FROM producto WHERE id_usuario = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Producto.class), idUsuario);
     }
 
     @Override
