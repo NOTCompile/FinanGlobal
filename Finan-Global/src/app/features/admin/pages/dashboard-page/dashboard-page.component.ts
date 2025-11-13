@@ -5,7 +5,7 @@ import { ActivityAdmin } from "../../components/activity-admin/activity-admin";
 
 @Component({
   selector: 'app-dashboard-page',
-  imports: [WelcomeAdmin, StatsCardAdmin, ActivityAdmin],
+  imports: [WelcomeAdmin, StatsCardAdmin],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
