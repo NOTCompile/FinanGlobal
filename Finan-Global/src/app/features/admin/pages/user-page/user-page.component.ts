@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { AddUserAdmin } from '../../components/modals/add-user-admin/add-user-admin';
 import { Usuario } from 'src/app/shared/interfaces/Usuario-Interface';
-import { usuarioService } from 'src/app/shared/services/usuarioService';
+import { usuarioService } from 'src/app/shared/services/Usuario.service';
 import { ModalUsuarioAdministrador } from '../../services/modalUsuario.service';
 
 @Component({

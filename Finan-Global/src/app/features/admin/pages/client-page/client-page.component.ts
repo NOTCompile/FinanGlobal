@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { Usuario } from 'src/app/shared/interfaces/Usuario-Interface';
-import { usuarioService } from 'src/app/shared/services/usuarioService';
+import { usuarioService } from 'src/app/shared/services/Usuario.service';
 import { AddClientAdmin } from '../../components/modals/add-client-admin/add-client-admin';
 import { ModalClienteAdministrador } from '../../services/modalCliente.service';
 

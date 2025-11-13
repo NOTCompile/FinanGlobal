@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/cor
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Usuario } from '../../interfaces/Usuario-Interface';
-import { usuarioService } from '../../services/usuarioService';
+import { usuarioService } from '../../services/Usuario.service';
 
 @Component({
   selector: 'app-register-page',
