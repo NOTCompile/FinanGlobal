@@ -3,7 +3,7 @@ import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-not-found-page',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './not-found-page.html',
   styleUrl: './not-found-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,22 +1,20 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { Usuario } from 'src/app/shared/interfaces/UsuarioInterface';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Usuario } from 'src/app/shared/interfaces/Usuario-Interface';
 import { usuarioService } from 'src/app/shared/services/usuarioService';
-import { ModalStateService } from 'src/app/shared/services/function/modalState.service';
 import { AddClientAdmin } from '../../components/modals/add-client-admin/add-client-admin';
+import { ModalClienteAdministrador } from '../../services/modalCliente.service';
 
 @Component({
   selector: 'app-client-page',
-  standalone: true,
   imports: [AddClientAdmin],
+  providers: [ModalClienteAdministrador],
   templateUrl: './client-page.component.html',
   styleUrl: './client-page.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ClientPage implements OnInit {
   // Servicios
   private usuarioServicio = inject(usuarioService);
-  private modalState = inject(ModalStateService);
+  private modalState = inject(ModalClienteAdministrador);
 
   // Estado reactivo
   usuarios = signal<Usuario[]>([]);
@@ -42,7 +40,7 @@ export default class ClientPage implements OnInit {
     });
   }
 
-  /** Abrir modal para agregar nuevo cliente */
+  /* Abrir modal para agregar nuevo cliente */
   abrirModalAgregar(): void {
     this.modo.set('agregar');
     this.usuarioSeleccionado.set({

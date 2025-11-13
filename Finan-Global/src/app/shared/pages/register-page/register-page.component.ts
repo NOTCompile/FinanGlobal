@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Usuario } from '../../interfaces/UsuarioInterface';
+import { Usuario } from '../../interfaces/Usuario-Interface';
 import { usuarioService } from '../../services/usuarioService';
 
 @Component({

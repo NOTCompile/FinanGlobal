@@ -1,13 +1,11 @@
 import { Injectable, signal } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ModalStateService {
   private _isOpen = signal(false);
   isOpen = signal(false);
 
-  open(title: string = '') {
+  open() {
     this.isOpen.set(true);
   }
 
