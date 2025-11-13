@@ -5,6 +5,7 @@ export const routes: Routes = [
   {
     path: 'index',
     loadComponent: () => import('./shared/pages/index-page/index-page.component'),
+    pathMatch: 'full',
   },
   {
     path: 'register',
@@ -154,6 +155,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    loadComponent: () => import('./shared/pages/not-found-page/not-found-page')
+    redirectTo: 'index'
+    /* loadComponent: () => import('./shared/pages/not-found-page/not-found-page'), */
   },
 ];
