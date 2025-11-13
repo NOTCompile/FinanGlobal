@@ -53,7 +53,7 @@ public class CuentaBancariaController {
         // 2. Mapeamos los datos del DTO a la entidad CuentaBancaria
         CuentaBancaria nuevaCuenta = new CuentaBancaria();
         nuevaCuenta.setNombre(cuentaDto.getNombre());
-        nuevaCuenta.setNumero_cuenta(cuentaDto.getNumero_cuenta());
+        nuevaCuenta.setNCuenta(cuentaDto.getNumero_cuenta());
         nuevaCuenta.setN_intercuenta(cuentaDto.getN_intercuenta());
         nuevaCuenta.setSaldo(cuentaDto.getSaldo());
 
