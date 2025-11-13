@@ -19,6 +19,10 @@ public class Producto {
     @JoinColumn(name = "id_tipo")
     private TipoProducto tipoProducto;
 
+    @ManyToOne // NUEVA RELACIÓN
+    @JoinColumn(name = "id_usuario") // Columna en la DB
+    private Usuario usuario; // Asumiendo que tu entidad de usuario se llama Usuario
+
     // Getters y Setters
 
     public Integer getId() {
@@ -51,5 +55,12 @@ public class Producto {
 
     public void setTipoProducto(TipoProducto tipoProducto) {
         this.tipoProducto = tipoProducto;
+    }
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
