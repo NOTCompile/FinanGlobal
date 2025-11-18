@@ -1,5 +1,9 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -11,25 +15,40 @@ public class CuentaBancaria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "n_cuenta") // Mapea a la columna SQL "n_cuenta"
-    private String numero_cuenta;
+    // CAMBIO CLAVE 1:
+    // El BeanPropertyRowMapper mapea 'n_cuenta' a 'nCuenta'.
+    @Column(name = "n_cuenta")
+    private String nCuenta; // Nombre de propiedad ajustado (camelCase de n_cuenta)
 
-    @Column(name = "n_intercuenta") // Mapea a la columna SQL "n_intercuenta"
+    @Column(name = "n_intercuenta")
     private String n_intercuenta;
 
-    // Mapea a la columna SQL "nombre"
     private String nombre;
-
-    // ELIMINADAS: private String banco;
-    // ELIMINADAS: private String tipo_cuenta;
 
     private BigDecimal saldo;
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    // --- Mapeo para JdbcTemplate (id simple) ---
+    // CAMBIO CLAVE 2:
+    // Agregamos un campo para capturar el ID del usuario directamente de la consulta
+    // SQL (SELECT id_usuario...). El RowMapper asignará el valor aquí.
+    // Indica a JPA que ignore este campo
+    //@Transient
+    //private Integer idUsuario;
+
+    // --- Mapeo para JPA (objeto completo) ---
+    // Mantenemos la relación JPA para cuando uses Spring Data JPA.
+    /*@ManyToOne(fetch = FetchType.LAZY) // Se puede usar LAZY, ya que Jackson solo necesita el ID.
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    @JsonIdentityReference(alwaysAsId = true) // 🔹 Muestra solo el ID del usuario
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id_usuario")
     private Usuario usuario;
 
-    // Getters y Setters
+
+    // ===== Getters y Setters =====
+
     public Integer getId() {
         return id;
     }
@@ -38,16 +57,15 @@ public class CuentaBancaria {
         this.id = id;
     }
 
-    // Mapeo para n_cuenta
-    public String getNumero_cuenta() {
-        return numero_cuenta;
+    // Mapeo corregido para n_cuenta
+    public String getNCuenta() { // Se espera getNCuenta()
+        return nCuenta;
     }
 
-    public void setNumero_cuenta(String numero_cuenta) {
-        this.numero_cuenta = numero_cuenta;
+    public void setNCuenta(String nCuenta) { // Se espera setNCuenta()
+        this.nCuenta = nCuenta;
     }
 
-    // Mapeo para n_intercuenta
     public String getN_intercuenta() {
         return n_intercuenta;
     }
@@ -56,7 +74,6 @@ public class CuentaBancaria {
         this.n_intercuenta = n_intercuenta;
     }
 
-    // Mapeo para nombre
     public String getNombre() {
         return nombre;
     }
@@ -64,8 +81,6 @@ public class CuentaBancaria {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
-    // El getter y setter para 'banco' y 'tipo_cuenta' DEBEN ser eliminados.
 
     public BigDecimal getSaldo() {
         return saldo;
@@ -82,4 +97,13 @@ public class CuentaBancaria {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    // Getter y Setter para el ID simple, necesario si usas JdbcTemplate
+   /* public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }*/
 }
