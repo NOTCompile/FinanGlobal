@@ -1,5 +1,14 @@
 <div class="container-fluid p-md-4">
   <app-welcome-admin></app-welcome-admin>
+
+  <div class="row pb-4">
+    <div class="col-md-3">
+      <button class="btn btn-finanglobal" (click)="verPDF('ReporteClienteyCuentas')">
+        <i class="fa-solid fa-file-pdf me-2"></i>Clientes + Cuentas
+      </button>
+    </div>
+  </div>
+
   <div class="row mb-4">
     <div class="col-md-3 mb-3">
       <app-stats-card-admin></app-stats-card-admin>
@@ -15,8 +24,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <!-- <div class="row">
     <app-activity-admin></app-activity-admin>
-  </div>
-
+  </div> -->
 </div>

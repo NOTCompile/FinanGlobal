@@ -1,7 +1,7 @@
 import { Component, effect, EventEmitter, inject, Input, input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Usuario } from 'src/app/shared/interfaces/UsuarioInterface';
-import { ModalStateService } from 'src/app/shared/services/function/modalState.service';
+import { Usuario } from 'src/app/shared/interfaces/Usuario-Interface';
+import { ModalClienteAdministrador } from '../../../services/modalCliente.service';
 
 @Component({
   selector: 'app-add-client-admin',
@@ -36,7 +36,7 @@ export class AddClientAdmin {
 
   // Servicios e inyección de dependencias
   private fb = inject(FormBuilder);
-  modalState = inject(ModalStateService);
+  modalState = inject(ModalClienteAdministrador);
 
   // Formulario reactivo
   formAddCliente: FormGroup = this.fb.group({
