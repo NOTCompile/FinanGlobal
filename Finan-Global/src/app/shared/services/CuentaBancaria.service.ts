@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Cuenta_Bancaria } from '../interfaces/Cuenta_Bancaria-Interface';
 
 @Injectable({
@@ -12,76 +12,72 @@ export class CuentaBancariaService {
 
   constructor(private http: HttpClient) {}
 
-  // CRUD
-  /* Obtener todos los Cuenta_Bancarias */
+  /* ---------- Helpers de mapeo ---------- */
+
+  private mapFromBackend(raw: any): Cuenta_Bancaria {
+    return {
+      id_cuenta_bancaria: raw.id,
+      nombre: raw.nombre,
+      n_cuenta: raw.ncuenta,
+      n_intercuenta: raw.n_intercuenta,
+      saldo: raw.saldo,
+      id_usuario: raw.usuario,
+    };
+  }
+
+  private mapToBackend(c: Cuenta_Bancaria) {
+    return {
+      id: c.id_cuenta_bancaria,
+      nombre: c.nombre,
+      ncuenta: c.n_cuenta,
+      n_intercuenta: c.n_intercuenta,
+      saldo: c.saldo,
+      usuario: c.id_usuario,
+    };
+  }
+
+  /* ---------- CRUD ---------- */
+
   findAll(): Observable<Cuenta_Bancaria[]> {
-    return this.http
-      .get<Cuenta_Bancaria[]>(this.apiUrl)
-      .pipe(tap((data) => this.guardarEnLocalStorage(data)));
+    return this.http.get<any[]>(this.apiUrl).pipe(
+      map((list) => list.map((c) => this.mapFromBackend(c))),
+      tap((mapped) => this.guardarEnLocalStorage(mapped))
+    );
   }
 
-  /*  Obtener Cuenta_Bancaria por ID - GET */
   getById(id: number): Observable<Cuenta_Bancaria> {
-    return this.http.get<Cuenta_Bancaria>(`${this.apiUrl}/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(map((raw) => this.mapFromBackend(raw)));
   }
 
-  /* Crear nuevo Cuenta_Bancaria - POST */
-  create(Cuenta_Bancaria: Cuenta_Bancaria): Observable<Cuenta_Bancaria> {
-    return this.http.post<Cuenta_Bancaria>(this.apiUrl, Cuenta_Bancaria).pipe(tap(() => this.cargarCuenta_Bancarias()));
+  create(cuenta: Cuenta_Bancaria): Observable<Cuenta_Bancaria> {
+    return this.http.post<any>(this.apiUrl, this.mapToBackend(cuenta)).pipe(
+      map((raw) => this.mapFromBackend(raw)),
+      tap(() => this.cargarCuenta_Bancarias())
+    );
   }
 
-  /* Actualizar Cuenta_Bancaria existente - PUT */
-  update(Cuenta_Bancaria: Partial<Cuenta_Bancaria>): Observable<Cuenta_Bancaria> {
-    return this.http
-      .put<Cuenta_Bancaria>(`${this.apiUrl}/${Cuenta_Bancaria.id_cuenta_bancaria}`, Cuenta_Bancaria)
-      .pipe(tap(() => this.cargarCuenta_Bancarias()));
+  update(cuenta: Cuenta_Bancaria): Observable<Cuenta_Bancaria> {
+    return this.http.put<any>(`${this.apiUrl}/${cuenta.id_cuenta_bancaria}`, this.mapToBackend(cuenta)).pipe(
+      map((raw) => this.mapFromBackend(raw)),
+      tap(() => this.cargarCuenta_Bancarias())
+    );
   }
 
-  /* Eliminar Cuenta_Bancaria - DELETE */
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(tap(() => this.eliminarLocal(id)));
   }
 
-  /* Buscar Cuenta_Bancaria por correo - GET */
-  findByCorreo(correo: string): Observable<Cuenta_Bancaria> {
-    return this.http.get<Cuenta_Bancaria>(`${this.apiUrl}/email/${correo}`);
-  }
-
-  /* Filtrar Cuenta_Bancarias por rol */
-  findByRol(rol: number): Observable<Cuenta_Bancaria[]> {
-    return this.http
-      .get<Cuenta_Bancaria[]>(`${this.apiUrl}/tipo/${rol}`)
-      .pipe(tap((data) => this.guardarEnLocalStorage(data)));
-  }
-
-  // PERSISTENCIA
-  private inicializarData() {
-    const data = localStorage.getItem('cuentasBancarias');
-    if (data) {
-      this.cuentaBancaria.set(JSON.parse(data));
-      console.log('cuentasBancarias cargados desde localStorage');
-    }
-
-    this.cargarCuenta_Bancarias();
-  }
-
-  /* Guardar signal + localStorage */
   private guardarEnLocalStorage(data: Cuenta_Bancaria[]) {
     this.cuentaBancaria.set(data);
     localStorage.setItem('cuentasBancarias', JSON.stringify(data));
   }
 
-  /* Cargar Cuenta_Bancarias backend */
   cargarCuenta_Bancarias() {
-    this.http.get<Cuenta_Bancaria[]>(this.apiUrl).subscribe({
-      next: (data) => this.guardarEnLocalStorage(data),
-      error: (err) => console.error('Error al cargar cuentasBancarias desde el backend', err),
-    });
+    this.findAll().subscribe();
   }
 
-  /* Eliminar Cuenta_Bancaria localmente */
   private eliminarLocal(id: number) {
-    const updated = this.cuentaBancaria().filter((u) => u.id_cuenta_bancaria !== id);
+    const updated = this.cuentaBancaria().filter((c) => c.id_cuenta_bancaria !== id);
     this.guardarEnLocalStorage(updated);
   }
 }
