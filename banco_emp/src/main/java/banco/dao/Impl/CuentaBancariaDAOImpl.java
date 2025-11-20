@@ -3,6 +3,7 @@ package banco.dao.Impl;
 
 import banco.dao.CuentaBancariaDAO;
 import banco.models.CuentaBancaria;
+import banco.models.Usuario;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,11 +24,23 @@ public class CuentaBancariaDAOImpl implements CuentaBancariaDAO {
 
     @Override
     public List<CuentaBancaria> findAll() {
-        // CORRECCIÓN: Seleccionar todas las columnas EXACTAS de la tabla para que BeanPropertyRowMapper funcione.
-        // También debes asegurarte de que el modelo CuentaBancaria tenga getters/setters que
-        // coincidan con estas columnas o usar @Column en el modelo.
         String sql = "SELECT id, id_usuario, nombre, n_cuenta, n_intercuenta, saldo FROM public.cuenta_bancaria";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CuentaBancaria.class));
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            CuentaBancaria cuenta = new CuentaBancaria();
+            cuenta.setId(rs.getInt("id"));
+            cuenta.setNombre(rs.getString("nombre"));
+            cuenta.setNCuenta(rs.getString("n_cuenta"));
+            cuenta.setN_intercuenta(rs.getString("n_intercuenta"));
+            cuenta.setSaldo(rs.getBigDecimal("saldo"));
+
+            // ⚙️ Crear objeto Usuario solo con el ID
+            Usuario u = new Usuario();
+            u.setId_usuario(rs.getInt("id_usuario"));
+            cuenta.setUsuario(u);
+
+            return cuenta;
+        });
     }
 
     @Override
@@ -52,7 +65,7 @@ public class CuentaBancariaDAOImpl implements CuentaBancariaDAO {
 
         jdbcTemplate.update(sql,
                 cuenta.getNombre(),
-                cuenta.getNumero_cuenta(),
+                cuenta.getNCuenta(),
                 cuenta.getN_intercuenta(),
                 cuenta.getSaldo(),
                 cuenta.getUsuario().getId_usuario()); // Hay 5 parámetros
@@ -66,7 +79,7 @@ public class CuentaBancariaDAOImpl implements CuentaBancariaDAO {
 
         jdbcTemplate.update(sql,
                 cuenta.getNombre(),
-                cuenta.getNumero_cuenta(),
+                cuenta.getNCuenta(),
                 cuenta.getN_intercuenta(),
                 cuenta.getSaldo(),
                 cuenta.getUsuario().getId_usuario(),
