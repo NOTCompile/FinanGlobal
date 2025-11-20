@@ -1,0 +1,171 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="reporte_empenos" language="java" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aa1aa2aa-3aa4-4aa5-aa6a-a7aa8aa9aa0a">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="PostgresBanco"/>
+    <property name="com.jaspersoft.studio.unit." value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+    <query language="sql"><![CDATA[SELECT
+  e.id AS id_empeno,
+  CONCAT(u.nombre, ' ', u.apellidos) AS cliente,
+  p.nombre AS producto,
+  tp.nombre AS tipo_producto,
+  e.valor_prestado::numeric(12,2) AS prestamo,
+  e.valor_recuperacion::numeric(12,2) AS recuperacion,
+  e.fecha_inicio,
+  e.fecha_final AS fecha_vencimiento,
+  es.nombre AS estado
+FROM empeno e
+JOIN producto p ON e.id_producto = p.id
+LEFT JOIN tipo_producto tp ON p.id_tipo = tp.id
+LEFT JOIN lista_empenos le ON le.id_empeno = e.id
+LEFT JOIN t_usuario u ON le.id_usuario = u.id_usuario
+LEFT JOIN estado es ON e.id_estado = es.id
+ORDER BY e.fecha_inicio DESC, cliente]]></query>
+    <field name="id_empeno" class="java.lang.Integer"/>
+    <field name="cliente" class="java.lang.String"/>
+    <field name="producto" class="java.lang.String"/>
+    <field name="tipo_producto" class="java.lang.String"/>
+    <field name="prestamo" class="java.math.BigDecimal"/>
+    <field name="recuperacion" class="java.math.BigDecimal"/>
+    <field name="fecha_inicio" class="java.sql.Date"/>
+    <field name="fecha_vencimiento" class="java.sql.Date"/>
+    <field name="estado" class="java.lang.String"/>
+    <variable name="total_empenos" calculation="Count" class="java.lang.Integer">
+        <expression><![CDATA[$F{id_empeno}]]></expression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="suma_prestamos" calculation="Sum" class="java.math.BigDecimal">
+        <expression><![CDATA[$F{prestamo}]]></expression>
+        <initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
+    </variable>
+    <variable name="suma_recuperacion" calculation="Sum" class="java.math.BigDecimal">
+        <expression><![CDATA[$F{recuperacion}]]></expression>
+        <initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
+    </variable>
+    <title height="80" splitType="Stretch">
+        <element kind="rectangle" uuid="bb1bb2bb-3bb4-4bb5-bb6b-b7bb8bb9bb0b" x="0" y="0" width="802" height="80" backcolor="#1A3A5C">
+            <pen lineWidth="0.0"/>
+        </element>
+        <element kind="staticText" uuid="cc1cc2cc-3cc4-4cc5-cc6c-c7cc8cc9cc0c" x="20" y="15" width="762" height="30" forecolor="#FFFFFF" fontName="SansSerif" fontSize="22.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[REPORTE DE EMPEÑOS]]></text>
+        </element>
+        <element kind="staticText" uuid="dd1dd2dd-3dd4-4dd5-dd6d-d7dd8dd9dd0d" x="20" y="50" width="762" height="20" forecolor="#E0E0E0" fontName="SansSerif" fontSize="12.0" italic="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Control de productos empeñados, valores y estados]]></text>
+        </element>
+    </title>
+    <pageHeader height="35" splitType="Stretch">
+        <element kind="textField" uuid="ee1ee2ee-3ee4-4ee5-ee6e-e7ee8ee9ee0e" x="0" y="10" width="200" height="20" forecolor="#1A3A5C" fontSize="10.0" pattern="dd/MM/yyyy HH:mm" bold="true" vTextAlign="Middle">
+            <expression><![CDATA[new java.util.Date()]]></expression>
+        </element>
+        <element kind="textField" uuid="ff1ff2ff-3ff4-4ff5-ff6f-f7ff8ff9ff0f" x="602" y="10" width="150" height="20" forecolor="#1A3A5C" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+        <element kind="textField" uuid="aa2aa3aa-4aa5-4aa6-aa7a-a8aa9aa0aa1a" x="752" y="10" width="50" height="20" forecolor="#1A3A5C" fontSize="10.0" evaluationTime="Report" bold="true" vTextAlign="Middle">
+            <expression><![CDATA[" de " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+        <element kind="line" uuid="bb2bb3bb-4bb5-4bb6-bb7b-b8bb9bb0bb1b" x="0" y="32" width="802" height="1" forecolor="#1A3A5C">
+            <pen lineWidth="2.0"/>
+        </element>
+    </pageHeader>
+    <columnHeader height="40" splitType="Stretch">
+        <element kind="rectangle" uuid="cc2cc3cc-4cc5-4cc6-cc7c-c8cc9cc0cc1c" x="0" y="0" width="802" height="40" backcolor="#2C5F8D">
+            <pen lineWidth="0.0"/>
+        </element>
+        <element kind="staticText" uuid="dd2dd3dd-4dd5-4dd6-dd7d-d8dd9dd0dd1d" x="5" y="10" width="35" height="20" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[ID]]></text>
+        </element>
+        <element kind="staticText" uuid="ee2ee3ee-4ee5-4ee6-ee7e-e8ee9ee0ee1e" x="45" y="10" width="110" height="20" forecolor="#FFFFFF" fontSize="9.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Cliente]]></text>
+        </element>
+        <element kind="staticText" uuid="ff2ff3ff-4ff5-4ff6-ff7f-f8ff9ff0ff1f" x="160" y="10" width="100" height="20" forecolor="#FFFFFF" fontSize="9.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Producto]]></text>
+        </element>
+        <element kind="staticText" uuid="aa3aa4aa-5aa6-4aa7-aa8a-a9aa0aa1aa2a" x="265" y="10" width="75" height="20" forecolor="#FFFFFF" fontSize="9.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Tipo/Material]]></text>
+        </element>
+        <element kind="staticText" uuid="bb3bb4bb-5bb6-4bb7-bb8b-b9bb0bb1bb2b" x="345" y="10" width="75" height="20" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[Préstamo]]></text>
+        </element>
+        <element kind="staticText" uuid="cc3cc4cc-5cc6-4cc7-cc8c-c9cc0cc1cc2c" x="425" y="10" width="80" height="20" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[Recuperación]]></text>
+        </element>
+        <element kind="staticText" uuid="dd3dd4dd-5dd6-4dd7-dd8d-d9dd0dd1dd2d" x="510" y="10" width="85" height="20" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Fecha Inicio]]></text>
+        </element>
+        <element kind="staticText" uuid="ee3ee4ee-5ee6-4ee7-ee8e-e9ee0ee1ee2e" x="600" y="10" width="90" height="20" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Vencimiento]]></text>
+        </element>
+        <element kind="staticText" uuid="ff3ff4ff-5ff6-4ff7-ff8f-f9ff0ff1ff2f" x="695" y="10" width="107" height="20" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Estado]]></text>
+        </element>
+    </columnHeader>
+    <detail>
+        <band height="30" splitType="Stretch">
+            <element kind="rectangle" uuid="aa4aa5aa-6aa7-4aa8-aa9a-a0aa1aa2aa3a" x="0" y="0" width="802" height="30" backcolor="#F5F5F5">
+                <printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
+                <pen lineWidth="0.0"/>
+            </element>
+            <element kind="textField" uuid="bb4bb5bb-6bb7-4bb8-bb9b-b0bb1bb2bb3b" x="5" y="5" width="35" height="20" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{id_empeno}]]></expression>
+            </element>
+            <element kind="textField" uuid="cc4cc5cc-6cc7-4cc8-cc9c-c0cc1cc2cc3c" x="45" y="5" width="110" height="20" fontSize="8.0" textAdjust="StretchHeight" blankWhenNull="true" vTextAlign="Middle">
+                <expression><![CDATA[$F{cliente} != null ? $F{cliente} : "Sin asignar"]]></expression>
+            </element>
+            <element kind="textField" uuid="dd4dd5dd-6dd7-4dd8-dd9d-d0dd1dd2dd3d" x="160" y="5" width="100" height="20" fontSize="8.0" textAdjust="StretchHeight" blankWhenNull="true" vTextAlign="Middle">
+                <expression><![CDATA[$F{producto}]]></expression>
+            </element>
+            <element kind="textField" uuid="ee4ee5ee-6ee7-4ee8-ee9e-e0ee1ee2ee3e" x="265" y="5" width="75" height="20" fontSize="8.0" blankWhenNull="true" vTextAlign="Middle">
+                <expression><![CDATA[$F{tipo_producto} != null ? $F{tipo_producto} : "N/A"]]></expression>
+            </element>
+            <element kind="textField" uuid="ff4ff5ff-6ff7-4ff8-ff9f-f0ff1ff2ff3f" x="345" y="5" width="75" height="20" fontSize="8.0" pattern="S/ #,##0.00" blankWhenNull="true" bold="true" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{prestamo}]]></expression>
+            </element>
+            <element kind="textField" uuid="aa5aa6aa-7aa8-4aa9-aa0a-a1aa2aa3aa4a" x="425" y="5" width="80" height="20" fontSize="8.0" pattern="S/ #,##0.00" blankWhenNull="true" bold="true" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{recuperacion}]]></expression>
+            </element>
+            <element kind="textField" uuid="bb5bb6bb-7bb8-4bb9-bb0b-b1bb2bb3bb4b" x="510" y="5" width="85" height="20" fontSize="8.0" pattern="dd/MM/yyyy" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{fecha_inicio}]]></expression>
+            </element>
+            <element kind="textField" uuid="cc5cc6cc-7cc8-4cc9-cc0c-c1cc2cc3cc4c" x="600" y="5" width="90" height="20" fontSize="8.0" pattern="dd/MM/yyyy" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{fecha_vencimiento}]]></expression>
+            </element>
+            <element kind="textField" uuid="dd5dd6dd-7dd8-4dd9-dd0d-d1dd2dd3dd4d" x="695" y="5" width="107" height="20" fontSize="8.0" blankWhenNull="true" bold="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{estado} != null ? $F{estado} : "Desconocido"]]></expression>
+            </element>
+            <element kind="line" uuid="ee5ee6ee-7ee8-4ee9-ee0e-e1ee2ee3ee4e" x="0" y="28" width="802" height="1" forecolor="#CCCCCC"/>
+        </band>
+    </detail>
+    <columnFooter splitType="Stretch"/>
+    <pageFooter height="30" splitType="Stretch">
+        <element kind="line" uuid="ff5ff6ff-7ff8-4ff9-ff0f-f1ff2ff3ff4f" x="0" y="5" width="802" height="1" forecolor="#1A3A5C"/>
+        <element kind="staticText" uuid="aa6aa7aa-8aa9-4aa0-aa1a-a2aa3aa4aa5a" x="0" y="10" width="450" height="15" forecolor="#666666" fontSize="8.0" vTextAlign="Middle">
+            <text><![CDATA[Sistema Bancario - Gestión de Empeños - JasperReports 7.0.3]]></text>
+        </element>
+        <element kind="textField" uuid="bb6bb7bb-8bb9-4bb0-bb1b-b2bb3bb4bb5b" x="702" y="10" width="100" height="15" forecolor="#666666" fontSize="8.0" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+    </pageFooter>
+    <summary height="80" splitType="Stretch">
+        <element kind="rectangle" uuid="cc6cc7cc-8cc9-4cc0-cc1c-c2cc3cc4cc5c" x="0" y="10" width="802" height="65" backcolor="#E8F4F8">
+            <pen lineWidth="1.0" lineColor="#1A3A5C"/>
+        </element>
+        <element kind="staticText" uuid="dd6dd7dd-8dd9-4dd0-dd1d-d2dd3dd4dd5d" x="400" y="18" width="150" height="20" forecolor="#1A3A5C" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[Total de Empeños:]]></text>
+        </element>
+        <element kind="textField" uuid="ee6ee7ee-8ee9-4ee0-ee1e-e2ee3ee4ee5e" x="560" y="18" width="230" height="20" forecolor="#1A3A5C" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA[$V{REPORT_COUNT}]]></expression>
+        </element>
+        <element kind="staticText" uuid="ff6ff7ff-8ff9-4ff0-ff1f-f2ff3ff4ff5f" x="400" y="40" width="150" height="20" forecolor="#1A3A5C" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[Total Prestado:]]></text>
+        </element>
+        <element kind="textField" uuid="aa7aa8aa-9aa0-4aa1-aa2a-a3aa4aa5aa6a" x="560" y="40" width="230" height="20" forecolor="#1A3A5C" fontSize="10.0" pattern="S/ #,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA[$V{suma_prestamos}]]></expression>
+        </element>
+        <element kind="staticText" uuid="bb7bb8bb-9bb0-4bb1-bb2b-b3bb4bb5bb6b" x="50" y="40" width="150" height="20" forecolor="#1A3A5C" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[Total a Recuperar:]]></text>
+        </element>
+        <element kind="textField" uuid="cc7cc8cc-9cc0-4cc1-cc2c-c3cc4cc5cc6c" x="210" y="40" width="150" height="20" forecolor="#1A3A5C" fontSize="10.0" pattern="S/ #,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA[$V{suma_recuperacion}]]></expression>
+        </element>
+    </summary>
+</jasperReport>
