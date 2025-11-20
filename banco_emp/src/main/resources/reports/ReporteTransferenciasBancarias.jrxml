@@ -1,0 +1,160 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="reporte_transferencias" language="java" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aaa1aaa2-aaa3-4aaa-4aaa-5aaa6aaa7aaa">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="PostgresBanco"/>
+    <property name="com.jaspersoft.studio.unit." value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+    <query language="sql"><![CDATA[SELECT
+  t.id,
+  t.fecha,
+  CONCAT(ue.nombre, ' ', ue.apellidos) AS cliente_emisor,
+  ce.n_cuenta AS cuenta_origen,
+  CONCAT(ur.nombre, ' ', ur.apellidos) AS cliente_receptor,
+  cr.n_cuenta AS cuenta_destino,
+  t.monto::numeric(12,2),
+  tt.nombre AS tipo_transferencia
+FROM transferencia t
+LEFT JOIN t_usuario ue ON t.id_usuario_emisor = ue.id_usuario
+LEFT JOIN cuenta_bancaria ce ON t.id_cuenta_emisor = ce.id
+LEFT JOIN t_usuario ur ON t.id_usuario_receptor = ur.id_usuario
+LEFT JOIN cuenta_bancaria cr ON t.id_cuenta_receptor = cr.id
+LEFT JOIN tipo_transferencia tt ON t.id_tipo = tt.id
+ORDER BY t.fecha DESC, t.id]]></query>
+    <field name="id" class="java.lang.Integer"/>
+    <field name="fecha" class="java.sql.Timestamp"/>
+    <field name="cliente_emisor" class="java.lang.String"/>
+    <field name="cuenta_origen" class="java.lang.String"/>
+    <field name="cliente_receptor" class="java.lang.String"/>
+    <field name="cuenta_destino" class="java.lang.String"/>
+    <field name="monto" class="java.math.BigDecimal"/>
+    <field name="tipo_transferencia" class="java.lang.String"/>
+    <variable name="total_transferencias" calculation="Count" class="java.lang.Integer">
+        <expression><![CDATA[$F{id}]]></expression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="suma_montos" calculation="Sum" class="java.math.BigDecimal">
+        <expression><![CDATA[$F{monto}]]></expression>
+        <initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
+    </variable>
+    <title height="80" splitType="Stretch">
+        <element kind="rectangle" uuid="bbb1bbb2-bbb3-4bbb-4bbb-5bbb6bbb7bbb" x="0" y="0" width="802" height="80" backcolor="#1A3A5C">
+            <pen lineWidth="0.0"/>
+        </element>
+        <element kind="staticText" uuid="ccc1ccc2-ccc3-4ccc-4ccc-5ccc6ccc7ccc" x="20" y="15" width="762" height="30" forecolor="#FFFFFF" fontName="SansSerif" fontSize="22.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[REPORTE DE TRANSFERENCIAS BANCARIAS]]></text>
+        </element>
+        <element kind="staticText" uuid="ddd1ddd2-ddd3-4ddd-4ddd-5ddd6ddd7ddd" x="20" y="50" width="762" height="20" forecolor="#E0E0E0" fontName="SansSerif" fontSize="12.0" italic="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Registro completo de transacciones entre cuentas]]></text>
+        </element>
+    </title>
+    <pageHeader height="35" splitType="Stretch">
+        <element kind="textField" uuid="eee1eee2-eee3-4eee-4eee-5eee6eee7eee" x="0" y="10" width="200" height="20" forecolor="#1A3A5C" fontSize="10.0" pattern="dd/MM/yyyy HH:mm" bold="true" vTextAlign="Middle">
+            <expression><![CDATA[new java.util.Date()]]></expression>
+        </element>
+        <element kind="textField" uuid="fff1fff2-fff3-4fff-4fff-5fff6fff7fff" x="602" y="10" width="150" height="20" forecolor="#1A3A5C" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+        <element kind="textField" uuid="aaa2aaa3-aaa4-4aaa-5aaa-6aaa7aaa8aaa" x="752" y="10" width="50" height="20" forecolor="#1A3A5C" fontSize="10.0" evaluationTime="Report" bold="true" vTextAlign="Middle">
+            <expression><![CDATA[" de " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+        <element kind="line" uuid="bbb2bbb3-bbb4-4bbb-5bbb-6bbb7bbb8bbb" x="0" y="32" width="802" height="1" forecolor="#1A3A5C">
+            <pen lineWidth="2.0"/>
+        </element>
+    </pageHeader>
+    <columnHeader height="50" splitType="Stretch">
+        <element kind="rectangle" uuid="ccc2ccc3-ccc4-4ccc-5ccc-6ccc7ccc8ccc" x="0" y="0" width="802" height="50" backcolor="#2C5F8D">
+            <pen lineWidth="0.0"/>
+        </element>
+        <element kind="staticText" uuid="ddd2ddd3-ddd4-4ddd-5ddd-6ddd7ddd8ddd" x="5" y="5" width="35" height="40" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[ID]]></text>
+        </element>
+        <element kind="staticText" uuid="eee2eee3-eee4-4eee-5eee-6eee7eee8eee" x="45" y="5" width="80" height="40" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Fecha]]></text>
+        </element>
+        <element kind="staticText" uuid="fff2fff3-fff4-4fff-5fff-6fff7fff8fff" x="130" y="5" width="110" height="40" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Cliente Emisor]]></text>
+        </element>
+        <element kind="staticText" uuid="aaa3aaa4-aaa5-4aaa-6aaa-7aaa8aaa9aaa" x="245" y="5" width="90" height="40" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Cuenta Origen]]></text>
+        </element>
+        <element kind="staticText" uuid="bbb3bbb4-bbb5-4bbb-6bbb-7bbb8bbb9bbb" x="340" y="5" width="110" height="40" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Cliente Receptor]]></text>
+        </element>
+        <element kind="staticText" uuid="ccc3ccc4-ccc5-4ccc-6ccc-7ccc8ccc9ccc" x="455" y="5" width="90" height="40" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Cuenta Destino]]></text>
+        </element>
+        <element kind="staticText" uuid="ddd3ddd4-ddd5-4ddd-6ddd-7ddd8ddd9ddd" x="550" y="5" width="85" height="40" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Monto]]></text>
+        </element>
+        <element kind="staticText" uuid="eee3eee4-eee5-4eee-6eee-7eee8eee9eee" x="640" y="5" width="162" height="40" forecolor="#FFFFFF" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Tipo Transferencia]]></text>
+        </element>
+    </columnHeader>
+    <detail>
+        <band height="35" splitType="Stretch">
+            <element kind="rectangle" uuid="fff3fff4-fff5-4fff-6fff-7fff8fff9fff" x="0" y="0" width="802" height="35" backcolor="#F5F5F5">
+                <printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
+                <pen lineWidth="0.0"/>
+            </element>
+            <element kind="textField" uuid="aaa4aaa5-aaa6-4aaa-7aaa-8aaa9aaa0aaa" x="5" y="7" width="35" height="20" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{id}]]></expression>
+            </element>
+            <element kind="textField" uuid="bbb4bbb5-bbb6-4bbb-7bbb-8bbb9bbb0bbb" x="45" y="7" width="80" height="20" fontSize="7.0" pattern="dd/MM/yyyy HH:mm" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{fecha}]]></expression>
+            </element>
+            <element kind="textField" uuid="ccc4ccc5-ccc6-4ccc-7ccc-8ccc9ccc0ccc" x="130" y="7" width="110" height="20" fontSize="7.0" textAdjust="StretchHeight" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{cliente_emisor} != null ? $F{cliente_emisor} : "No registrado"]]></expression>
+            </element>
+            <element kind="textField" uuid="ddd4ddd5-ddd6-4ddd-7ddd-8ddd9ddd0ddd" x="245" y="7" width="90" height="20" fontSize="7.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{cuenta_origen} != null ? $F{cuenta_origen} : "N/A"]]></expression>
+            </element>
+            <element kind="textField" uuid="eee4eee5-eee6-4eee-7eee-8eee9eee0eee" x="340" y="7" width="110" height="20" fontSize="7.0" textAdjust="StretchHeight" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{cliente_receptor} != null ? $F{cliente_receptor} : "No registrado"]]></expression>
+            </element>
+            <element kind="textField" uuid="fff4fff5-fff6-4fff-7fff-8fff9fff0fff" x="455" y="7" width="90" height="20" fontSize="7.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{cuenta_destino} != null ? $F{cuenta_destino} : "N/A"]]></expression>
+            </element>
+            <element kind="textField" uuid="aaa5aaa6-aaa7-4aaa-8aaa-9aaa0aaa1aaa" x="550" y="7" width="85" height="20" fontSize="8.0" pattern="S/ #,##0.00" blankWhenNull="true" bold="true" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{monto}]]></expression>
+            </element>
+            <element kind="textField" uuid="bbb5bbb6-bbb7-4bbb-8bbb-9bbb0bbb1bbb" x="640" y="7" width="162" height="20" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{tipo_transferencia} != null ? $F{tipo_transferencia} : "No especificado"]]></expression>
+            </element>
+            <element kind="line" uuid="ccc5ccc6-ccc7-4ccc-8ccc-9ccc0ccc1ccc" x="0" y="33" width="802" height="1" forecolor="#CCCCCC"/>
+        </band>
+    </detail>
+    <columnFooter splitType="Stretch"/>
+    <pageFooter height="30" splitType="Stretch">
+        <element kind="line" uuid="ddd5ddd6-ddd7-4ddd-8ddd-9ddd0ddd1ddd" x="0" y="5" width="802" height="1" forecolor="#1A3A5C"/>
+        <element kind="staticText" uuid="eee5eee6-eee7-4eee-8eee-9eee0eee1eee" x="0" y="10" width="500" height="15" forecolor="#666666" fontSize="8.0" vTextAlign="Middle">
+            <text><![CDATA[Sistema Bancario - Control de Transferencias - JasperReports 7.0.3 | CONFIDENCIAL]]></text>
+        </element>
+        <element kind="textField" uuid="fff5fff6-fff7-4fff-8fff-9fff0fff1fff" x="702" y="10" width="100" height="15" forecolor="#666666" fontSize="8.0" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+    </pageFooter>
+    <summary height="80" splitType="Stretch">
+        <element kind="rectangle" uuid="aaa6aaa7-aaa8-4aaa-9aaa-0aaa1aaa2aaa" x="0" y="10" width="802" height="65" backcolor="#E8F4F8">
+            <pen lineWidth="1.0" lineColor="#1A3A5C"/>
+        </element>
+        <element kind="staticText" uuid="bbb6bbb7-bbb8-4bbb-9bbb-0bbb1bbb2bbb" x="20" y="18" width="200" height="25" forecolor="#1A3A5C" fontSize="12.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[RESUMEN DE TRANSFERENCIAS]]></text>
+        </element>
+        <element kind="staticText" uuid="ccc6ccc7-ccc8-4ccc-9ccc-0ccc1ccc2ccc" x="250" y="20" width="150" height="20" forecolor="#1A3A5C" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[Total de Transferencias:]]></text>
+        </element>
+        <element kind="textField" uuid="ddd6ddd7-ddd8-4ddd-9ddd-0ddd1ddd2ddd" x="410" y="20" width="100" height="20" forecolor="#1A3A5C" fontSize="10.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+            <expression><![CDATA[$V{REPORT_COUNT}]]></expression>
+        </element>
+        <element kind="staticText" uuid="eee6eee7-eee8-4eee-9eee-0eee1eee2eee" x="250" y="45" width="150" height="20" forecolor="#1A3A5C" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[Monto Total Transferido:]]></text>
+        </element>
+        <element kind="textField" uuid="fff6fff7-fff8-4fff-9fff-0fff1fff2fff" x="410" y="45" width="150" height="20" forecolor="#1A3A5C" fontSize="10.0" pattern="S/ #,##0.00" bold="true" hTextAlign="Left" vTextAlign="Middle">
+            <expression><![CDATA[$V{suma_montos}]]></expression>
+        </element>
+        <element kind="staticText" uuid="aaa7aaa8-aaa9-4aaa-0aaa-1aaa2aaa3aaa" x="570" y="25" width="220" height="30" forecolor="#D32F2F" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[⚠ REPORTE CONFIDENCIAL
+Solo para uso interno]]></text>
+        </element>
+    </summary>
+</jasperReport>
