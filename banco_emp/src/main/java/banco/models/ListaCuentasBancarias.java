@@ -9,11 +9,11 @@ public class ListaCuentasBancarias {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // Se recomienda Lazy por defecto
     @JoinColumn(name = "id_cuenta")
     private CuentaBancaria cuentaBancaria;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // Se recomienda Lazy por defecto
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 

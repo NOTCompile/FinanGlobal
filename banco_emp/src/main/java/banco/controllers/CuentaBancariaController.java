@@ -82,4 +82,5 @@ public class CuentaBancariaController {
         cuentaBancariaService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
 }
