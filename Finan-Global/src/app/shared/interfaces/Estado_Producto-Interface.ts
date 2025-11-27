@@ -1,5 +1,5 @@
 export interface Estado_Producto {
-  id_estado_producto: number;
+  id: number;
   nombre: string;
   descripcion: string;
 }

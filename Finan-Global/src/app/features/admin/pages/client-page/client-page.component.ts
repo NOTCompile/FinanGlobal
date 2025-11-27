@@ -34,7 +34,7 @@ export default class ClientPage implements OnInit {
     this.usuarioServicio.findByRol(4).subscribe({
       next: (data) => {
         this.usuarios.set(data);
-        localStorage.setItem('usuarios', JSON.stringify(data));
+        localStorage.setItem('clientes', JSON.stringify(data));
       },
       error: (err) => console.error('Error al obtener usuarios:', err),
     });

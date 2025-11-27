@@ -1,7 +1,7 @@
 export interface Cuenta_Bancaria {
-  id_cuenta_bancaria: number;
-  n_intercuenta: string;
+  id: number;
   n_cuenta: string;
+  n_intercuenta: string;
   nombre: string;
   saldo: number;
   id_usuario: number;

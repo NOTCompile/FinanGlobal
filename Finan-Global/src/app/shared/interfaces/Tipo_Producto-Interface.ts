@@ -1,5 +1,5 @@
 export interface Tipo_Producto {
-  id_tipo_producto: number;
+  id: number;
   nombre: string;
   descripcion: string;
 }
