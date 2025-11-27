@@ -1,8 +1,8 @@
 export interface Tarjeta {
-  id_tarjeta: number;
-  id_cuenta: number;
-  id_tipo_tarjeta: number;
-  codigo: number;
-  cvc: number;
-  fecha_caducidad: Date;
+  id: number;
+  cuentaBancaria: number;
+  tipoTarjeta: number;
+  codigo: string;
+  cvc: string;
+  fechaCaducidad: Date;
 }

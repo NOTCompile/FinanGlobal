@@ -1,5 +1,5 @@
 export interface Estado_Solicitud {
-  id_estado_solicitud: number;
+  id: number;
   nombre: string;
   descripcion: string;
 }
