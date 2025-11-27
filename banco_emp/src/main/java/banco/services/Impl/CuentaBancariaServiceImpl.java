@@ -31,6 +31,12 @@ public class CuentaBancariaServiceImpl implements CuentaBancariaService {
         // Aquí podrías agregar lógica de negocio, como verificar permisos
         return cuentaBancariaDAO.findById(id);
     }
+    // ⭐ Implementación del nuevo método en el Service ⭐
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<CuentaBancaria> findByNCuenta(String nCuenta) {
+        return cuentaBancariaDAO.findByNCuenta(nCuenta);
+    }
 
     @Override
     @Transactional // Transacción de escritura

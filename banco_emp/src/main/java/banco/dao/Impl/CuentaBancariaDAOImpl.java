@@ -54,6 +54,31 @@ public class CuentaBancariaDAOImpl implements CuentaBancariaDAO {
             return Optional.empty();
         }
     }
+    // ⭐ Implementación de findByNCuenta ⭐
+    @Override
+    public Optional<CuentaBancaria> findByNCuenta(String nCuenta) {
+        String sql = "SELECT id, id_usuario, nombre, n_cuenta, n_intercuenta, saldo FROM public.cuenta_bancaria WHERE n_cuenta = ?";
+        try {
+            // Usamos un RowMapper personalizado para también cargar el ID del Usuario.
+            CuentaBancaria cuenta = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+                CuentaBancaria c = new CuentaBancaria();
+                c.setId(rs.getInt("id"));
+                c.setNombre(rs.getString("nombre"));
+                c.setNCuenta(rs.getString("n_cuenta"));
+                c.setN_intercuenta(rs.getString("n_intercuenta"));
+                c.setSaldo(rs.getBigDecimal("saldo"));
+
+                Usuario u = new Usuario();
+                u.setId_usuario(rs.getInt("id_usuario"));
+                c.setUsuario(u);
+                return c;
+            }, nCuenta);
+
+            return Optional.ofNullable(cuenta);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 
     @Override
     public CuentaBancaria save(CuentaBancaria cuenta) {
