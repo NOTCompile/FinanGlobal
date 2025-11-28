@@ -21,20 +21,16 @@ export default class ClientPage implements OnInit {
   modo = signal<'agregar' | 'editar'>('agregar');
   usuarioSeleccionado = signal<Partial<Usuario> | null>(null);
 
-  // Computed: total de usuarios
-  totalUsuarios = computed(() => this.usuarios().length);
-
   // Ciclo de vida
   ngOnInit(): void {
     this.cargarUsuarios();
   }
 
-  /** Carga usuarios de rol 4 (clientes) */
+  // Carga usuarios de rol 4 (clientes)
   cargarUsuarios(): void {
     this.usuarioServicio.findByRol(4).subscribe({
       next: (data) => {
         this.usuarios.set(data);
-        localStorage.setItem('clientes', JSON.stringify(data));
       },
       error: (err) => console.error('Error al obtener usuarios:', err),
     });
@@ -44,16 +40,16 @@ export default class ClientPage implements OnInit {
   abrirModalAgregar(): void {
     this.modo.set('agregar');
     this.usuarioSeleccionado.set({
-    dni_ruc: '',
-    correo: '',
-    contrasena: '',
-    nombre: '',
-    apellidos: '',
-    direccion: '',
-    sexo: 'Seleccione...',
-    telefono: '',
-    rol_usuario: 4, 
-  });
+      dni_ruc: '',
+      correo: '',
+      contrasena: '',
+      nombre: '',
+      apellidos: '',
+      direccion: '',
+      sexo: 'Seleccione...',
+      telefono: '',
+      rol_usuario: 4,
+    });
     this.modalState.open();
   }
 

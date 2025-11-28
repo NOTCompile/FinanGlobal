@@ -47,6 +47,14 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/pages/pawnshop-page/pawnshop-page.component'),
       },
       {
+        path: 'utils',
+        loadComponent: () => import('./features/admin/pages/utils-page/utils-page.component'),
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./features/admin/pages/profile-page/profile-page'),
+      },
+      {
         path: '**',
         redirectTo: 'dashboard',
       },
@@ -155,7 +163,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'index'
+    redirectTo: 'index',
     /* loadComponent: () => import('./shared/pages/not-found-page/not-found-page'), */
   },
 ];

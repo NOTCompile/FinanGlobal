@@ -29,7 +29,7 @@
     "icon": "fa-solid fa-shop",
     "route": "/admin/pawnshop"
   },
-    {
+  {
     "id": 6,
     "name": "Clientes",
     "icon": "fa-solid fa-users",
@@ -40,5 +40,11 @@
     "name": "Usuarios",
     "icon": "fa-solid fa-users-gear",
     "route": "/admin/user"
+  },
+  {
+    "id": 8,
+    "name": "Utilidades",
+    "icon": "fa-solid fa-screwdriver-wrench",
+    "route": "/admin/utils"
   }
 ]

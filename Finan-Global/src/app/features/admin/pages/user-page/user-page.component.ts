@@ -36,7 +36,6 @@ export default class UserPageComponent {
         // Filtrar todos menos los del rol 4
         const filtrados = data.filter((usuario) => usuario.rol_usuario !== 4);
         this.usuarios.set(filtrados);
-        localStorage.setItem('usuarios', JSON.stringify(filtrados));
       },
       error: (err) => console.error('Error al obtener usuarios:', err),
     });
