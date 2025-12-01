@@ -1,9 +1,9 @@
 package banco.dao.Impl;
 
 import banco.dao.ListaCuentasBancariasDAO;
-import banco.models.ListaCuentasBancarias;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import banco.models.*;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
@@ -17,34 +17,55 @@ public class ListaCuentasBancariasDAOImpl implements ListaCuentasBancariasDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // Columnas de la tabla: id, id_cuenta, id_usuario
-    private static final String SELECT_FIELDS = "id, id_cuenta, id_usuario";
+    // SQL con JOINs para obtener todos los datos relacionados
+    private static final String SELECT_WITH_JOINS =
+        "SELECT lcb.id, " +
+        "lcb.id_cuenta, cb.n_cuenta, cb.n_intercuenta, cb.nombre AS cb_nombre, cb.saldo, " +
+        "lcb.id_usuario, u.nombre AS u_nombre, u.apellidos AS u_apellidos, u.dni_ruc, u.correo " +
+        "FROM lista_cuentasbancarias lcb " +
+        "LEFT JOIN cuenta_bancaria cb ON lcb.id_cuenta = cb.id " +
+        "LEFT JOIN t_usuario u ON lcb.id_usuario = u.id_usuario";
+
+    // RowMapper personalizado
+    private final RowMapper<ListaCuentasBancarias> listaCuentasRowMapper = (rs, rowNum) -> {
+        ListaCuentasBancarias lcb = new ListaCuentasBancarias();
+        lcb.setId(rs.getInt("id"));
+
+        // Mapear CuentaBancaria
+        if (rs.getObject("id_cuenta") != null) {
+            CuentaBancaria cb = new CuentaBancaria();
+            cb.setId(rs.getInt("id_cuenta"));
+            cb.setNCuenta(rs.getString("n_cuenta"));
+            cb.setN_intercuenta(rs.getString("n_intercuenta"));
+            cb.setNombre(rs.getString("cb_nombre"));
+            cb.setSaldo(rs.getBigDecimal("saldo"));
+            lcb.setCuentaBancaria(cb);
+        }
+
+        // Mapear Usuario
+        if (rs.getObject("id_usuario") != null) {
+            Usuario u = new Usuario();
+            u.setId_usuario(rs.getInt("id_usuario"));
+            u.setNombre(rs.getString("u_nombre"));
+            u.setApellidos(rs.getString("u_apellidos"));
+            u.setDni_ruc(rs.getString("dni_ruc"));
+            u.setCorreo(rs.getString("correo"));
+            lcb.setUsuario(u);
+        }
+
+        return lcb;
+    };
 
     @Override
     public List<ListaCuentasBancarias> findAll() {
-        String sql = "SELECT " + SELECT_FIELDS + " FROM lista_cuentasbancarias";
-        // Nota: Para DAO con JDBCTemplate y Entidades JPA, se requiere un RowMapper
-        // que maneje las relaciones de forma manual o una consulta más compleja (JOIN)
-        // si se quisiera traer los objetos completos. Aquí solo traemos los IDs.
-        // Asumiendo que la Entidad `ListaCuentasBancarias` tiene los campos `idCuenta` e `idUsuario`
-        // para el mapeo o se usa un RowMapper personalizado.
-        // Usaremos un RowMapper personalizado o asumiremos que los IDs se mapean a la Entidad
-        // por el BeanPropertyRowMapper. **Se usará `BeanPropertyRowMapper` asumiendo que el modelo
-        // tiene campos para `idCuenta` e `idUsuario` para JDBCTemplate.**
-        // En el modelo JPA original esto no existe, es un riesgo al mezclar JPA y JDBC.
-        // Para este ejemplo, solo se listan los registros de la tabla de unión.
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ListaCuentasBancarias.class));
+        return jdbcTemplate.query(SELECT_WITH_JOINS, listaCuentasRowMapper);
     }
 
     @Override
     public Optional<ListaCuentasBancarias> findById(Integer id) {
-        String sql = "SELECT " + SELECT_FIELDS + " FROM lista_cuentasbancarias WHERE id = ?";
-        try {
-            ListaCuentasBancarias lcb = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ListaCuentasBancarias.class), id);
-            return Optional.ofNullable(lcb);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
+        String sql = SELECT_WITH_JOINS + " WHERE lcb.id = ?";
+        List<ListaCuentasBancarias> result = jdbcTemplate.query(sql, listaCuentasRowMapper, id);
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
 
     @Override
@@ -53,9 +74,7 @@ public class ListaCuentasBancariasDAOImpl implements ListaCuentasBancariasDAO {
 
         jdbcTemplate.update(sql,
                 listaCuentasBancarias.getCuentaBancaria().getId(),
-                listaCuentasBancarias.getUsuario().getId_usuario()); // Asumiendo que el Usuario tiene getNombre() y getIdUsuario()
-
-        // Como JDBC no devuelve el ID generado fácilmente sin KeyHolder, se omite por simplicidad.
+                listaCuentasBancarias.getUsuario().getId_usuario());
         return listaCuentasBancarias;
     }
 
