@@ -1,20 +1,16 @@
 package banco.dao.Impl;
 
-
 import banco.dao.CuentaBancariaDAO;
 import banco.models.CuentaBancaria;
 import banco.models.Usuario;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-
 @Repository
 public class CuentaBancariaDAOImpl implements CuentaBancariaDAO {
-
-    // Asumiendo que has inyectado JdbcTemplate correctamente
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -22,85 +18,76 @@ public class CuentaBancariaDAOImpl implements CuentaBancariaDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
-    public List<CuentaBancaria> findAll() {
-        String sql = "SELECT id, id_usuario, nombre, n_cuenta, n_intercuenta, saldo FROM public.cuenta_bancaria";
+    // SQL con JOIN para obtener todos los datos del usuario
+    private static final String SELECT_WITH_JOIN =
+        "SELECT cb.id, cb.nombre, cb.n_cuenta, cb.n_intercuenta, cb.saldo, " +
+        "cb.id_usuario, u.nombre AS u_nombre, u.apellidos AS u_apellidos, u.dni_ruc, u.correo, " +
+        "u.sexo, u.telefono, u.direccion " +
+        "FROM cuenta_bancaria cb " +
+        "LEFT JOIN t_usuario u ON cb.id_usuario = u.id_usuario";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            CuentaBancaria cuenta = new CuentaBancaria();
-            cuenta.setId(rs.getInt("id"));
-            cuenta.setNombre(rs.getString("nombre"));
-            cuenta.setNCuenta(rs.getString("n_cuenta"));
-            cuenta.setN_intercuenta(rs.getString("n_intercuenta"));
-            cuenta.setSaldo(rs.getBigDecimal("saldo"));
+    // RowMapper personalizado
+    private final RowMapper<CuentaBancaria> cuentaBancariaRowMapper = (rs, rowNum) -> {
+        CuentaBancaria cb = new CuentaBancaria();
+        cb.setId(rs.getInt("id"));
+        cb.setNombre(rs.getString("nombre"));
+        cb.setNCuenta(rs.getString("n_cuenta"));
+        cb.setN_intercuenta(rs.getString("n_intercuenta"));
+        cb.setSaldo(rs.getBigDecimal("saldo"));
 
-            // ⚙️ Crear objeto Usuario solo con el ID
+        // Mapear Usuario completo
+        if (rs.getObject("id_usuario") != null) {
             Usuario u = new Usuario();
             u.setId_usuario(rs.getInt("id_usuario"));
-            cuenta.setUsuario(u);
+            u.setNombre(rs.getString("u_nombre"));
+            u.setApellidos(rs.getString("u_apellidos"));
+            u.setDni_ruc(rs.getString("dni_ruc"));
+            u.setCorreo(rs.getString("correo"));
+            u.setSexo(rs.getString("sexo"));
+            u.setTelefono(rs.getString("telefono"));
+            u.setDireccion(rs.getString("direccion"));
+            cb.setUsuario(u);
+        }
 
-            return cuenta;
-        });
+        return cb;
+    };
+
+    @Override
+    public List<CuentaBancaria> findAll() {
+        return jdbcTemplate.query(SELECT_WITH_JOIN, cuentaBancariaRowMapper);
     }
 
     @Override
     public Optional<CuentaBancaria> findById(Integer id) {
-        // CORRECCIÓN: Mismo SELECT que findAll.
-        String sql = "SELECT id, id_usuario, nombre, n_cuenta, n_intercuenta, saldo FROM public.cuenta_bancaria WHERE id = ?";
-        try {
-            CuentaBancaria c = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CuentaBancaria.class), id);
-            return Optional.ofNullable(c);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
+        String sql = SELECT_WITH_JOIN + " WHERE cb.id = ?";
+        List<CuentaBancaria> result = jdbcTemplate.query(sql, cuentaBancariaRowMapper, id);
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
-    // ⭐ Implementación de findByNCuenta ⭐
+
     @Override
     public Optional<CuentaBancaria> findByNCuenta(String nCuenta) {
-        String sql = "SELECT id, id_usuario, nombre, n_cuenta, n_intercuenta, saldo FROM public.cuenta_bancaria WHERE n_cuenta = ?";
-        try {
-            // Usamos un RowMapper personalizado para también cargar el ID del Usuario.
-            CuentaBancaria cuenta = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
-                CuentaBancaria c = new CuentaBancaria();
-                c.setId(rs.getInt("id"));
-                c.setNombre(rs.getString("nombre"));
-                c.setNCuenta(rs.getString("n_cuenta"));
-                c.setN_intercuenta(rs.getString("n_intercuenta"));
-                c.setSaldo(rs.getBigDecimal("saldo"));
-
-                Usuario u = new Usuario();
-                u.setId_usuario(rs.getInt("id_usuario"));
-                c.setUsuario(u);
-                return c;
-            }, nCuenta);
-
-            return Optional.ofNullable(cuenta);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
+        String sql = SELECT_WITH_JOIN + " WHERE cb.n_cuenta = ?";
+        List<CuentaBancaria> result = jdbcTemplate.query(sql, cuentaBancariaRowMapper, nCuenta);
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
 
     @Override
     public CuentaBancaria save(CuentaBancaria cuenta) {
-        // CORRECCIÓN: Los nombres de las columnas SQL deben ser las que están en la DB.
-        // Se asume que has añadido 'banco' y 'tipo_cuenta' a la BD como resolvimos antes.
-        // También se incluye 'nombre' y 'n_intercuenta' si son relevantes para el INSERT.
-        String sql = "INSERT INTO public.cuenta_bancaria (nombre, n_cuenta, n_intercuenta, saldo, id_usuario) " +
-                "VALUES (?, ?, ?, ?, ?)"; // Hay 5 campos para insertar
+        String sql = "INSERT INTO cuenta_bancaria (nombre, n_cuenta, n_intercuenta, saldo, id_usuario) " +
+                "VALUES (?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
                 cuenta.getNombre(),
                 cuenta.getNCuenta(),
                 cuenta.getN_intercuenta(),
                 cuenta.getSaldo(),
-                cuenta.getUsuario().getId_usuario()); // Hay 5 parámetros
+                cuenta.getUsuario().getId_usuario());
         return cuenta;
     }
 
     @Override
     public CuentaBancaria update(CuentaBancaria cuenta) {
-        // CORRECCIÓN: Los nombres de las columnas SQL deben ser las que están en la DB.
-        String sql = "UPDATE public.cuenta_bancaria SET nombre=?, n_cuenta=?, n_intercuenta=?, saldo=?, id_usuario=? WHERE id=?";
+        String sql = "UPDATE cuenta_bancaria SET nombre=?, n_cuenta=?, n_intercuenta=?, saldo=?, id_usuario=? WHERE id=?";
 
         jdbcTemplate.update(sql,
                 cuenta.getNombre(),
@@ -114,7 +101,8 @@ public class CuentaBancariaDAOImpl implements CuentaBancariaDAO {
 
     @Override
     public void deleteById(Integer id) {
-        String sql = "DELETE FROM public.cuenta_bancaria WHERE id = ?";
+        String sql = "DELETE FROM cuenta_bancaria WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
 }
+

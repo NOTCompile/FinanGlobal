@@ -1,8 +1,6 @@
 package banco.models;
 
-
 import jakarta.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -10,7 +8,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "t_usuario")
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id_usuario" // Usar el nombre del campo de la clave primaria
+        property = "id_usuario"
 )
 public class Usuario {
 

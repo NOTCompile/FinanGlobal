@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,12 +10,14 @@ public class ListaCuentasBancarias {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Se recomienda Lazy por defecto
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cuenta")
+    @JsonIgnoreProperties({"usuario"})
     private CuentaBancaria cuentaBancaria;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Se recomienda Lazy por defecto
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
+    @JsonIgnoreProperties({"contrasena", "nombre_usuario", "rol_usuario", "telefono", "direccion", "sexo"})
     private Usuario usuario;
 
     // Getters y Setters
