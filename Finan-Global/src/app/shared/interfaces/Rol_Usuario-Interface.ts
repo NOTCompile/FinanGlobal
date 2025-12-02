@@ -1,5 +1,5 @@
 export interface Rol_Usuario {
-  id_rol_usuario: number;
-  nombre: string;
+  id: number;
+  rol: string;
   descripcion: string;
 }

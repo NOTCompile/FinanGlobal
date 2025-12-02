@@ -1,10 +1,10 @@
 export interface Tranferencia {
-  id_transferencia: number;
-  id_usuario_emisor: number;
-  id_cuenta_emisor: number;
-  id_usuario_receptor: number;
-  id_cuenta_receptor: number;
-  id_tipo_transferencia: number;
+  id: number;
+  usuarioEmisor: number;
+  cuentaEmisora: number;
+  usuarioReceptor: number;
+  cuentaReceptora: number;
+  tipoTransferencia: number;
   monto: number;
   fecha: Date;
 }

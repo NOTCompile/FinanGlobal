@@ -1,5 +1,5 @@
 export interface Tipo_Documento {
-  id_tipo_documento: number;
+  id: number;
   tipo: string;
   descripcion: string;
 }

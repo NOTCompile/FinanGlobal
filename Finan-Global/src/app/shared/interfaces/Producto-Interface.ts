@@ -1,6 +1,6 @@
 export interface Producto {
-  id_producto: number;
+  id: number;
   nombre: string;
-  id_tipo_producto: number;
-  valor_solicitado: number;
+  valorSolicitado: number;
+  tipoProducto: number;
 }
