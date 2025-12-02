@@ -1,5 +1,5 @@
 export interface Tipo_Tarjeta {
-  id_tipo_tarjeta: number;
+  id: number;
   nombre: string;
   descripcion: string;
 }

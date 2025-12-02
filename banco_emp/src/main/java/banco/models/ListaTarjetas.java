@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,10 +12,12 @@ public class ListaTarjetas {
 
     @ManyToOne
     @JoinColumn(name = "id_tarjeta")
+    @JsonIgnoreProperties({"cuentaBancaria"})
     private Tarjeta tarjeta;
 
     @ManyToOne
     @JoinColumn(name = "id_usuario")
+    @JsonIgnoreProperties({"contrasena", "nombre_usuario", "rol_usuario"})
     private Usuario usuario;
 
     // Getters y Setters

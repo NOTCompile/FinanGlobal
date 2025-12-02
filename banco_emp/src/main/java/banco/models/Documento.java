@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -14,7 +15,8 @@ public class Documento {
     private LocalDate fecha;
 
     @Column(name = "path")
-    private String rutaArchivo; // Cambiado para mejor semántica en Java
+    @JsonProperty("rutaArchivo")
+    private String rutaArchivo;
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_documento")

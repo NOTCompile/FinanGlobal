@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -9,26 +10,20 @@ public class Reclamo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // PK serial
+    private Integer id;
 
-    // --- Relaciones de Clave Foránea (FK) ---
-
-    // FK a t_usuario (id_usuario)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario", nullable = false)
-    private Usuario usuario; // Asume que ya existe la clase Usuario (t_usuario)
+    @JsonIgnoreProperties({"contrasena", "nombre_usuario", "rol_usuario"})
+    private Usuario usuario;
 
-    // FK a tipo_reclamo (id_tipo_reclamo) - ESTO ES LO QUE SOLICITASTE
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_tipo_reclamo", nullable = false)
     private TipoReclamo tipoReclamo;
 
-    // FK a estado (id_estado)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_estado") // Nullable en la BD
-    private Estado estado; // Asume que existe una clase Estado
-
-    // --- Columnas de Datos ---
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_estado")
+    private Estado estado;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String descripcion;

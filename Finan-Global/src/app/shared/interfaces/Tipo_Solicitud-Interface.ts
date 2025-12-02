@@ -1,5 +1,5 @@
 export interface Tipo_Solicitud {
-  id_tipo_solicitud: number;
+  id: number;
   nombre: string;
   descripcion: string;
 }
