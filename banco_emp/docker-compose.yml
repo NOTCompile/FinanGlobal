@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # --- 1. Servicio PostgreSQL con Healthcheck ---
+  postgres:
+    image: postgres:18
+    container_name: postgres_empenos
+    restart: always
+    environment:
+      POSTGRES_DB: sistema_empenos
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gonza
+    ports:
+      - "5432:5432"
+    volumes:
+      # Montaje del volumen correcto para PG 18+
+      - postgres_data:/var/lib/postgresql
+    healthcheck: # <-- Nuevo: Define cómo verificar que el servicio está listo
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # --- 2. Servicio Spring Boot con Dependencia Estricta ---
+  springboot:
+    build: .
+    container_name: app_empenos
+    depends_on:
+      postgres:
+        condition: service_healthy # <-- Clave: Espera a que el healthcheck de postgres pase
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sistema_empenos
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: gonza
+      # Puedes volver a poner 'validate' o 'update' después de confirmar que el mapeo es correcto.
+      # Por ahora, mantenemos 'none' hasta que sepas que todo funciona.
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+
+# Definición del volumen
+volumes:
+  postgres_data:
