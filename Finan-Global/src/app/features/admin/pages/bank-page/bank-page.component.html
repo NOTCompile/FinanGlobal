@@ -3,11 +3,9 @@
     <div class="d-flex align-items-center justify-content-between mb-3 gap-4 p-2">
       <h5><i class="fa-solid fa-wallet me-2"></i>Gestión de Cuentas Bancarias</h5>
 
-      <div class="input-group w-50">
+      <div class="input-group w-50"></div>
 
-      </div>
-
-      <button class="btn btn-finanglobal" (click)="null">
+      <button class="btn btn-finanglobal" (click)="abrirModalAgregar()">
         <i class="fas fa-plus me-2"></i>Nueva Cuenta
       </button>
     </div>
@@ -26,12 +24,12 @@
         @for (item of cuentaBancaria(); track $index) {
         <tr>
           <th scope="row">{{ item.id }}</th>
-          <td>{{ obtenerNombreUsuario(item.usuario) }}</td>
+          <td>{{ obtenerNombreUsuario(item.id_usuario) }}</td>
           <td>{{ item.nombre }}</td>
           <td>{{ item.ncuenta }}</td>
-          <td>{{ item.saldo}} </td>
+          <td>{{ item.saldo }}</td>
           <td>
-            <button (click)="null" class="btn btn-sm btn-outline-warning me-1 ms-1">
+            <button (click)="(null)" class="btn btn-sm btn-outline-warning me-1 ms-1">
               <i class="fa-solid fa-pen"></i>
             </button>
             <button
@@ -47,3 +45,9 @@
     </table>
   </div>
 </div>
+
+<app-add-bank-admin
+  [modo]="modo()"
+  [cuentaBancaria]="cuentaSeleccionada()"
+  (guardar)="onGuardar($event)"
+></app-add-bank-admin>

@@ -4,5 +4,5 @@ export interface Cuenta_Bancaria {
   n_intercuenta: string;
   nombre: string;
   saldo: number;
-  usuario: number;
+  id_usuario: number;
 }
