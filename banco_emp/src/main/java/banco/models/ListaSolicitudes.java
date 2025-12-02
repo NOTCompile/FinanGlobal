@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,15 +12,18 @@ public class ListaSolicitudes {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario")
-    private Usuario usuarioSolicitante; // Usuario que hace la solicitud
+    @JsonIgnoreProperties({"contrasena", "nombre_usuario", "rol_usuario"})
+    private Usuario usuarioSolicitante;
 
     @ManyToOne
     @JoinColumn(name = "id_solicitud")
+    @JsonIgnoreProperties({"producto"})
     private Solicitud solicitud;
 
     @ManyToOne
     @JoinColumn(name = "id_usuario_banco")
-    private Usuario usuarioBanco; // Usuario del banco que gestiona
+    @JsonIgnoreProperties({"contrasena", "nombre_usuario", "rol_usuario"})
+    private Usuario usuarioBanco;
 
     // Getters y Setters
 

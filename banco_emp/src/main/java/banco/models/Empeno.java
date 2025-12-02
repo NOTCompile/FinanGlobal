@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class Empeno {
 
     @ManyToOne
     @JoinColumn(name = "id_producto")
+    @JsonIgnoreProperties({"usuario"})
     private Producto producto;
 
     @ManyToOne

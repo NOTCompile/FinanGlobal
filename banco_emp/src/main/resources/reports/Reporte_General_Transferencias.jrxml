@@ -1,0 +1,231 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="reporte_transferencias_general" language="java" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="PostgresBanco"/>
+    <property name="com.jaspersoft.studio.unit." value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+    <parameter name="NOMBRE_BANCO" class="java.lang.String">
+        <defaultValueExpression><![CDATA["FinanGlobal S.A.C"]]></defaultValueExpression>
+    </parameter>
+    <query language="sql"><![CDATA[SELECT
+    tr.id,
+    tr.fecha,
+    tr.monto,
+    tt.nombre AS tipo_transferencia,
+    tt.descripcion AS tipo_descripcion,
+    CONCAT(ue.nombre, ' ', ue.apellidos) AS emisor,
+    ue.dni_ruc AS emisor_dni,
+    ce.nombre AS cuenta_emisor,
+    ce.n_cuenta AS numero_cuenta_emisor,
+    CONCAT(ur.nombre, ' ', ur.apellidos) AS receptor,
+    ur.dni_ruc AS receptor_dni,
+    cr.nombre AS cuenta_receptor,
+    cr.n_cuenta AS numero_cuenta_receptor
+FROM transferencia tr
+JOIN tipo_transferencia tt ON tr.id_tipo = tt.id
+JOIN t_usuario ue ON tr.id_usuario_emisor = ue.id_usuario
+JOIN cuenta_bancaria ce ON tr.id_cuenta_emisor = ce.id
+JOIN t_usuario ur ON tr.id_usuario_receptor = ur.id_usuario
+JOIN cuenta_bancaria cr ON tr.id_cuenta_receptor = cr.id
+ORDER BY tr.fecha DESC]]></query>
+    <field name="id" class="java.lang.Long"/>
+    <field name="fecha" class="java.sql.Timestamp"/>
+    <field name="monto" class="java.math.BigDecimal"/>
+    <field name="tipo_transferencia" class="java.lang.String"/>
+    <field name="tipo_descripcion" class="java.lang.String"/>
+    <field name="emisor" class="java.lang.String"/>
+    <field name="emisor_dni" class="java.lang.String"/>
+    <field name="cuenta_emisor" class="java.lang.String"/>
+    <field name="numero_cuenta_emisor" class="java.lang.String"/>
+    <field name="receptor" class="java.lang.String"/>
+    <field name="receptor_dni" class="java.lang.String"/>
+    <field name="cuenta_receptor" class="java.lang.String"/>
+    <field name="numero_cuenta_receptor" class="java.lang.String"/>
+    <variable name="total_transferencias" calculation="Count" class="java.lang.Integer">
+        <expression><![CDATA[$F{id}]]></expression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="monto_total" calculation="Sum" class="java.math.BigDecimal">
+        <expression><![CDATA[$F{monto}]]></expression>
+        <initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
+    </variable>
+    <variable name="monto_promedio" class="java.math.BigDecimal">
+        <expression><![CDATA[$V{total_transferencias} > 0 ? $V{monto_total}.divide(new BigDecimal($V{total_transferencias}), 2, java.math.RoundingMode.HALF_UP) : new BigDecimal(0)]]></expression>
+    </variable>
+    <title height="100" splitType="Stretch">
+        <element kind="rectangle" uuid="2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e" x="0" y="0" width="802" height="100" backcolor="#1A3A5C">
+            <pen lineWidth="0.0"/>
+        </element>
+        <element kind="rectangle" uuid="3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f" x="0" y="0" width="802" height="5" backcolor="#8B5CF6">
+            <pen lineWidth="0.0"/>
+        </element>
+        <element kind="rectangle" uuid="4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a" x="20" y="20" width="60" height="60" backcolor="#8B5CF6">
+            <pen lineWidth="2.0" lineColor="#FFFFFF"/>
+        </element>
+        <element kind="staticText" uuid="5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b" x="25" y="35" width="50" height="30" forecolor="#FFFFFF" fontSize="20.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[💸]]></text>
+        </element>
+        <element kind="textField" uuid="6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c" x="90" y="20" width="700" height="25" forecolor="#8B5CF6" fontSize="16.0" bold="true" vTextAlign="Middle">
+            <expression><![CDATA[$P{NOMBRE_BANCO}]]></expression>
+        </element>
+        <element kind="staticText" uuid="7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d" x="90" y="45" width="700" height="30" forecolor="#FFFFFF" fontSize="20.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+            <text><![CDATA[REPORTE GENERAL DE TRANSFERENCIAS]]></text>
+        </element>
+        <element kind="staticText" uuid="8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e" x="90" y="75" width="700" height="20" forecolor="#E0E0E0" fontSize="11.0" italic="true" hTextAlign="Left" vTextAlign="Middle">
+            <text><![CDATA[Historial completo de todas las transacciones realizadas en el sistema]]></text>
+        </element>
+    </title>
+    <pageHeader height="70" splitType="Stretch">
+        <element kind="rectangle" uuid="9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f" x="0" y="0" width="802" height="70" backcolor="#F8F9FA">
+            <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+        </element>
+        <element kind="staticText" uuid="0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a" x="10" y="10" width="100" height="15" forecolor="#666666" fontSize="8.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Fecha de emisión:]]></text>
+        </element>
+        <element kind="textField" uuid="1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b" x="10" y="25" width="200" height="18" forecolor="#1A3A5C" fontSize="10.0" pattern="dd/MM/yyyy HH:mm:ss" bold="true" vTextAlign="Middle">
+            <expression><![CDATA[new java.util.Date()]]></expression>
+        </element>
+        <element kind="staticText" uuid="2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c" x="10" y="48" width="150" height="15" forecolor="#666666" fontSize="8.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Reporte generado por el sistema]]></text>
+        </element>
+        <element kind="textField" uuid="3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d" x="650" y="15" width="100" height="20" forecolor="#1A3A5C" fontSize="11.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+        <element kind="textField" uuid="4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e" x="750" y="15" width="50" height="20" forecolor="#1A3A5C" fontSize="11.0" evaluationTime="Report" bold="true" vTextAlign="Middle">
+            <expression><![CDATA[" / " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+        <element kind="line" uuid="5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f" x="0" y="68" width="802" height="1" forecolor="#1A3A5C">
+            <pen lineWidth="2.0"/>
+        </element>
+    </pageHeader>
+    <columnHeader height="40" splitType="Stretch">
+        <element kind="rectangle" uuid="6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a" x="0" y="0" width="802" height="40" backcolor="#1A3A5C">
+            <pen lineWidth="0.0"/>
+        </element>
+        <element kind="staticText" uuid="7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b" x="10" y="10" width="35" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[ID]]></text>
+        </element>
+        <element kind="staticText" uuid="8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c" x="55" y="10" width="85" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Fecha / Hora]]></text>
+        </element>
+        <element kind="staticText" uuid="9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d" x="150" y="10" width="70" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Tipo]]></text>
+        </element>
+        <element kind="staticText" uuid="0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e" x="230" y="10" width="160" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Emisor]]></text>
+        </element>
+        <element kind="staticText" uuid="1c2d3e4f-5a6b-7c8d-9e0f-1a2b3c4d5e6f" x="400" y="10" width="160" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Receptor]]></text>
+        </element>
+        <element kind="staticText" uuid="2d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a" x="570" y="10" width="100" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[Monto]]></text>
+        </element>
+        <element kind="staticText" uuid="3e4f5a6b-7c8d-9e0f-1a2b-3c4d5e6f7a8b" x="680" y="10" width="110" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Estado]]></text>
+        </element>
+    </columnHeader>
+    <detail>
+        <band height="65" splitType="Stretch">
+            <element kind="rectangle" uuid="4f5a6b7c-8d9e-0f1a-2b3c-4d5e6f7a8b9c" x="0" y="0" width="802" height="65" backcolor="#FAFAFA">
+                <printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
+                <pen lineWidth="0.0"/>
+            </element>
+            <element kind="textField" uuid="5a6b7c8d-9e0f-1a2b-3c4d-5e6f7a8b9c0d" x="10" y="22" width="35" height="15" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{id}]]></expression>
+            </element>
+            <element kind="textField" uuid="6b7c8d9e-0f1a-2b3c-4d5e-6f7a8b9c0d1e" x="55" y="18" width="85" height="13" fontSize="8.0" pattern="dd/MM/yyyy" bold="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{fecha}]]></expression>
+            </element>
+            <element kind="textField" uuid="7c8d9e0f-1a2b-3c4d-5e6f-7a8b9c0d1e2f" x="55" y="31" width="85" height="11" forecolor="#666666" fontSize="7.5" pattern="HH:mm:ss" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{fecha}]]></expression>
+            </element>
+            <element kind="textField" uuid="8d9e0f1a-2b3c-4d5e-6f7a-8b9c0d1e2f3a" x="150" y="18" width="70" height="13" fontSize="8.0" bold="true" vTextAlign="Middle">
+                <expression><![CDATA[$F{tipo_transferencia}]]></expression>
+            </element>
+            <element kind="textField" uuid="9e0f1a2b-3c4d-5e6f-7a8b-9c0d1e2f3a4b" x="150" y="31" width="70" height="11" forecolor="#666666" fontSize="6.5" blankWhenNull="true" vTextAlign="Middle">
+                <expression><![CDATA[$F{tipo_descripcion}]]></expression>
+            </element>
+            <element kind="textField" uuid="0f1a2b3c-4d5e-6f7a-8b9c-0d1e2f3a4b5c" x="230" y="12" width="160" height="14" fontSize="8.5" bold="true" vTextAlign="Middle">
+                <expression><![CDATA[$F{emisor}]]></expression>
+            </element>
+            <element kind="textField" uuid="1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d" x="230" y="26" width="160" height="11" forecolor="#666666" fontSize="7.0" vTextAlign="Middle">
+                <expression><![CDATA["DNI: " + $F{emisor_dni}]]></expression>
+            </element>
+            <element kind="textField" uuid="2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e" x="230" y="37" width="160" height="11" forecolor="#999999" fontSize="6.5" vTextAlign="Middle">
+                <expression><![CDATA[$F{cuenta_emisor} + " - " + $F{numero_cuenta_emisor}]]></expression>
+            </element>
+            <element kind="textField" uuid="3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f" x="400" y="12" width="160" height="14" fontSize="8.5" bold="true" vTextAlign="Middle">
+                <expression><![CDATA[$F{receptor}]]></expression>
+            </element>
+            <element kind="textField" uuid="4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a" x="400" y="26" width="160" height="11" forecolor="#666666" fontSize="7.0" vTextAlign="Middle">
+                <expression><![CDATA["DNI: " + $F{receptor_dni}]]></expression>
+            </element>
+            <element kind="textField" uuid="5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b" x="400" y="37" width="160" height="11" forecolor="#999999" fontSize="6.5" vTextAlign="Middle">
+                <expression><![CDATA[$F{cuenta_receptor} + " - " + $F{numero_cuenta_receptor}]]></expression>
+            </element>
+            <element kind="textField" uuid="6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c" x="570" y="22" width="100" height="20" forecolor="#8B5CF6" fontSize="11.0" pattern="S/ #,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{monto}]]></expression>
+            </element>
+            <element kind="staticText" uuid="7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d" x="680" y="22" width="110" height="20" forecolor="#006400" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+                <text><![CDATA[✓ COMPLETADA]]></text>
+            </element>
+            <element kind="line" uuid="8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e" x="10" y="63" width="782" height="1" forecolor="#E0E0E0"/>
+        </band>
+    </detail>
+    <columnFooter splitType="Stretch"/>
+    <pageFooter height="40" splitType="Stretch">
+        <element kind="line" uuid="9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f" x="0" y="5" width="802" height="1" forecolor="#1A3A5C">
+            <pen lineWidth="1.5"/>
+        </element>
+        <element kind="staticText" uuid="0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a" x="10" y="12" width="400" height="15" forecolor="#666666" fontSize="8.0" vTextAlign="Middle">
+            <text><![CDATA[Sistema Bancario - Reporte generado automáticamente]]></text>
+        </element>
+        <element kind="textField" uuid="1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b" x="10" y="25" width="400" height="12" forecolor="#999999" fontSize="7.0" pattern="'Generado el' dd/MM/yyyy 'a las' HH:mm:ss" italic="true" vTextAlign="Middle">
+            <expression><![CDATA[new java.util.Date()]]></expression>
+        </element>
+        <element kind="textField" uuid="2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c" x="680" y="12" width="120" height="20" forecolor="#1A3A5C" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+        <element kind="staticText" uuid="3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d" x="420" y="25" width="380" height="12" forecolor="#CC0000" fontSize="7.0" bold="true" italic="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[DOCUMENTO CONFIDENCIAL - USO INTERNO]]></text>
+        </element>
+    </pageFooter>
+    <summary height="150" splitType="Stretch">
+        <element kind="line" uuid="4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e" x="0" y="10" width="802" height="1" forecolor="#1A3A5C">
+            <pen lineWidth="2.0"/>
+        </element>
+        <element kind="rectangle" uuid="5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f" x="0" y="20" width="802" height="120" backcolor="#F5F3FF">
+            <pen lineWidth="1.5" lineColor="#1A3A5C"/>
+        </element>
+        <element kind="staticText" uuid="6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a" x="20" y="30" width="380" height="25" forecolor="#1A3A5C" fontSize="14.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[📊 RESUMEN GENERAL DE TRANSFERENCIAS]]></text>
+        </element>
+        <element kind="line" uuid="7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b" x="20" y="58" width="380" height="2" forecolor="#8B5CF6">
+            <pen lineWidth="2.0"/>
+        </element>
+        <element kind="staticText" uuid="8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c" x="30" y="70" width="200" height="20" forecolor="#1A3A5C" fontSize="11.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[💸 Total de Transferencias:]]></text>
+        </element>
+        <element kind="textField" uuid="9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d" x="230" y="70" width="100" height="20" forecolor="#1A3A5C" fontSize="12.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA[$V{total_transferencias}]]></expression>
+        </element>
+        <element kind="staticText" uuid="0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e" x="30" y="95" width="200" height="20" forecolor="#1A3A5C" fontSize="11.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[💰 Monto Total Transferido:]]></text>
+        </element>
+        <element kind="textField" uuid="1c2d3e4f-5a6b-7c8d-9e0f-1a2b3c4d5e6f" x="230" y="95" width="150" height="20" forecolor="#8B5CF6" fontSize="13.0" pattern="S/ #,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA[$V{monto_total}]]></expression>
+        </element>
+        <element kind="staticText" uuid="2d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a" x="420" y="70" width="200" height="20" forecolor="#1A3A5C" fontSize="11.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[📈 Monto Promedio:]]></text>
+        </element>
+        <element kind="textField" uuid="3e4f5a6b-7c8d-9e0f-1a2b-3c4d5e6f7a8b" x="620" y="70" width="160" height="20" forecolor="#3B82F6" fontSize="12.0" pattern="S/ #,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA[$V{monto_promedio}]]></expression>
+        </element>
+        <element kind="staticText" uuid="4f5a6b7c-8d9e-0f1a-2b3c-4d5e6f7a8b9c" x="420" y="95" width="360" height="15" forecolor="#666666" fontSize="8.0" italic="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[Todas las transferencias registradas están en estado COMPLETADA]]></text>
+        </element>
+        <element kind="staticText" uuid="5a6b7c8d-9e0f-1a2b-3c4d-5e6f7a8b9c0d" x="30" y="120" width="760" height="15" forecolor="#999999" fontSize="7.5" italic="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Las transferencias están ordenadas de más reciente a más antigua según fecha y hora de la transacción]]></text>
+        </element>
+    </summary>
+</jasperReport>
