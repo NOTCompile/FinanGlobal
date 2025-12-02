@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -16,11 +17,12 @@ public class Tarjeta {
     @Column(name = "fecha_caducidad")
     private LocalDate fechaCaducidad;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cuenta")
+    @JsonIgnoreProperties({"usuario"})
     private CuentaBancaria cuentaBancaria;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_tipo")
     private TipoTarjeta tipoTarjeta;
 

@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,11 +10,12 @@ public class ListaEmpenos {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario")
+    @JsonIgnoreProperties({"contrasena", "nombre_usuario", "rol_usuario"})
     private Usuario usuario;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_empeno")
     private Empeno empeno;
 

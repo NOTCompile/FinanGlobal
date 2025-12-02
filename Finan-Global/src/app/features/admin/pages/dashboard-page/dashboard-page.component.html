@@ -1,22 +1,35 @@
 <div class="container-fluid p-md-4">
   <app-welcome-admin></app-welcome-admin>
-  <div class="row mb-4">
-    <div class="col-md-3 mb-3">
-      <app-stats-card-admin></app-stats-card-admin>
-    </div>
-    <div class="col-md-3 mb-3">
-      <app-stats-card-admin></app-stats-card-admin>
-    </div>
-    <div class="col-md-3 mb-3">
-      <app-stats-card-admin></app-stats-card-admin>
-    </div>
-    <div class="col-md-3 mb-3">
-      <app-stats-card-admin></app-stats-card-admin>
+
+  <div class="">
+    <h3 class="mt-3 mb-3">Reportes</h3>
+    <div class="row text-center">
+      <div class="col-md-3">
+        <button class="btn btn-finanglobal" (click)="verPDF('ReporteClienteyCuentas')">
+          <i class="fa-solid fa-file-pdf me-2"></i>Clientes + Cuentas
+        </button>
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-finanglobal" (click)="verPDF('ReporteClientesSolicitud')">
+          <i class="fa-solid fa-file-pdf me-2"></i>Solicitud Clientes
+        </button>
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-finanglobal" (click)="verPDF('ReporteEmpeños')">
+          <i class="fa-solid fa-file-pdf me-2"></i>Empeños
+        </button>
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-finanglobal" (click)="verPDF('ReporteTransferenciasBancarias')">
+          <i class="fa-solid fa-file-pdf me-2"></i>Transferencias Bancarias
+        </button>
+      </div>
     </div>
   </div>
 
-  <div class="row">
+  <app-stats-card-admin></app-stats-card-admin>
+
+  <!-- <div class="row">
     <app-activity-admin></app-activity-admin>
-  </div>
-
+  </div> -->
 </div>

@@ -7,4 +7,17 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './card-page.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class CardPageComponent { }
+export default class CardPageComponent {
+abrirModalAgregar() {
+throw new Error('Method not implemented.');
+}
+usuarios() {
+throw new Error('Method not implemented.');
+}
+eliminarUsuario(arg0: any) {
+throw new Error('Method not implemented.');
+}
+abrirModalEditar(_t22: any) {
+throw new Error('Method not implemented.');
+}
+}
