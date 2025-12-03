@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ReporteService } from 'src/app/shared/services/Reporte.service';
 import { TransferenciaService } from 'src/app/shared/services/Transferencia.service';
 
@@ -7,7 +7,6 @@ import { TransferenciaService } from 'src/app/shared/services/Transferencia.serv
   imports: [],
   templateUrl: './transfer-page.component.html',
   styleUrl: './transfer-page.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class TransferPageComponent implements OnInit {
   // Servicios

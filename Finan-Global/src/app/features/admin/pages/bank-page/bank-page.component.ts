@@ -5,6 +5,7 @@ import { ModalCuentaBancariaAdministrador } from '../../services/modalCuentaBanc
 import { AddBankAdmin } from '../../components/modals/add-bank-admin/add-bank-admin';
 import { usuarioService } from 'src/app/shared/services/Usuario.service';
 import { Cuenta_BancariaDTO } from 'src/app/shared/interfaces/DTO/Cuenta_BancariaDTO-Interface';
+import { ReporteService } from 'src/app/shared/services/Reporte.service';
 
 @Component({
   selector: 'app-bank-page',
@@ -17,6 +18,7 @@ export default class BankPage implements OnInit {
   private cuentaBancariaServicio = inject(CuentaBancariaService);
   private usuarioServicio = inject(usuarioService);
   private modalServicio = inject(ModalCuentaBancariaAdministrador);
+  private reporteService = inject(ReporteService); // PDF
 
   // Estado
   cuentaBancaria = this.cuentaBancariaServicio.cuentasBancarias;
@@ -145,5 +147,17 @@ export default class BankPage implements OnInit {
         error: (err) => console.error(err),
       });
     }
+  }
+
+  /* PDF */
+  obtenerPDFGeneral(nombre: string) {
+    this.reporteService.descargarReporteGeneral(nombre).subscribe({
+      next: (data: Blob) => {
+        const file = new Blob([data], { type: 'application/pdf' });
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL, '_blank');
+      },
+      error: (err) => console.error('Error al mostrar PDF:', err),
+    });
   }
 }

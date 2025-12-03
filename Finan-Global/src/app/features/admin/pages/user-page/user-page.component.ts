@@ -3,6 +3,7 @@ import { AddUserAdmin } from '../../components/modals/add-user-admin/add-user-ad
 import { Usuario } from 'src/app/shared/interfaces/Usuario-Interface';
 import { usuarioService } from 'src/app/shared/services/Usuario.service';
 import { ModalUsuarioAdministrador } from '../../services/modalUsuario.service';
+import { ReporteService } from 'src/app/shared/services/Reporte.service';
 
 @Component({
   selector: 'app-user-page',
@@ -15,6 +16,7 @@ export default class UserPageComponent {
   // Servicios
   private usuarioServicio = inject(usuarioService);
   private modalService = inject(ModalUsuarioAdministrador);
+  private reporteService = inject(ReporteService); // PDF
 
   // Estado reactivo
   usuarios = signal<Usuario[]>([]);
@@ -116,6 +118,18 @@ export default class UserPageComponent {
         console.error('Error al eliminar usuario:', err);
         alert('No se pudo eliminar el usuario');
       },
+    });
+  }
+
+  /* PDF */
+  obtenerPDFGeneral(nombre: string) {
+    this.reporteService.descargarReporteGeneral(nombre).subscribe({
+      next: (data: Blob) => {
+        const file = new Blob([data], { type: 'application/pdf' });
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL, '_blank');
+      },
+      error: (err) => console.error('Error al mostrar PDF:', err),
     });
   }
 }

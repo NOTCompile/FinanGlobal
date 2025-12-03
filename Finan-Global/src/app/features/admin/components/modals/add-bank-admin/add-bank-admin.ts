@@ -58,7 +58,6 @@ export class AddBankAdmin implements OnInit {
         this.formAddCuenta.patchValue(this._cuenta);
       }
     });
-    
   }
 
   ngOnInit(): void {

@@ -5,7 +5,7 @@
 
       <div class="input-group w-50"></div>
 
-      <button class="btn btn-finanglobal" (click)="(null)">
+      <button class="btn btn-finanglobal" (click)="abrirTDocumentos()">
         <i class="fas fa-plus me-2"></i>Nuevo Tipo
       </button>
     </div>
@@ -25,10 +25,16 @@
           <td>{{ item.tipo }}</td>
           <td>{{ item.descripcion }}</td>
           <td>
-            <button (click)="(null)" class="btn btn-sm btn-outline-warning me-1 ms-1">
+            <button
+              (click)="editarTDocumentos(item)"
+              class="btn btn-sm btn-outline-warning me-1 ms-1"
+            >
               <i class="fa-solid fa-pen"></i>
             </button>
-            <button (click)="(item.id)" class="btn btn-sm btn-outline-danger ms-1">
+            <button
+              (click)="onEliminarTDocumento(item.id)"
+              class="btn btn-sm btn-outline-danger ms-1"
+            >
               <i class="fa-solid fa-trash"></i>
             </button>
           </td>
@@ -44,7 +50,7 @@
 
       <div class="input-group w-50"></div>
 
-      <button class="btn btn-finanglobal" (click)="(null)">
+      <button class="btn btn-finanglobal" (click)="abrirTProductos()">
         <i class="fas fa-plus me-2"></i>Nuevo Tipo
       </button>
     </div>
@@ -64,10 +70,16 @@
           <td>{{ item.nombre }}</td>
           <td>{{ item.descripcion }}</td>
           <td>
-            <button (click)="(null)" class="btn btn-sm btn-outline-warning me-1 ms-1">
+            <button
+              (click)="editarTProductos(item)"
+              class="btn btn-sm btn-outline-warning me-1 ms-1"
+            >
               <i class="fa-solid fa-pen"></i>
             </button>
-            <button (click)="(item.id)" class="btn btn-sm btn-outline-danger ms-1">
+            <button
+              (click)="onEliminarTProducto(item.id)"
+              class="btn btn-sm btn-outline-danger ms-1"
+            >
               <i class="fa-solid fa-trash"></i>
             </button>
           </td>
@@ -83,7 +95,7 @@
 
       <div class="input-group w-50"></div>
 
-      <button class="btn btn-finanglobal" (click)="(null)">
+      <button class="btn btn-finanglobal" (click)="abrirTTransferencias()">
         <i class="fas fa-plus me-2"></i>Nuevo Tipo
       </button>
     </div>
@@ -103,10 +115,16 @@
           <td>{{ item.nombre }}</td>
           <td>{{ item.descripcion }}</td>
           <td>
-            <button (click)="(null)" class="btn btn-sm btn-outline-warning me-1 ms-1">
+            <button
+              (click)="editarTTransferencias(item)"
+              class="btn btn-sm btn-outline-warning me-1 ms-1"
+            >
               <i class="fa-solid fa-pen"></i>
             </button>
-            <button (click)="(item.id)" class="btn btn-sm btn-outline-danger ms-1">
+            <button
+              (click)="onEliminarTTransferencia(item.id)"
+              class="btn btn-sm btn-outline-danger ms-1"
+            >
               <i class="fa-solid fa-trash"></i>
             </button>
           </td>
@@ -116,3 +134,21 @@
     </table>
   </div>
 </div>
+
+<app-add-tdocuments-admin
+  [modo]="modo()"
+  [tDocumento]="tipoDocumentoSeleccionado()"
+  (guardar)="onGuardarTDocumentos($event)"
+></app-add-tdocuments-admin>
+
+<app-add-tproducts-admin
+  [modo]="modo()"
+  [tProducto]="tipoProductoSeleccionado()"
+  (guardar)="onGuardarTProductos($event)"
+></app-add-tproducts-admin>
+
+<app-add-transferencia-admin
+  [modo]="modo()"
+  [tTransferencia]="tipoTransferenciaSeleccionado()"
+  (guardar)="onGuardarTTransferencia($event)"
+></app-add-transferencia-admin>

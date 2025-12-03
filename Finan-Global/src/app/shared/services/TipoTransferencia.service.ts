@@ -22,6 +22,41 @@ export class TipoTransferenciaService {
       .pipe(tap((data) => this.guardarLocal(data)));
   }
 
+  // Obtener por ID
+  getById(id: number): Observable<Tipo_Transferencia> {
+    return this.http.get<Tipo_Transferencia>(`${this.apiUrl}/${id}`);
+  }
+
+  // Crear nuevo
+  create(tipo: Omit<Tipo_Transferencia, 'id'>): Observable<Tipo_Transferencia> {
+    return this.http.post<Tipo_Transferencia>(this.apiUrl, tipo).pipe(
+      tap((nuevo) => {
+        const lista = [...this.tipoTransferencias(), nuevo];
+        this.guardarLocal(lista);
+      })
+    );
+  }
+
+  // Actualizar existente
+  update(id: number, tipo: Tipo_Transferencia): Observable<Tipo_Transferencia> {
+    return this.http.put<Tipo_Transferencia>(`${this.apiUrl}/${id}`, tipo).pipe(
+      tap((actualizado) => {
+        const lista = this.tipoTransferencias().map((t) => (t.id === id ? actualizado : t));
+        this.guardarLocal(lista);
+      })
+    );
+  }
+
+  // Eliminar
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      tap(() => {
+        const lista = this.tipoTransferencias().filter((t) => t.id !== id);
+        this.guardarLocal(lista);
+      })
+    );
+  }
+
   /* Local Storage */
   private inicializarData() {
     const data = localStorage.getItem('tipoTransferencias');

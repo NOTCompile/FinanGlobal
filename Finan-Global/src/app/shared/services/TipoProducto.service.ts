@@ -17,9 +17,29 @@ export class TipoProductoService {
 
   // Obtener todas los tipos
   getAll(): Observable<Tipo_Producto[]> {
+    return this.http.get<Tipo_Producto[]>(this.apiUrl).pipe(tap((data) => this.guardarLocal(data)));
+  }
+
+  getById(id: number): Observable<Tipo_Producto> {
+    return this.http.get<Tipo_Producto>(`${this.apiUrl}/${id}`);
+  }
+
+  create(data: Partial<Tipo_Producto>): Observable<Tipo_Producto> {
     return this.http
-      .get<Tipo_Producto[]>(this.apiUrl)
-      .pipe(tap((data) => this.guardarLocal(data)));
+      .post<Tipo_Producto>(this.apiUrl, data)
+      .pipe(tap(() => this.cargarTipoProductos()));
+  }
+
+  update(id: number, data: Partial<Tipo_Producto>): Observable<Tipo_Producto> {
+    return this.http
+      .put<Tipo_Producto>(`${this.apiUrl}/${id}`, data)
+      .pipe(tap(() => this.cargarTipoProductos()));
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http
+      .delete<void>(`${this.apiUrl}/${id}`)
+      .pipe(tap(() => this.cargarTipoProductos()));
   }
 
   /* Local Storage */
@@ -29,10 +49,10 @@ export class TipoProductoService {
       this.tipoProductos.set(JSON.parse(data));
       console.log('tipoDocumentos cargado desde localStorage');
     }
-    this.cargarTipoDocumentos();
+    this.cargarTipoProductos();
   }
 
-  private cargarTipoDocumentos() {
+  private cargarTipoProductos() {
     this.getAll().subscribe();
   }
 
