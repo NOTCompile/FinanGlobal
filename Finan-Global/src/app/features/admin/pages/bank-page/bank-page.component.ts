@@ -4,6 +4,7 @@ import { CuentaBancariaService } from 'src/app/shared/services/CuentaBancaria.se
 import { ModalCuentaBancariaAdministrador } from '../../services/modalCuentaBancaria.service';
 import { AddBankAdmin } from '../../components/modals/add-bank-admin/add-bank-admin';
 import { usuarioService } from 'src/app/shared/services/Usuario.service';
+import { Cuenta_BancariaDTO } from 'src/app/shared/interfaces/DTO/Cuenta_BancariaDTO-Interface';
 
 @Component({
   selector: 'app-bank-page',
@@ -20,7 +21,7 @@ export default class BankPage implements OnInit {
   // Estado
   cuentaBancaria = this.cuentaBancariaServicio.cuentasBancarias;
   modo = signal<'agregar' | 'editar'>('agregar');
-  cuentaSeleccionada = signal<Partial<Cuenta_Bancaria> | null>(null);
+  cuentaSeleccionada = signal<Partial<Cuenta_BancariaDTO> | null>(null);
 
   ngOnInit(): void {
     this.cargarCuentasBancarias();
@@ -31,6 +32,7 @@ export default class BankPage implements OnInit {
     this.cuentaBancariaServicio.getAll().subscribe({
       next: () => {
         console.log('Cuentas Bancarias Cargadas');
+        this.ordenarCuentas();
       },
       error: (err) => console.error('Error al cargar cuentas:', err),
     });
@@ -55,6 +57,14 @@ export default class BankPage implements OnInit {
     return usuario ? `${usuario.nombre} ${usuario.apellidos}` : 'Sin cliente';
   }
 
+  // Ordenar
+  private ordenarCuentas(): void {
+    const ordenadas = [...this.cuentaBancariaServicio.cuentasBancarias()].sort(
+      (a, b) => a.id - b.id
+    );
+    this.cuentaBancariaServicio.cuentasBancarias.set(ordenadas);
+  }
+
   /* Modal CRUD */
 
   // Abrir modal para agregar
@@ -62,45 +72,77 @@ export default class BankPage implements OnInit {
     console.log('Modal de Agregar Cuenta = ABIERTO');
     this.modo.set('agregar');
     this.cuentaSeleccionada.set({
-      n_intercuenta: '',
-      ncuenta: '',
       nombre: '',
-      saldo: 4,
+      numero_cuenta: '',
+      n_intercuenta: '',
+      saldo: 0,
       id_usuario: 0,
     });
     this.modalServicio.open();
   }
 
-  onGuardar(cuentaData: Partial<Cuenta_Bancaria>): void {
+  // Abri modal editar
+  abrirModalEditar(cuenta: Cuenta_Bancaria) {
+    this.modo.set('editar');
+
+    this.cuentaSeleccionada.set({
+      id: cuenta.id,
+      nombre: cuenta.nombre,
+      numero_cuenta: cuenta.ncuenta,
+      n_intercuenta: cuenta.n_intercuenta,
+      saldo: cuenta.saldo,
+      id_usuario: cuenta.usuario.id_usuario,
+    });
+
+    this.modalServicio.open();
+  }
+
+  onGuardar(cuentaData: Partial<Cuenta_BancariaDTO>): void {
     const modoActual = this.modo();
 
     if (modoActual === 'agregar') {
-      const nuevaCuentaBancaria: Cuenta_Bancaria = {
-        ...cuentaData,
-      } as Cuenta_Bancaria;
-
-      this.cuentaBancariaServicio.create(nuevaCuentaBancaria).subscribe({
+      // AGREGAR → usa DTO sin problema
+      this.cuentaBancariaServicio.create(cuentaData).subscribe({
         next: () => {
-          alert('Cuenta Bancaria creada correctamente');
-          this.cargarCuentasBancarias(); // recarga sin reload
+          alert('Cuenta creada correctamente');
+          this.cargarCuentasBancarias();
           this.modalServicio.close();
+          this.ordenarCuentas();
         },
-        error: (err) => console.error('Error al crear Cuenta Bancaria:', err),
+        error: (err) => console.error(err),
       });
     } else {
-      const cuentaBase = this.cuentaSeleccionada()!;
-      const cuentaBancariaEditado: Cuenta_Bancaria = {
-        ...cuentaBase, // Mantiene valores previos
-        ...cuentaData, // Sobrescribe nombre y usuario
-      } as Cuenta_Bancaria;
-
-      this.cuentaBancariaServicio.update(cuentaBase.id!, cuentaBancariaEditado).subscribe({
-        next: () => {
-          alert('Cuenta Bancaria actualizado correctamente');
-          this.cargarCuentasBancarias(); // recarga sin reload
-          this.modalServicio.close();
+      // EDITAR → convertir DTO a ENTIDAD REAL
+      const cuentaEntidad: Cuenta_Bancaria = {
+        id: cuentaData.id!,
+        nombre: cuentaData.nombre!,
+        ncuenta: cuentaData.numero_cuenta!, // ← mapeo correcto
+        n_intercuenta: cuentaData.n_intercuenta!,
+        saldo: cuentaData.saldo!,
+        usuario: {
+          // ← tu backend lo NECESITA ASÍ
+          id_usuario: cuentaData.id_usuario!,
+          nombre: '',
+          apellidos: '',
+          dni_ruc: '',
+          sexo: '',
+          correo: '',
+          telefono: '',
+          direccion: '',
+          nombre_usuario: '',
+          contrasena: '',
+          rol_usuario: 0,
         },
-        error: (err) => console.error('Error al actualizar cliente:', err),
+      };
+
+      this.cuentaBancariaServicio.update(cuentaEntidad.id, cuentaEntidad).subscribe({
+        next: () => {
+          alert('Cuenta actualizada correctamente');
+          this.cargarCuentasBancarias();
+          this.modalServicio.close();
+          this.ordenarCuentas();
+        },
+        error: (err) => console.error(err),
       });
     }
   }

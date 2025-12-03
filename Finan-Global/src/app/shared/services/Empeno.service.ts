@@ -47,22 +47,6 @@ export class EmpenoService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(tap(() => this.eliminarLocal(id)));
   }
 
-  /* Funciones + Mapeo */
-  // Producto en Empeño
-  getProductoOfEmpeno() {
-    return forkJoin({
-      empenos: this.getAll(),
-      productos: this.productoService.getAll(),
-    }).pipe(
-      map(({ empenos, productos }) =>
-        empenos.map((e) => ({
-          ...e,
-          productoNombre: productos.find((p) => p.id === e.producto)?.nombre,
-        }))
-      )
-    );
-  }
-
   // Total de empeños
   totalEmpenos = computed(() => this.empenos().length);
 
@@ -70,7 +54,7 @@ export class EmpenoService {
   totalMonto = computed(() => this.empenos().reduce((acc, e) => acc + e.valorRecuperacion, 0));
 
   // Obtener solo los empeños activos
-  empenosActivos = computed(() => this.empenos().filter((e) => e.estado === 1));
+  empenosActivos = computed(() => this.empenos().filter((e) => e.estado.id === 1));
 
   //  LOCAL STORAGE + ESTADO
 

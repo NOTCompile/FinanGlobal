@@ -3,7 +3,11 @@
     <div class="d-flex align-items-center justify-content-between mb-3 gap-4 p-2">
       <h5><i class="fa-solid fa-shop me-2"></i>Gestión de Empeños</h5>
 
-      <div class="input-group w-50"></div>
+      <div class="input-group w-50 justify-content-center">
+        <button class="btn btn-finanglobal" (click)="obtenerPDFGeneral('Reporte_General_Empenos')">
+          <i class="fa-solid fa-file-pdf me-2"></i>Reporte General de Empeños
+        </button>
+      </div>
 
       <button class="btn btn-finanglobal" (click)="(null)">
         <i class="fas fa-plus me-2"></i>Nuevo Empeño
@@ -14,7 +18,7 @@
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Producto</th>
-          <th scope="col">Estado</th>
+          <th scope="col">Estado Solicitud</th>
           <th scope="col">Valor</th>
           <th scope="col">Fecha Inicial</th>
           <th scope="col">Fecha Final</th>
@@ -25,8 +29,8 @@
         @for (item of empenios(); track $index) {
         <tr>
           <th scope="row">{{ item.id }}</th>
-          <td>{{ item.producto }}</td>
-          <td>{{ item.estado }}</td>
+          <td>{{ item.producto.nombre }}</td>
+          <td>{{ item.estado.nombre }}</td>
           <td>{{ item.valorRecuperacion }}</td>
           <td>{{ item.fechaInicio }}</td>
           <td>{{ item.fechaFinal }}</td>

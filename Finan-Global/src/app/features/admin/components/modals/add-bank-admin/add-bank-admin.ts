@@ -13,6 +13,7 @@ import { ModalCuentaBancariaAdministrador } from '../../../services/modalCuentaB
 import { Cuenta_Bancaria } from 'src/app/shared/interfaces/Cuenta_Bancaria-Interface';
 import { usuarioService } from 'src/app/shared/services/Usuario.service';
 import { Usuario } from 'src/app/shared/interfaces/Usuario-Interface';
+import { Cuenta_BancariaDTO } from 'src/app/shared/interfaces/DTO/Cuenta_BancariaDTO-Interface';
 
 @Component({
   selector: 'app-add-bank-admin',
@@ -27,17 +28,22 @@ export class AddBankAdmin implements OnInit {
   private usuarioServicio = inject(usuarioService);
 
   // Entradas
+  @Input() cuentaEscogida: Partial<Cuenta_Bancaria> | null = null;
   @Input() modo: 'agregar' | 'editar' = 'agregar';
-  @Input() set cuentaBancaria(value: Partial<Cuenta_Bancaria> | null) {
+  @Input() set cuentaBancaria(value: Partial<Cuenta_BancariaDTO> | null) {
     if (value) {
       this._cuenta = value;
-      this.formAddCuenta.patchValue(value);
+      this.formAddCuenta.patchValue({
+        nombre: value.nombre,
+        usuario: value.id_usuario,
+        saldo: value.saldo,
+      });
     }
   }
-  private _cuenta: Partial<Cuenta_Bancaria> | null = null;
+  private _cuenta: Partial<Cuenta_BancariaDTO> | null = null;
 
   // Salida
-  @Output() guardar = new EventEmitter<Partial<Cuenta_Bancaria>>();
+  @Output() guardar = new EventEmitter<Partial<Cuenta_BancariaDTO>>();
 
   // Estados
   usuarios = signal<Usuario[]>([]);
@@ -52,6 +58,7 @@ export class AddBankAdmin implements OnInit {
         this.formAddCuenta.patchValue(this._cuenta);
       }
     });
+    
   }
 
   ngOnInit(): void {
@@ -72,6 +79,7 @@ export class AddBankAdmin implements OnInit {
   formAddCuenta: FormGroup = this.fb.group({
     nombre: ['', [Validators.required]],
     usuario: ['', Validators.required],
+    saldo: ['', Validators.required],
   });
 
   // Enviar datos al componente padre
@@ -83,17 +91,16 @@ export class AddBankAdmin implements OnInit {
 
     const datosFormulario = this.formAddCuenta.value;
 
-    // Generar números aleatorios para las cuentas
-    const n_intercuenta = this.generarNumeroInterCuenta();
-    const ncuenta = this.generarNumeroCuenta();
-
     // Emitir datos combinados
-    const datosEmitidos: Partial<Cuenta_Bancaria> = {
-      ...this._cuenta,
-      ...datosFormulario,
-      n_intercuenta,
-      ncuenta,
-      saldo: 0,
+    const datosEmitidos: Partial<Cuenta_BancariaDTO> = {
+      id: this._cuenta?.id ?? 0,
+      nombre: datosFormulario.nombre,
+      numero_cuenta:
+        this.modo === 'agregar' ? this.generarNumeroCuenta() : this._cuenta?.numero_cuenta!,
+      n_intercuenta:
+        this.modo === 'agregar' ? this.generarNumeroInterCuenta() : this._cuenta?.n_intercuenta!,
+      saldo: datosFormulario.saldo,
+      id_usuario: datosFormulario.usuario,
     };
 
     console.log('Datos de cuenta nueva', datosEmitidos);

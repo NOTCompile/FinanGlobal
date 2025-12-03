@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { computed, Injectable, signal } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { Cuenta_Bancaria } from '../interfaces/Cuenta_Bancaria-Interface';
+import { Cuenta_BancariaDTO } from '../interfaces/DTO/Cuenta_BancariaDTO-Interface';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,7 @@ export class CuentaBancariaService {
   }
 
   // Crear una nueva cuenta (ENVÍA DTO)
-  create(cuenta: Partial<Cuenta_Bancaria>): Observable<Cuenta_Bancaria> {
+  create(cuenta: Partial<Cuenta_BancariaDTO>): Observable<Cuenta_Bancaria> {
     return this.http.post<Cuenta_Bancaria>(this.apiUrl, cuenta);
   }
 

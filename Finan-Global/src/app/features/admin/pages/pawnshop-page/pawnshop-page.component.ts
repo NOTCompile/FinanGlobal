@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { EmpenoService } from 'src/app/shared/services/Empeno.service';
 import { ProductoService } from 'src/app/shared/services/Producto.service';
+import { ReporteService } from 'src/app/shared/services/Reporte.service';
 
 @Component({
   selector: 'app-pawnshop-page',
@@ -11,6 +12,7 @@ import { ProductoService } from 'src/app/shared/services/Producto.service';
 export default class PawnshopPageComponent implements OnInit {
   private empenioService = inject(EmpenoService);
   private productoService = inject(ProductoService);
+  private reporteService = inject(ReporteService); // PDF
 
   empenios = this.empenioService.empenos;
 
@@ -21,7 +23,7 @@ export default class PawnshopPageComponent implements OnInit {
 
   // Cargar Empeños
   cargarEmpenios(): void {
-    this.empenioService.getProductoOfEmpeno().subscribe({
+    this.empenioService.getAll().subscribe({
       next: (data) => {
         this.empenios.set(data);
         console.log('Empeños Cargados');
@@ -37,6 +39,18 @@ export default class PawnshopPageComponent implements OnInit {
         console.log('Productos Cargados');
       },
       error: (err) => console.error('Error al cargar los productos: ', err),
+    });
+  }
+
+  /* PDF */
+  obtenerPDFGeneral(nombre: string) {
+    this.reporteService.descargarReporteGeneral(nombre).subscribe({
+      next: (data: Blob) => {
+        const file = new Blob([data], { type: 'application/pdf' });
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL, '_blank');
+      },
+      error: (err) => console.error('Error al mostrar PDF:', err),
     });
   }
 }

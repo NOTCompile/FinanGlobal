@@ -1,12 +1,19 @@
 <div class="container">
   <div class="card-finanglobal mt-4">
     <div class="d-flex align-items-center justify-content-between mb-3 gap-4 p-2">
-      <h5><i class="fa-solid fa-shop me-2"></i>Tipo de Documentos</h5>
+      <h5><i class="fa-solid fa-shop me-2"></i>Transferencias</h5>
 
-      <div class="input-group w-50"></div>
+      <div class="input-group w-50 justify-content-center">
+        <button
+          class="btn btn-finanglobal"
+          (click)="obtenerPDFGeneral('Reporte_General_Transferencias')"
+        >
+          <i class="fa-solid fa-file-pdf me-2"></i>Reporte General de Transferencias
+        </button>
+      </div>
 
       <button class="btn btn-finanglobal" (click)="(null)">
-        <i class="fas fa-plus me-2"></i>Nuevo Tipo
+        <i class="fas fa-plus me-2"></i>Nueva Transferencia
       </button>
     </div>
     <table class="table text-center">
@@ -14,7 +21,7 @@
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Cuenta Emisora</th>
-          <th scope="col">cuenta Receptora</th>
+          <th scope="col">Cuenta Receptora</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -22,8 +29,20 @@
         @for (item of transferencia(); track $index) {
         <tr>
           <th scope="row">{{ item.id }}</th>
-          <td>{{ item.cuentaEmisora }}</td>
-          <td>{{ item.cuentaReceptora }}</td>
+          <td>
+            <div class="container text-start">
+              <p>Cliente: {{ item.usuarioEmisor.nombre }} {{ item.usuarioEmisor.apellidos }}</p>
+              <p>N° de Cuenta: {{ item.cuentaEmisora.ncuenta }}</p>
+              <p>Enviado: S/.{{ item.monto }}</p>
+            </div>
+          </td>
+          <td>
+            <div class="container text-start">
+              <p>Cliente: {{ item.usuarioReceptor.nombre }} {{ item.usuarioReceptor.apellidos }}</p>
+              <p>N° de Cuenta: {{ item.cuentaReceptora.ncuenta }}</p>
+              <p>Recibido: S/.{{ item.monto }}</p>
+            </div>
+          </td>
           <td>
             <button (click)="(null)" class="btn btn-sm btn-outline-warning me-1 ms-1">
               <i class="fa-solid fa-pen"></i>

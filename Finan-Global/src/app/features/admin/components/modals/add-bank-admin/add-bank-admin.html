@@ -1,12 +1,48 @@
-@if (modalEstado.isOpen()) {
+@if (modalEstado.isOpen()) { @if (modo === 'agregar') {
 <div class="modal fade show d-block animate-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog fade modal-dialog-centered">
     <div class="modal-content shadow-lg rounded-3 border-0">
       <!-- Modal Title -->
       <div class="modal-header modal-finanglobal text-white">
-        <h5 class="modal-title">
-          {{ modo === 'editar' ? 'Editar Cuenta Bancaria' : 'Nueva Cuenta Bancaria' }}
-        </h5>
+        <h5 class="modal-title">Nueva Cuenta Bancaria</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+      </div>
+      <!-- Modal Content -->
+      <div class="modal-body">
+        <form [formGroup]="formAddCuenta" class="row g-3">
+          <div class="col-md-12">
+            <label class="form-label">Dueño de la Cuenta:</label>
+            <select formControlName="usuario" class="form-select">
+              <option selected>Seleccione...</option>
+              @for (item of usuarios(); track item.id_usuario) {
+              <option value="{{ item.id_usuario }}">{{ item.nombre }} {{ item.apellidos }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Nombre de la Cuenta: </label>
+            <input type="text" formControlName="nombre" class="form-control" />
+          </div>
+        </form>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-outline-danger" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn btn-success" [disabled]="formAddCuenta.invalid" (click)="onSubmit()">
+          Agregar Cuenta Bancaria
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+} @else {
+<div class="modal fade show d-block animate-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog fade modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-3 border-0">
+      <!-- Modal Title -->
+      <div class="modal-header modal-finanglobal text-white">
+        <h5 class="modal-title">Editar Cuenta Bancaria</h5>
         <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
       </div>
       <!-- Modal Content -->
@@ -26,18 +62,24 @@
             <label class="form-label">Nombre de la Cuenta: </label>
             <input type="text" formControlName="nombre" class="form-control" />
           </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Saldo en la Cuenta: </label>
+            <input type="text" formControlName="saldo" class="form-control" />
+          </div>
         </form>
       </div>
       <!-- Modal Footer -->
       <div class="modal-footer">
         <button class="btn btn-outline-danger" (click)="cerrarModal()">Cancelar</button>
         <button class="btn btn-success" [disabled]="formAddCuenta.invalid" (click)="onSubmit()">
-          {{ modo === 'editar' ? 'Actualizar Cuenta Bancaria' : 'Agregar Cuenta Bancaria' }}
+          Actualizar Cuenta Bancaria
         </button>
       </div>
     </div>
   </div>
 </div>
+}
 
 <div class="modal-backdrop fade show"></div>
 }
