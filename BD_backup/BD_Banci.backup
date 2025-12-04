@@ -1,0 +1,2205 @@
+--
+-- PostgreSQL database dump
+--
+
+\restrict 51WxANHXcKx5xV4dYQ0mAWHtkQ9d0LBkEPq7DeL1n0E4okmMRcgQzmsy4Mar0A5
+
+-- Dumped from database version 18.0
+-- Dumped by pg_dump version 18.0
+
+-- Started on 2025-12-04 09:35:12
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 219 (class 1259 OID 17029)
+-- Name: cuenta_bancaria; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cuenta_bancaria (
+    id integer NOT NULL,
+    id_usuario integer,
+    nombre character varying(255),
+    n_cuenta character varying(24),
+    n_intercuenta character varying(24),
+    saldo numeric(9,2)
+);
+
+
+ALTER TABLE public.cuenta_bancaria OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 17033)
+-- Name: cuenta_bancaria_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.cuenta_bancaria_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.cuenta_bancaria_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5265 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: cuenta_bancaria_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.cuenta_bancaria_id_seq OWNED BY public.cuenta_bancaria.id;
+
+
+--
+-- TOC entry 221 (class 1259 OID 17034)
+-- Name: documento; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.documento (
+    id integer NOT NULL,
+    nombre character varying(255),
+    fecha date,
+    id_tipo_documento integer,
+    path character varying(255)
+);
+
+
+ALTER TABLE public.documento OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 17040)
+-- Name: documento_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.documento_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.documento_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5266 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: documento_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.documento_id_seq OWNED BY public.documento.id;
+
+
+--
+-- TOC entry 223 (class 1259 OID 17041)
+-- Name: empeno; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.empeno (
+    id integer NOT NULL,
+    id_producto integer,
+    valor_prestado numeric(9,2),
+    valor_recuperacion numeric(9,2),
+    fecha_inicio date,
+    fecha_final date,
+    id_estado integer
+);
+
+
+ALTER TABLE public.empeno OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1259 OID 17045)
+-- Name: empeno_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.empeno_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.empeno_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5267 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: empeno_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.empeno_id_seq OWNED BY public.empeno.id;
+
+
+--
+-- TOC entry 225 (class 1259 OID 17046)
+-- Name: estado; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.estado (
+    id integer NOT NULL,
+    nombre character varying(255),
+    descripcion character varying(255)
+);
+
+
+ALTER TABLE public.estado OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1259 OID 17052)
+-- Name: estado_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.estado_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.estado_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5268 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: estado_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.estado_id_seq OWNED BY public.estado.id;
+
+
+--
+-- TOC entry 227 (class 1259 OID 17053)
+-- Name: estado_solicitud; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.estado_solicitud (
+    id integer NOT NULL,
+    nombre character varying(255),
+    descripcion character varying(255)
+);
+
+
+ALTER TABLE public.estado_solicitud OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 17059)
+-- Name: estado_solicitud_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.estado_solicitud_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.estado_solicitud_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5269 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: estado_solicitud_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.estado_solicitud_id_seq OWNED BY public.estado_solicitud.id;
+
+
+--
+-- TOC entry 229 (class 1259 OID 17060)
+-- Name: lista_cuentasbancarias; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.lista_cuentasbancarias (
+    id integer NOT NULL,
+    id_cuenta integer,
+    id_usuario integer
+);
+
+
+ALTER TABLE public.lista_cuentasbancarias OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1259 OID 17064)
+-- Name: lista_cuentasbancarias_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.lista_cuentasbancarias_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.lista_cuentasbancarias_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5270 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: lista_cuentasbancarias_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.lista_cuentasbancarias_id_seq OWNED BY public.lista_cuentasbancarias.id;
+
+
+--
+-- TOC entry 231 (class 1259 OID 17065)
+-- Name: lista_documentos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.lista_documentos (
+    id integer NOT NULL,
+    id_usuario integer,
+    id_documento integer
+);
+
+
+ALTER TABLE public.lista_documentos OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1259 OID 17069)
+-- Name: lista_documentos_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.lista_documentos_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.lista_documentos_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5271 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: lista_documentos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.lista_documentos_id_seq OWNED BY public.lista_documentos.id;
+
+
+--
+-- TOC entry 233 (class 1259 OID 17070)
+-- Name: lista_empenos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.lista_empenos (
+    id integer NOT NULL,
+    id_usuario integer,
+    id_empeno integer
+);
+
+
+ALTER TABLE public.lista_empenos OWNER TO postgres;
+
+--
+-- TOC entry 234 (class 1259 OID 17074)
+-- Name: lista_empenos_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.lista_empenos_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.lista_empenos_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5272 (class 0 OID 0)
+-- Dependencies: 234
+-- Name: lista_empenos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.lista_empenos_id_seq OWNED BY public.lista_empenos.id;
+
+
+--
+-- TOC entry 235 (class 1259 OID 17075)
+-- Name: lista_solicitudes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.lista_solicitudes (
+    id integer NOT NULL,
+    id_usuario integer,
+    id_solicitud integer,
+    id_usuario_banco integer
+);
+
+
+ALTER TABLE public.lista_solicitudes OWNER TO postgres;
+
+--
+-- TOC entry 236 (class 1259 OID 17079)
+-- Name: lista_solicitudes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.lista_solicitudes_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.lista_solicitudes_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5273 (class 0 OID 0)
+-- Dependencies: 236
+-- Name: lista_solicitudes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.lista_solicitudes_id_seq OWNED BY public.lista_solicitudes.id;
+
+
+--
+-- TOC entry 237 (class 1259 OID 17080)
+-- Name: lista_tarjetas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.lista_tarjetas (
+    id integer NOT NULL,
+    id_tarjeta integer,
+    id_usuario integer
+);
+
+
+ALTER TABLE public.lista_tarjetas OWNER TO postgres;
+
+--
+-- TOC entry 238 (class 1259 OID 17084)
+-- Name: lista_tarjetas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.lista_tarjetas_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.lista_tarjetas_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5274 (class 0 OID 0)
+-- Dependencies: 238
+-- Name: lista_tarjetas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.lista_tarjetas_id_seq OWNED BY public.lista_tarjetas.id;
+
+
+--
+-- TOC entry 239 (class 1259 OID 17085)
+-- Name: producto; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.producto (
+    id integer NOT NULL,
+    nombre character varying(255),
+    id_tipo integer,
+    valor_solicitado numeric(9,2),
+    id_usuario integer
+);
+
+
+ALTER TABLE public.producto OWNER TO postgres;
+
+--
+-- TOC entry 240 (class 1259 OID 17089)
+-- Name: producto_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.producto_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.producto_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5275 (class 0 OID 0)
+-- Dependencies: 240
+-- Name: producto_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.producto_id_seq OWNED BY public.producto.id;
+
+
+--
+-- TOC entry 241 (class 1259 OID 17090)
+-- Name: reclamo; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.reclamo (
+    id integer NOT NULL,
+    id_usuario integer NOT NULL,
+    id_tipo_reclamo integer NOT NULL,
+    id_estado integer,
+    descripcion text NOT NULL,
+    fecha_reclamo date DEFAULT CURRENT_DATE NOT NULL,
+    fecha_solucion date,
+    detalle_solucion text
+);
+
+
+ALTER TABLE public.reclamo OWNER TO postgres;
+
+--
+-- TOC entry 242 (class 1259 OID 17101)
+-- Name: reclamo_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.reclamo_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.reclamo_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5276 (class 0 OID 0)
+-- Dependencies: 242
+-- Name: reclamo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.reclamo_id_seq OWNED BY public.reclamo.id;
+
+
+--
+-- TOC entry 243 (class 1259 OID 17102)
+-- Name: rol_usuario; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.rol_usuario (
+    id integer NOT NULL,
+    rol character varying(100),
+    descripcion character varying(255)
+);
+
+
+ALTER TABLE public.rol_usuario OWNER TO postgres;
+
+--
+-- TOC entry 244 (class 1259 OID 17106)
+-- Name: rol_usuario_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.rol_usuario_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.rol_usuario_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5277 (class 0 OID 0)
+-- Dependencies: 244
+-- Name: rol_usuario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.rol_usuario_id_seq OWNED BY public.rol_usuario.id;
+
+
+--
+-- TOC entry 245 (class 1259 OID 17107)
+-- Name: solicitud; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.solicitud (
+    id integer NOT NULL,
+    id_tipo integer,
+    id_estado integer,
+    id_producto integer,
+    descripcion character varying(255),
+    fecha_inicio date,
+    fecha_fin date
+);
+
+
+ALTER TABLE public.solicitud OWNER TO postgres;
+
+--
+-- TOC entry 246 (class 1259 OID 17111)
+-- Name: solicitud_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.solicitud_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.solicitud_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5278 (class 0 OID 0)
+-- Dependencies: 246
+-- Name: solicitud_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.solicitud_id_seq OWNED BY public.solicitud.id;
+
+
+--
+-- TOC entry 247 (class 1259 OID 17112)
+-- Name: t_usuario; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.t_usuario (
+    id_usuario integer NOT NULL,
+    nombre character varying(255),
+    apellidos character varying(255),
+    dni_ruc character varying(11),
+    sexo character varying(20),
+    correo character varying(255),
+    telefono character varying(9),
+    direccion character varying(255),
+    nombre_usuario character varying(255),
+    contrasena character varying(255),
+    rol_usuario integer
+);
+
+
+ALTER TABLE public.t_usuario OWNER TO postgres;
+
+--
+-- TOC entry 248 (class 1259 OID 17118)
+-- Name: tarjetas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tarjetas (
+    id integer NOT NULL,
+    id_cuenta integer,
+    id_tipo integer,
+    codigo character varying(16),
+    cvc character varying(3),
+    fecha_caducidad date
+);
+
+
+ALTER TABLE public.tarjetas OWNER TO postgres;
+
+--
+-- TOC entry 249 (class 1259 OID 17122)
+-- Name: tarjetas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tarjetas_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.tarjetas_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5279 (class 0 OID 0)
+-- Dependencies: 249
+-- Name: tarjetas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tarjetas_id_seq OWNED BY public.tarjetas.id;
+
+
+--
+-- TOC entry 250 (class 1259 OID 17123)
+-- Name: tipo_documento; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tipo_documento (
+    id integer NOT NULL,
+    tipo character varying(255),
+    descripcion character varying(255)
+);
+
+
+ALTER TABLE public.tipo_documento OWNER TO postgres;
+
+--
+-- TOC entry 251 (class 1259 OID 17129)
+-- Name: tipo_documento_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tipo_documento_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.tipo_documento_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5280 (class 0 OID 0)
+-- Dependencies: 251
+-- Name: tipo_documento_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tipo_documento_id_seq OWNED BY public.tipo_documento.id;
+
+
+--
+-- TOC entry 252 (class 1259 OID 17130)
+-- Name: tipo_producto; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tipo_producto (
+    id integer NOT NULL,
+    nombre character varying(255),
+    descripcion character varying(255)
+);
+
+
+ALTER TABLE public.tipo_producto OWNER TO postgres;
+
+--
+-- TOC entry 253 (class 1259 OID 17136)
+-- Name: tipo_producto_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tipo_producto_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.tipo_producto_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5281 (class 0 OID 0)
+-- Dependencies: 253
+-- Name: tipo_producto_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tipo_producto_id_seq OWNED BY public.tipo_producto.id;
+
+
+--
+-- TOC entry 254 (class 1259 OID 17137)
+-- Name: tipo_reclamo; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tipo_reclamo (
+    id integer NOT NULL,
+    nombre character varying(100) NOT NULL,
+    descripcion character varying(255)
+);
+
+
+ALTER TABLE public.tipo_reclamo OWNER TO postgres;
+
+--
+-- TOC entry 255 (class 1259 OID 17142)
+-- Name: tipo_reclamo_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tipo_reclamo_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.tipo_reclamo_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5282 (class 0 OID 0)
+-- Dependencies: 255
+-- Name: tipo_reclamo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tipo_reclamo_id_seq OWNED BY public.tipo_reclamo.id;
+
+
+--
+-- TOC entry 256 (class 1259 OID 17143)
+-- Name: tipo_solicitud; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tipo_solicitud (
+    id integer NOT NULL,
+    nombre character varying(255),
+    descripcion character varying(255)
+);
+
+
+ALTER TABLE public.tipo_solicitud OWNER TO postgres;
+
+--
+-- TOC entry 257 (class 1259 OID 17149)
+-- Name: tipo_solicitud_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tipo_solicitud_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.tipo_solicitud_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5283 (class 0 OID 0)
+-- Dependencies: 257
+-- Name: tipo_solicitud_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tipo_solicitud_id_seq OWNED BY public.tipo_solicitud.id;
+
+
+--
+-- TOC entry 258 (class 1259 OID 17150)
+-- Name: tipo_tarjeta; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tipo_tarjeta (
+    id integer NOT NULL,
+    tipo character varying(100),
+    descripcion character varying(255)
+);
+
+
+ALTER TABLE public.tipo_tarjeta OWNER TO postgres;
+
+--
+-- TOC entry 259 (class 1259 OID 17154)
+-- Name: tipo_tarjeta_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tipo_tarjeta_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.tipo_tarjeta_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5284 (class 0 OID 0)
+-- Dependencies: 259
+-- Name: tipo_tarjeta_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tipo_tarjeta_id_seq OWNED BY public.tipo_tarjeta.id;
+
+
+--
+-- TOC entry 260 (class 1259 OID 17155)
+-- Name: tipo_transferencia; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tipo_transferencia (
+    id integer NOT NULL,
+    nombre character varying(255),
+    descripcion character varying(255)
+);
+
+
+ALTER TABLE public.tipo_transferencia OWNER TO postgres;
+
+--
+-- TOC entry 261 (class 1259 OID 17161)
+-- Name: tipo_transferencia_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tipo_transferencia_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.tipo_transferencia_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5285 (class 0 OID 0)
+-- Dependencies: 261
+-- Name: tipo_transferencia_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tipo_transferencia_id_seq OWNED BY public.tipo_transferencia.id;
+
+
+--
+-- TOC entry 262 (class 1259 OID 17162)
+-- Name: transferencia; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.transferencia (
+    id integer NOT NULL,
+    id_usuario_emisor integer,
+    id_cuenta_emisor integer,
+    id_usuario_receptor integer,
+    id_cuenta_receptor integer,
+    id_tipo integer,
+    monto numeric(9,2),
+    fecha date
+);
+
+
+ALTER TABLE public.transferencia OWNER TO postgres;
+
+--
+-- TOC entry 263 (class 1259 OID 17166)
+-- Name: transferencia_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.transferencia_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.transferencia_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5286 (class 0 OID 0)
+-- Dependencies: 263
+-- Name: transferencia_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.transferencia_id_seq OWNED BY public.transferencia.id;
+
+
+--
+-- TOC entry 264 (class 1259 OID 17167)
+-- Name: usuario_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.usuario_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.usuario_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5287 (class 0 OID 0)
+-- Dependencies: 264
+-- Name: usuario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.usuario_id_seq OWNED BY public.t_usuario.id_usuario;
+
+
+--
+-- TOC entry 4966 (class 2604 OID 17168)
+-- Name: cuenta_bancaria id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuenta_bancaria ALTER COLUMN id SET DEFAULT nextval('public.cuenta_bancaria_id_seq'::regclass);
+
+
+--
+-- TOC entry 4967 (class 2604 OID 17169)
+-- Name: documento id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.documento ALTER COLUMN id SET DEFAULT nextval('public.documento_id_seq'::regclass);
+
+
+--
+-- TOC entry 4968 (class 2604 OID 17170)
+-- Name: empeno id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empeno ALTER COLUMN id SET DEFAULT nextval('public.empeno_id_seq'::regclass);
+
+
+--
+-- TOC entry 4969 (class 2604 OID 17171)
+-- Name: estado id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.estado ALTER COLUMN id SET DEFAULT nextval('public.estado_id_seq'::regclass);
+
+
+--
+-- TOC entry 4970 (class 2604 OID 17172)
+-- Name: estado_solicitud id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.estado_solicitud ALTER COLUMN id SET DEFAULT nextval('public.estado_solicitud_id_seq'::regclass);
+
+
+--
+-- TOC entry 4971 (class 2604 OID 17173)
+-- Name: lista_cuentasbancarias id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_cuentasbancarias ALTER COLUMN id SET DEFAULT nextval('public.lista_cuentasbancarias_id_seq'::regclass);
+
+
+--
+-- TOC entry 4972 (class 2604 OID 17174)
+-- Name: lista_documentos id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_documentos ALTER COLUMN id SET DEFAULT nextval('public.lista_documentos_id_seq'::regclass);
+
+
+--
+-- TOC entry 4973 (class 2604 OID 17175)
+-- Name: lista_empenos id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_empenos ALTER COLUMN id SET DEFAULT nextval('public.lista_empenos_id_seq'::regclass);
+
+
+--
+-- TOC entry 4974 (class 2604 OID 17176)
+-- Name: lista_solicitudes id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_solicitudes ALTER COLUMN id SET DEFAULT nextval('public.lista_solicitudes_id_seq'::regclass);
+
+
+--
+-- TOC entry 4975 (class 2604 OID 17177)
+-- Name: lista_tarjetas id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_tarjetas ALTER COLUMN id SET DEFAULT nextval('public.lista_tarjetas_id_seq'::regclass);
+
+
+--
+-- TOC entry 4976 (class 2604 OID 17178)
+-- Name: producto id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.producto ALTER COLUMN id SET DEFAULT nextval('public.producto_id_seq'::regclass);
+
+
+--
+-- TOC entry 4977 (class 2604 OID 17179)
+-- Name: reclamo id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reclamo ALTER COLUMN id SET DEFAULT nextval('public.reclamo_id_seq'::regclass);
+
+
+--
+-- TOC entry 4979 (class 2604 OID 17180)
+-- Name: rol_usuario id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rol_usuario ALTER COLUMN id SET DEFAULT nextval('public.rol_usuario_id_seq'::regclass);
+
+
+--
+-- TOC entry 4980 (class 2604 OID 17181)
+-- Name: solicitud id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.solicitud ALTER COLUMN id SET DEFAULT nextval('public.solicitud_id_seq'::regclass);
+
+
+--
+-- TOC entry 4981 (class 2604 OID 17182)
+-- Name: t_usuario id_usuario; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.t_usuario ALTER COLUMN id_usuario SET DEFAULT nextval('public.usuario_id_seq'::regclass);
+
+
+--
+-- TOC entry 4982 (class 2604 OID 17183)
+-- Name: tarjetas id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tarjetas ALTER COLUMN id SET DEFAULT nextval('public.tarjetas_id_seq'::regclass);
+
+
+--
+-- TOC entry 4983 (class 2604 OID 17184)
+-- Name: tipo_documento id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_documento ALTER COLUMN id SET DEFAULT nextval('public.tipo_documento_id_seq'::regclass);
+
+
+--
+-- TOC entry 4984 (class 2604 OID 17185)
+-- Name: tipo_producto id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_producto ALTER COLUMN id SET DEFAULT nextval('public.tipo_producto_id_seq'::regclass);
+
+
+--
+-- TOC entry 4985 (class 2604 OID 17186)
+-- Name: tipo_reclamo id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_reclamo ALTER COLUMN id SET DEFAULT nextval('public.tipo_reclamo_id_seq'::regclass);
+
+
+--
+-- TOC entry 4986 (class 2604 OID 17187)
+-- Name: tipo_solicitud id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_solicitud ALTER COLUMN id SET DEFAULT nextval('public.tipo_solicitud_id_seq'::regclass);
+
+
+--
+-- TOC entry 4987 (class 2604 OID 17188)
+-- Name: tipo_tarjeta id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_tarjeta ALTER COLUMN id SET DEFAULT nextval('public.tipo_tarjeta_id_seq'::regclass);
+
+
+--
+-- TOC entry 4988 (class 2604 OID 17189)
+-- Name: tipo_transferencia id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_transferencia ALTER COLUMN id SET DEFAULT nextval('public.tipo_transferencia_id_seq'::regclass);
+
+
+--
+-- TOC entry 4989 (class 2604 OID 17190)
+-- Name: transferencia id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transferencia ALTER COLUMN id SET DEFAULT nextval('public.transferencia_id_seq'::regclass);
+
+
+--
+-- TOC entry 5214 (class 0 OID 17029)
+-- Dependencies: 219
+-- Data for Name: cuenta_bancaria; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.cuenta_bancaria (id, id_usuario, nombre, n_cuenta, n_intercuenta, saldo) FROM stdin;
+5	20	Cuenta General 	82086833856393840000	1411351293443304	9100.00
+10	1	Cuenta de Ahorros	44417231360319865000	1260196891450326	3300.00
+2	17	Cuenta Corriente	81729795866593400000	1112226814221297	2800.00
+3	18	Cuenta Ahorros	24809128291548290000	1375116959321590	3400.50
+4	20	Cuenta Institucional 	88549931347320950000	1202281444602088	8700.75
+6	18	Cuenta Ahorros 	72304278482181320000	1287086727442209	2600.00
+16	1	Cuenta Universitaria	58992976093412220000	1852763552562849	3500.00
+18	17	Ahorros Universidad	18960778355779105000	1681999738811713	5300.00
+19	17	Prueba	82481031324655420000	1557785500475464	100.00
+1	17	Cuenta Ahorros	72526154930651300000	1253142976187518	5000.00
+20	18	Universidad	56699854947917340000	1715090607330842	500.00
+\.
+
+
+--
+-- TOC entry 5216 (class 0 OID 17034)
+-- Dependencies: 221
+-- Data for Name: documento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.documento (id, nombre, fecha, id_tipo_documento, path) FROM stdin;
+1	Contrato Juan	2025-01-01	1	/docs/contrato_juan.pdf
+2	Factura María	2025-02-10	4	/docs/factura_maria.pdf
+3	Identidad Carlos	2025-03-05	3	/docs/id_carlos.pdf
+4	Reporte Lucía	2025-04-20	2	/docs/reporte_lucia.pdf
+5	Recibo Sofía	2025-05-15	5	/docs/recibo_sofia.pdf
+\.
+
+
+--
+-- TOC entry 5218 (class 0 OID 17041)
+-- Dependencies: 223
+-- Data for Name: empeno; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.empeno (id, id_producto, valor_prestado, valor_recuperacion, fecha_inicio, fecha_final, id_estado) FROM stdin;
+1	1	800.00	1000.00	2025-01-01	2025-03-01	2
+2	2	500.00	650.00	2025-02-10	2025-04-10	1
+3	3	1500.00	1800.00	2025-03-05	2025-06-05	2
+4	4	600.00	750.00	2025-04-20	2025-07-20	3
+5	5	400.00	500.00	2025-05-15	2025-08-15	4
+\.
+
+
+--
+-- TOC entry 5220 (class 0 OID 17046)
+-- Dependencies: 225
+-- Data for Name: estado; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.estado (id, nombre, descripcion) FROM stdin;
+1	Pendiente	Aún no procesado
+2	Activo	En proceso
+3	Finalizado	Concluido
+4	Cancelado	Anulado por el usuario
+5	Vencido	Fecha límite superada
+\.
+
+
+--
+-- TOC entry 5222 (class 0 OID 17053)
+-- Dependencies: 227
+-- Data for Name: estado_solicitud; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.estado_solicitud (id, nombre, descripcion) FROM stdin;
+1	Enviado	Enviado al sistema
+2	Proceso	En revisión
+3	Aceptado	Aprobado por la entidad
+4	Denegado	Rechazado por el sistema
+5	Completado	Solicitud concluida
+\.
+
+
+--
+-- TOC entry 5224 (class 0 OID 17060)
+-- Dependencies: 229
+-- Data for Name: lista_cuentasbancarias; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.lista_cuentasbancarias (id, id_cuenta, id_usuario) FROM stdin;
+1	1	1
+2	2	2
+3	3	3
+4	4	4
+5	5	5
+\.
+
+
+--
+-- TOC entry 5226 (class 0 OID 17065)
+-- Dependencies: 231
+-- Data for Name: lista_documentos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.lista_documentos (id, id_usuario, id_documento) FROM stdin;
+1	1	1
+2	2	2
+3	3	3
+4	4	4
+5	5	5
+\.
+
+
+--
+-- TOC entry 5228 (class 0 OID 17070)
+-- Dependencies: 233
+-- Data for Name: lista_empenos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.lista_empenos (id, id_usuario, id_empeno) FROM stdin;
+1	1	1
+2	2	2
+3	3	3
+4	4	4
+5	5	5
+\.
+
+
+--
+-- TOC entry 5230 (class 0 OID 17075)
+-- Dependencies: 235
+-- Data for Name: lista_solicitudes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.lista_solicitudes (id, id_usuario, id_solicitud, id_usuario_banco) FROM stdin;
+1	1	1	2
+2	2	2	4
+3	3	3	5
+4	4	4	1
+5	5	5	3
+\.
+
+
+--
+-- TOC entry 5232 (class 0 OID 17080)
+-- Dependencies: 237
+-- Data for Name: lista_tarjetas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.lista_tarjetas (id, id_tarjeta, id_usuario) FROM stdin;
+1	1	1
+2	2	2
+3	3	3
+4	4	4
+5	5	5
+\.
+
+
+--
+-- TOC entry 5234 (class 0 OID 17085)
+-- Dependencies: 239
+-- Data for Name: producto; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.producto (id, nombre, id_tipo, valor_solicitado, id_usuario) FROM stdin;
+1	Laptop HP	1	1200.00	1
+2	Anillo de Oro	2	800.00	2
+3	Motocicleta Honda	3	2500.00	3
+4	Sofá de cuero	4	950.00	4
+5	Taladro Bosch	5	600.00	5
+\.
+
+
+--
+-- TOC entry 5236 (class 0 OID 17090)
+-- Dependencies: 241
+-- Data for Name: reclamo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.reclamo (id, id_usuario, id_tipo_reclamo, id_estado, descripcion, fecha_reclamo, fecha_solucion, detalle_solucion) FROM stdin;
+1	1	1	1	El cajero fue grosero y poco servicial al solicitar un retiro.	2025-10-20	\N	\N
+2	2	2	3	El saldo no refleja el último depósito realizado hace 24 horas.	2025-10-21	2025-10-22	Se verificó el depósito y se ajustó el saldo correctamente.
+3	3	3	2	Una transferencia a interbancaria no llegó a su destino.	2025-10-23	\N	\N
+4	4	4	2	No puedo acceder a mi perfil, la aplicación muestra error 500.	2025-10-24	\N	\N
+5	5	5	3	La página web tiene información contradictoria sobre las tasas de interés del préstamo.	2025-10-25	2025-10-26	Se actualizó la documentación del producto y se envió la información correcta por correo.
+\.
+
+
+--
+-- TOC entry 5238 (class 0 OID 17102)
+-- Dependencies: 243
+-- Data for Name: rol_usuario; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.rol_usuario (id, rol, descripcion) FROM stdin;
+1	Administrador	Gestiona todo el sistema
+2	Banco	Entidad bancaria del sistema
+3	Agente	Intermediario de empeños
+4	Cliente	Usuario que realiza operaciones
+5	Soporte	Asistencia técnica
+\.
+
+
+--
+-- TOC entry 5240 (class 0 OID 17107)
+-- Dependencies: 245
+-- Data for Name: solicitud; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.solicitud (id, id_tipo, id_estado, id_producto, descripcion, fecha_inicio, fecha_fin) FROM stdin;
+1	1	1	1	Solicitud de préstamo por laptop	2025-01-02	2025-02-02
+2	2	2	2	Solicitud de tarjeta de crédito	2025-02-11	2025-03-11
+3	3	3	3	Solicitud de nueva cuenta bancaria	2025-03-06	2025-04-06
+4	4	4	4	Solicitud de empeño de sofá	2025-04-21	2025-05-21
+5	5	5	5	Solicitud de retiro bancario	2025-05-16	2025-06-16
+\.
+
+
+--
+-- TOC entry 5242 (class 0 OID 17112)
+-- Dependencies: 247
+-- Data for Name: t_usuario; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.t_usuario (id_usuario, nombre, apellidos, dni_ruc, sexo, correo, telefono, direccion, nombre_usuario, contrasena, rol_usuario) FROM stdin;
+1	Juan	Pérez Soto	72345678	Masculino	juanp@example.com	912345678	Av. Lima 123	juanp	1234	4
+2	María	Gómez Ruiz	78901234	Femenino	cliente@cliente.com	923456789	Jr. Arequipa 450	mariag	cliente	4
+3	Carlos	Vargas León	80123456	Masculino	agente@agente.com	934567890	Av. Los Incas 320	carlosv	agente	3
+4	Lucía	Torres Díaz	74589632	Femenino	banco@banco.com	945678901	Calle Melgar 89	luciat	banco	2
+5	Sofía	Rojas Núñez	71458963	Femenino	admin@admin.com	956789012	Urb. Selva Alegre 10	sofiar	admin	1
+17	Nhayda	Mamani Ramos	72441982	Femenino	nhayda@gmail.com	969980096	Calle Rodriguez Ballón 207 - A	Nhayda	72441982	4
+20	Vilma Angelica	Ramos Pumacahua	04415267	Femenino	mavil@hotmail.com	953741667	Calle Calvario 207-B	Vilma Angelica	04415267	4
+19	Aldhair Said	Mamani Ramos	72441983	Masculino	notcompile@gmail.com	963023181	Asoc. 11 de Diciembre Mzn C2 Lote-6	Aldhair Said	72441983ASMR	1
+18	Jose 	Zea Sutta	72441984	Masculino	josez@gmail.com	968514271	Urb. El Rosario B-5	Jose 	72441983ASMR	4
+\.
+
+
+--
+-- TOC entry 5243 (class 0 OID 17118)
+-- Dependencies: 248
+-- Data for Name: tarjetas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tarjetas (id, id_cuenta, id_tipo, codigo, cvc, fecha_caducidad) FROM stdin;
+1	1	1	1111222233334444	123	2028-05-01
+2	2	2	5555666677778888	456	2027-09-15
+3	3	3	9999000011112222	789	2026-10-10
+4	4	4	3333444455556666	101	2029-02-25
+5	5	5	7777888899990000	202	2028-12-31
+6	5	2	9771930646997940	348	2025-12-05
+\.
+
+
+--
+-- TOC entry 5245 (class 0 OID 17123)
+-- Dependencies: 250
+-- Data for Name: tipo_documento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tipo_documento (id, tipo, descripcion) FROM stdin;
+1	Legal	Documento legal o contrato
+2	Reporte	Informe generado
+3	Identidad	Documento de identificación personal
+4	Factura	Factura emitida
+6	Example	Example2
+5	Recibo	Comprobante de pago
+\.
+
+
+--
+-- TOC entry 5247 (class 0 OID 17130)
+-- Dependencies: 252
+-- Data for Name: tipo_producto; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tipo_producto (id, nombre, descripcion) FROM stdin;
+1	Electrónico	Dispositivos y aparatos
+2	Joyería	Objetos de oro y plata
+3	Vehículo	Autos y motos
+4	Mueble	Muebles del hogar
+5	Herramienta	Equipos de trabajo
+\.
+
+
+--
+-- TOC entry 5249 (class 0 OID 17137)
+-- Dependencies: 254
+-- Data for Name: tipo_reclamo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tipo_reclamo (id, nombre, descripcion) FROM stdin;
+1	Mala Atención	Reclamo relacionado con el servicio o trato del personal.
+2	Error de Saldo	Reclamo por discrepancias en el saldo de una cuenta.
+3	Problema de Transferencia	Reclamo por fallos o demoras en una transferencia.
+4	Fallo en la App/Web	Reclamo por problemas técnicos en la plataforma digital.
+5	Información de Producto	Reclamo por información incorrecta o incompleta sobre un producto.
+\.
+
+
+--
+-- TOC entry 5251 (class 0 OID 17143)
+-- Dependencies: 256
+-- Data for Name: tipo_solicitud; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tipo_solicitud (id, nombre, descripcion) FROM stdin;
+1	Préstamo	Solicitud de préstamo
+2	Tarjeta	Solicitud de tarjeta
+3	Cuenta	Solicitud de cuenta bancaria
+4	Empeño	Solicitud de empeño
+5	Retiro	Solicitud de retiro o transferencia
+\.
+
+
+--
+-- TOC entry 5253 (class 0 OID 17150)
+-- Dependencies: 258
+-- Data for Name: tipo_tarjeta; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tipo_tarjeta (id, tipo, descripcion) FROM stdin;
+1	Débito	Tarjeta de débito estándar
+2	Crédito	Tarjeta de crédito personal
+3	Prepago	Tarjeta prepago
+4	Virtual	Tarjeta virtual para compras online
+5	Corporativa	Tarjeta de uso empresarial
+\.
+
+
+--
+-- TOC entry 5255 (class 0 OID 17155)
+-- Dependencies: 260
+-- Data for Name: tipo_transferencia; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tipo_transferencia (id, nombre, descripcion) FROM stdin;
+2	Interbancaria	Transferencia entre bancos distintos
+3	Internacional	Transferencia internacional
+4	Automática	Transferencia automática programada
+5	Manual	Transferencia hecha por el usuario
+1	Bancaria	Transferencia entre cuentas del mismo bancos
+\.
+
+
+--
+-- TOC entry 5257 (class 0 OID 17162)
+-- Dependencies: 262
+-- Data for Name: transferencia; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.transferencia (id, id_usuario_emisor, id_cuenta_emisor, id_usuario_receptor, id_cuenta_receptor, id_tipo, monto, fecha) FROM stdin;
+1	1	1	2	2	1	300.00	2025-06-01
+2	2	2	3	3	2	500.00	2025-06-10
+3	3	3	4	4	3	750.00	2025-07-05
+4	4	4	5	5	4	1000.00	2025-08-01
+5	5	5	1	1	5	1200.00	2025-09-01
+6	17	1	17	2	1	300.00	2025-12-03
+7	1	10	18	3	1	200.00	2025-12-03
+\.
+
+
+--
+-- TOC entry 5288 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: cuenta_bancaria_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.cuenta_bancaria_id_seq', 20, true);
+
+
+--
+-- TOC entry 5289 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: documento_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.documento_id_seq', 5, true);
+
+
+--
+-- TOC entry 5290 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: empeno_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.empeno_id_seq', 5, true);
+
+
+--
+-- TOC entry 5291 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: estado_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.estado_id_seq', 5, true);
+
+
+--
+-- TOC entry 5292 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: estado_solicitud_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.estado_solicitud_id_seq', 5, true);
+
+
+--
+-- TOC entry 5293 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: lista_cuentasbancarias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.lista_cuentasbancarias_id_seq', 5, true);
+
+
+--
+-- TOC entry 5294 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: lista_documentos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.lista_documentos_id_seq', 5, true);
+
+
+--
+-- TOC entry 5295 (class 0 OID 0)
+-- Dependencies: 234
+-- Name: lista_empenos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.lista_empenos_id_seq', 5, true);
+
+
+--
+-- TOC entry 5296 (class 0 OID 0)
+-- Dependencies: 236
+-- Name: lista_solicitudes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.lista_solicitudes_id_seq', 5, true);
+
+
+--
+-- TOC entry 5297 (class 0 OID 0)
+-- Dependencies: 238
+-- Name: lista_tarjetas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.lista_tarjetas_id_seq', 5, true);
+
+
+--
+-- TOC entry 5298 (class 0 OID 0)
+-- Dependencies: 240
+-- Name: producto_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.producto_id_seq', 5, true);
+
+
+--
+-- TOC entry 5299 (class 0 OID 0)
+-- Dependencies: 242
+-- Name: reclamo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.reclamo_id_seq', 5, true);
+
+
+--
+-- TOC entry 5300 (class 0 OID 0)
+-- Dependencies: 244
+-- Name: rol_usuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.rol_usuario_id_seq', 5, true);
+
+
+--
+-- TOC entry 5301 (class 0 OID 0)
+-- Dependencies: 246
+-- Name: solicitud_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.solicitud_id_seq', 5, true);
+
+
+--
+-- TOC entry 5302 (class 0 OID 0)
+-- Dependencies: 249
+-- Name: tarjetas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tarjetas_id_seq', 8, true);
+
+
+--
+-- TOC entry 5303 (class 0 OID 0)
+-- Dependencies: 251
+-- Name: tipo_documento_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tipo_documento_id_seq', 7, true);
+
+
+--
+-- TOC entry 5304 (class 0 OID 0)
+-- Dependencies: 253
+-- Name: tipo_producto_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tipo_producto_id_seq', 7, true);
+
+
+--
+-- TOC entry 5305 (class 0 OID 0)
+-- Dependencies: 255
+-- Name: tipo_reclamo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tipo_reclamo_id_seq', 5, true);
+
+
+--
+-- TOC entry 5306 (class 0 OID 0)
+-- Dependencies: 257
+-- Name: tipo_solicitud_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tipo_solicitud_id_seq', 5, true);
+
+
+--
+-- TOC entry 5307 (class 0 OID 0)
+-- Dependencies: 259
+-- Name: tipo_tarjeta_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tipo_tarjeta_id_seq', 5, true);
+
+
+--
+-- TOC entry 5308 (class 0 OID 0)
+-- Dependencies: 261
+-- Name: tipo_transferencia_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tipo_transferencia_id_seq', 6, true);
+
+
+--
+-- TOC entry 5309 (class 0 OID 0)
+-- Dependencies: 263
+-- Name: transferencia_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.transferencia_id_seq', 7, true);
+
+
+--
+-- TOC entry 5310 (class 0 OID 0)
+-- Dependencies: 264
+-- Name: usuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.usuario_id_seq', 20, true);
+
+
+--
+-- TOC entry 4991 (class 2606 OID 17192)
+-- Name: cuenta_bancaria cuenta_bancaria_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuenta_bancaria
+    ADD CONSTRAINT cuenta_bancaria_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4993 (class 2606 OID 17194)
+-- Name: documento documento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.documento
+    ADD CONSTRAINT documento_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4995 (class 2606 OID 17196)
+-- Name: empeno empeno_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empeno
+    ADD CONSTRAINT empeno_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4997 (class 2606 OID 17198)
+-- Name: estado estado_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.estado
+    ADD CONSTRAINT estado_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4999 (class 2606 OID 17200)
+-- Name: estado_solicitud estado_solicitud_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.estado_solicitud
+    ADD CONSTRAINT estado_solicitud_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5001 (class 2606 OID 17202)
+-- Name: lista_cuentasbancarias lista_cuentasbancarias_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_cuentasbancarias
+    ADD CONSTRAINT lista_cuentasbancarias_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5003 (class 2606 OID 17204)
+-- Name: lista_documentos lista_documentos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_documentos
+    ADD CONSTRAINT lista_documentos_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5005 (class 2606 OID 17206)
+-- Name: lista_empenos lista_empenos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_empenos
+    ADD CONSTRAINT lista_empenos_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5007 (class 2606 OID 17208)
+-- Name: lista_solicitudes lista_solicitudes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_solicitudes
+    ADD CONSTRAINT lista_solicitudes_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5009 (class 2606 OID 17210)
+-- Name: lista_tarjetas lista_tarjetas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_tarjetas
+    ADD CONSTRAINT lista_tarjetas_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5011 (class 2606 OID 17212)
+-- Name: producto producto_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.producto
+    ADD CONSTRAINT producto_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5013 (class 2606 OID 17214)
+-- Name: reclamo reclamo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reclamo
+    ADD CONSTRAINT reclamo_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5015 (class 2606 OID 17216)
+-- Name: rol_usuario rol_usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rol_usuario
+    ADD CONSTRAINT rol_usuario_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5017 (class 2606 OID 17218)
+-- Name: solicitud solicitud_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.solicitud
+    ADD CONSTRAINT solicitud_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5021 (class 2606 OID 17220)
+-- Name: tarjetas tarjetas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tarjetas
+    ADD CONSTRAINT tarjetas_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5023 (class 2606 OID 17222)
+-- Name: tipo_documento tipo_documento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_documento
+    ADD CONSTRAINT tipo_documento_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5025 (class 2606 OID 17224)
+-- Name: tipo_producto tipo_producto_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_producto
+    ADD CONSTRAINT tipo_producto_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5027 (class 2606 OID 17226)
+-- Name: tipo_reclamo tipo_reclamo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_reclamo
+    ADD CONSTRAINT tipo_reclamo_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5029 (class 2606 OID 17228)
+-- Name: tipo_solicitud tipo_solicitud_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_solicitud
+    ADD CONSTRAINT tipo_solicitud_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5031 (class 2606 OID 17230)
+-- Name: tipo_tarjeta tipo_tarjeta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_tarjeta
+    ADD CONSTRAINT tipo_tarjeta_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5033 (class 2606 OID 17232)
+-- Name: tipo_transferencia tipo_transferencia_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipo_transferencia
+    ADD CONSTRAINT tipo_transferencia_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5035 (class 2606 OID 17234)
+-- Name: transferencia transferencia_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transferencia
+    ADD CONSTRAINT transferencia_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5019 (class 2606 OID 17236)
+-- Name: t_usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.t_usuario
+    ADD CONSTRAINT usuario_pkey PRIMARY KEY (id_usuario);
+
+
+--
+-- TOC entry 5036 (class 2606 OID 17237)
+-- Name: cuenta_bancaria cuenta_bancaria_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuenta_bancaria
+    ADD CONSTRAINT cuenta_bancaria_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.t_usuario(id_usuario);
+
+
+--
+-- TOC entry 5037 (class 2606 OID 17242)
+-- Name: documento documento_id_tipo_documento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.documento
+    ADD CONSTRAINT documento_id_tipo_documento_fkey FOREIGN KEY (id_tipo_documento) REFERENCES public.tipo_documento(id);
+
+
+--
+-- TOC entry 5038 (class 2606 OID 17247)
+-- Name: empeno empeno_id_estado_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empeno
+    ADD CONSTRAINT empeno_id_estado_fkey FOREIGN KEY (id_estado) REFERENCES public.estado(id);
+
+
+--
+-- TOC entry 5039 (class 2606 OID 17252)
+-- Name: empeno empeno_id_producto_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empeno
+    ADD CONSTRAINT empeno_id_producto_fkey FOREIGN KEY (id_producto) REFERENCES public.producto(id);
+
+
+--
+-- TOC entry 5040 (class 2606 OID 17257)
+-- Name: lista_cuentasbancarias lista_cuentasbancarias_id_cuenta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_cuentasbancarias
+    ADD CONSTRAINT lista_cuentasbancarias_id_cuenta_fkey FOREIGN KEY (id_cuenta) REFERENCES public.cuenta_bancaria(id);
+
+
+--
+-- TOC entry 5041 (class 2606 OID 17262)
+-- Name: lista_cuentasbancarias lista_cuentasbancarias_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_cuentasbancarias
+    ADD CONSTRAINT lista_cuentasbancarias_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.t_usuario(id_usuario);
+
+
+--
+-- TOC entry 5042 (class 2606 OID 17267)
+-- Name: lista_documentos lista_documentos_id_documento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_documentos
+    ADD CONSTRAINT lista_documentos_id_documento_fkey FOREIGN KEY (id_documento) REFERENCES public.documento(id);
+
+
+--
+-- TOC entry 5043 (class 2606 OID 17272)
+-- Name: lista_documentos lista_documentos_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_documentos
+    ADD CONSTRAINT lista_documentos_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.t_usuario(id_usuario);
+
+
+--
+-- TOC entry 5044 (class 2606 OID 17277)
+-- Name: lista_empenos lista_empenos_id_empeno_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_empenos
+    ADD CONSTRAINT lista_empenos_id_empeno_fkey FOREIGN KEY (id_empeno) REFERENCES public.empeno(id);
+
+
+--
+-- TOC entry 5045 (class 2606 OID 17282)
+-- Name: lista_empenos lista_empenos_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_empenos
+    ADD CONSTRAINT lista_empenos_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.t_usuario(id_usuario);
+
+
+--
+-- TOC entry 5046 (class 2606 OID 17287)
+-- Name: lista_solicitudes lista_solicitudes_id_solicitud_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_solicitudes
+    ADD CONSTRAINT lista_solicitudes_id_solicitud_fkey FOREIGN KEY (id_solicitud) REFERENCES public.solicitud(id);
+
+
+--
+-- TOC entry 5047 (class 2606 OID 17292)
+-- Name: lista_solicitudes lista_solicitudes_id_usuario_banco_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_solicitudes
+    ADD CONSTRAINT lista_solicitudes_id_usuario_banco_fkey FOREIGN KEY (id_usuario_banco) REFERENCES public.t_usuario(id_usuario);
+
+
+--
+-- TOC entry 5048 (class 2606 OID 17297)
+-- Name: lista_solicitudes lista_solicitudes_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_solicitudes
+    ADD CONSTRAINT lista_solicitudes_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.t_usuario(id_usuario);
+
+
+--
+-- TOC entry 5049 (class 2606 OID 17302)
+-- Name: lista_tarjetas lista_tarjetas_id_tarjeta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_tarjetas
+    ADD CONSTRAINT lista_tarjetas_id_tarjeta_fkey FOREIGN KEY (id_tarjeta) REFERENCES public.tarjetas(id);
+
+
+--
+-- TOC entry 5050 (class 2606 OID 17307)
+-- Name: lista_tarjetas lista_tarjetas_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lista_tarjetas
+    ADD CONSTRAINT lista_tarjetas_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.t_usuario(id_usuario);
+
+
+--
+-- TOC entry 5051 (class 2606 OID 17312)
+-- Name: producto producto_id_tipo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.producto
+    ADD CONSTRAINT producto_id_tipo_fkey FOREIGN KEY (id_tipo) REFERENCES public.tipo_producto(id);
+
+
+--
+-- TOC entry 5052 (class 2606 OID 17317)
+-- Name: producto producto_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.producto
+    ADD CONSTRAINT producto_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.t_usuario(id_usuario);
+
+
+--
+-- TOC entry 5053 (class 2606 OID 17322)
+-- Name: reclamo reclamo_id_estado_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reclamo
+    ADD CONSTRAINT reclamo_id_estado_fkey FOREIGN KEY (id_estado) REFERENCES public.estado(id);
+
+
+--
+-- TOC entry 5054 (class 2606 OID 17327)
+-- Name: reclamo reclamo_id_tipo_reclamo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reclamo
+    ADD CONSTRAINT reclamo_id_tipo_reclamo_fkey FOREIGN KEY (id_tipo_reclamo) REFERENCES public.tipo_reclamo(id);
+
+
+--
+-- TOC entry 5055 (class 2606 OID 17332)
+-- Name: reclamo reclamo_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reclamo
+    ADD CONSTRAINT reclamo_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.t_usuario(id_usuario);
+
+
+--
+-- TOC entry 5056 (class 2606 OID 17337)
+-- Name: solicitud solicitud_id_estado_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.solicitud
+    ADD CONSTRAINT solicitud_id_estado_fkey FOREIGN KEY (id_estado) REFERENCES public.estado_solicitud(id);
+
+
+--
+-- TOC entry 5057 (class 2606 OID 17342)
+-- Name: solicitud solicitud_id_producto_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.solicitud
+    ADD CONSTRAINT solicitud_id_producto_fkey FOREIGN KEY (id_producto) REFERENCES public.producto(id);
+
+
+--
+-- TOC entry 5058 (class 2606 OID 17347)
+-- Name: solicitud solicitud_id_tipo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.solicitud
+    ADD CONSTRAINT solicitud_id_tipo_fkey FOREIGN KEY (id_tipo) REFERENCES public.tipo_solicitud(id);
+
+
+--
+-- TOC entry 5060 (class 2606 OID 17352)
+-- Name: tarjetas tarjetas_id_cuenta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tarjetas
+    ADD CONSTRAINT tarjetas_id_cuenta_fkey FOREIGN KEY (id_cuenta) REFERENCES public.cuenta_bancaria(id);
+
+
+--
+-- TOC entry 5061 (class 2606 OID 17357)
+-- Name: tarjetas tarjetas_id_tipo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tarjetas
+    ADD CONSTRAINT tarjetas_id_tipo_fkey FOREIGN KEY (id_tipo) REFERENCES public.tipo_tarjeta(id);
+
+
+--
+-- TOC entry 5062 (class 2606 OID 17362)
+-- Name: transferencia transferencia_id_cuenta_emisor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transferencia
+    ADD CONSTRAINT transferencia_id_cuenta_emisor_fkey FOREIGN KEY (id_cuenta_emisor) REFERENCES public.cuenta_bancaria(id);
+
+
+--
+-- TOC entry 5063 (class 2606 OID 17367)
+-- Name: transferencia transferencia_id_cuenta_receptor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transferencia
+    ADD CONSTRAINT transferencia_id_cuenta_receptor_fkey FOREIGN KEY (id_cuenta_receptor) REFERENCES public.cuenta_bancaria(id);
+
+
+--
+-- TOC entry 5064 (class 2606 OID 17372)
+-- Name: transferencia transferencia_id_tipo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transferencia
+    ADD CONSTRAINT transferencia_id_tipo_fkey FOREIGN KEY (id_tipo) REFERENCES public.tipo_transferencia(id);
+
+
+--
+-- TOC entry 5065 (class 2606 OID 17377)
+-- Name: transferencia transferencia_id_usuario_emisor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transferencia
+    ADD CONSTRAINT transferencia_id_usuario_emisor_fkey FOREIGN KEY (id_usuario_emisor) REFERENCES public.t_usuario(id_usuario);
+
+
+--
+-- TOC entry 5066 (class 2606 OID 17382)
+-- Name: transferencia transferencia_id_usuario_receptor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transferencia
+    ADD CONSTRAINT transferencia_id_usuario_receptor_fkey FOREIGN KEY (id_usuario_receptor) REFERENCES public.t_usuario(id_usuario);
+
+
+--
+-- TOC entry 5059 (class 2606 OID 17387)
+-- Name: t_usuario usuario_rol_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.t_usuario
+    ADD CONSTRAINT usuario_rol_usuario_fkey FOREIGN KEY (rol_usuario) REFERENCES public.rol_usuario(id);
+
+
+-- Completed on 2025-12-04 09:35:12
+
+--
+-- PostgreSQL database dump complete
+--
+
+\unrestrict 51WxANHXcKx5xV4dYQ0mAWHtkQ9d0LBkEPq7DeL1n0E4okmMRcgQzmsy4Mar0A5
+
