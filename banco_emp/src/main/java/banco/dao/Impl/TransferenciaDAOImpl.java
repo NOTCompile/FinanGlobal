@@ -4,10 +4,15 @@ import banco.dao.TransferenciaDAO;
 import banco.models.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,14 +122,30 @@ public class TransferenciaDAOImpl implements TransferenciaDAO {
     public Transferencia save(Transferencia t) {
         String sql = "INSERT INTO transferencia (id_usuario_emisor, id_cuenta_emisor, id_usuario_receptor, id_cuenta_receptor, id_tipo, monto, fecha) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        jdbcTemplate.update(sql,
-                t.getUsuarioEmisor().getId_usuario(),
-                t.getCuentaEmisora().getId(),
-                t.getUsuarioReceptor().getId_usuario(),
-                t.getCuentaReceptora().getId(),
-                t.getTipoTransferencia().getId(),
-                t.getMonto(),
-                t.getFecha());
+        // Usar KeyHolder para recuperar el ID autogenerado
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, t.getUsuarioEmisor().getId_usuario());
+            ps.setInt(2, t.getCuentaEmisora().getId());
+            ps.setInt(3, t.getUsuarioReceptor().getId_usuario());
+            ps.setInt(4, t.getCuentaReceptora().getId());
+            ps.setInt(5, t.getTipoTransferencia().getId());
+            ps.setBigDecimal(6, t.getMonto());
+            ps.setDate(7, Date.valueOf(t.getFecha()));
+            return ps;
+        }, keyHolder);
+
+        // Recuperar el ID generado (PostgreSQL retorna todas las columnas, solo queremos el id)
+        if (keyHolder.getKeys() != null && keyHolder.getKeys().containsKey("id")) {
+            Number key = (Number) keyHolder.getKeys().get("id");
+            t.setId(key.intValue());
+            System.out.println("✓ ID generado para transferencia: " + t.getId());
+        } else {
+            System.err.println("ADVERTENCIA: No se pudo obtener el ID generado");
+        }
+
         return t;
     }
 

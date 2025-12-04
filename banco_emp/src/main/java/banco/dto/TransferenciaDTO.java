@@ -1,5 +1,6 @@
 package banco.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -7,9 +8,16 @@ import java.time.LocalDate;
 public class TransferenciaDTO {
 
     private BigDecimal monto;
+
+    @JsonProperty("nCuentaEmisora")
     private String nCuentaEmisora;
+
+    @JsonProperty("nCuentaReceptora")
     private String nCuentaReceptora;
+
+    @JsonProperty("idTipoTransferencia")
     private Integer idTipoTransferencia;
+
     // Opcionalmente, puedes incluir el ID del usuario logueado (Emisor) aquí, o tomarlo del contexto de seguridad.
 
     // Getters y Setters
