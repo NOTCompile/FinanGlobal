@@ -20,6 +20,21 @@ export class TransferenciaService {
     return this.http.get<Tranferencia[]>(this.apiUrl).pipe(tap((data) => this.guardarLocal(data)));
   }
 
+  // Obtener transferencia por ID
+  getById(id: number): Observable<Tranferencia> {
+    return this.http.get<Tranferencia>(`${this.apiUrl}/${id}`);
+  }
+
+  // Realizar transferencia
+  realizar(dto: Partial<Tranferencia>): Observable<Tranferencia> {
+    return this.http.post<Tranferencia>(`${this.apiUrl}/realizar`, dto).pipe(
+      tap((nueva) => {
+        const actualizadas = [...this.transferencias(), nueva];
+        this.guardarLocal(actualizadas);
+      })
+    );
+  }
+
   /* Local Storage */
   private inicializarData() {
     const data = localStorage.getItem('Transferencias');
