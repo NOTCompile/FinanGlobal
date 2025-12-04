@@ -76,7 +76,7 @@ export class AddBankAdmin implements OnInit {
 
   // Formulario
   formAddCuenta: FormGroup = this.fb.group({
-    nombre: ['', [Validators.required]],
+    nombre: ['', Validators.required],
     usuario: ['', Validators.required],
     saldo: ['', Validators.required],
   });

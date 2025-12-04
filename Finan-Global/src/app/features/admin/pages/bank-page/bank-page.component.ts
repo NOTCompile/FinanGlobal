@@ -3,7 +3,6 @@ import { Cuenta_Bancaria } from 'src/app/shared/interfaces/Cuenta_Bancaria-Inter
 import { CuentaBancariaService } from 'src/app/shared/services/CuentaBancaria.service';
 import { ModalCuentaBancariaAdministrador } from '../../services/modalCuentaBancaria.service';
 import { AddBankAdmin } from '../../components/modals/add-bank-admin/add-bank-admin';
-import { usuarioService } from 'src/app/shared/services/Usuario.service';
 import { Cuenta_BancariaDTO } from 'src/app/shared/interfaces/DTO/Cuenta_BancariaDTO-Interface';
 import { ReporteService } from 'src/app/shared/services/Reporte.service';
 
