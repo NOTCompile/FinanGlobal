@@ -1,4 +1,4 @@
-import { Component, effect, EventEmitter, inject, Input, input, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Usuario } from 'src/app/shared/interfaces/Usuario-Interface';
 import { ModalClienteAdministrador } from '../../../services/modalCliente.service';

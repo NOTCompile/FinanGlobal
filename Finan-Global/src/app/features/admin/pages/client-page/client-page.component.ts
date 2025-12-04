@@ -3,6 +3,7 @@ import { Usuario } from 'src/app/shared/interfaces/Usuario-Interface';
 import { usuarioService } from 'src/app/shared/services/Usuario.service';
 import { AddClientAdmin } from '../../components/modals/add-client-admin/add-client-admin';
 import { ModalClienteAdministrador } from '../../services/modalCliente.service';
+import { ReporteService } from 'src/app/shared/services/Reporte.service';
 
 @Component({
   selector: 'app-client-page',
@@ -15,26 +16,23 @@ export default class ClientPage implements OnInit {
   // Servicios
   private usuarioServicio = inject(usuarioService);
   private modalState = inject(ModalClienteAdministrador);
+  private reporteService = inject(ReporteService); // PDF
 
   // Estado reactivo
   usuarios = signal<Usuario[]>([]);
   modo = signal<'agregar' | 'editar'>('agregar');
   usuarioSeleccionado = signal<Partial<Usuario> | null>(null);
 
-  // Computed: total de usuarios
-  totalUsuarios = computed(() => this.usuarios().length);
-
   // Ciclo de vida
   ngOnInit(): void {
     this.cargarUsuarios();
   }
 
-  /** Carga usuarios de rol 4 (clientes) */
+  // Carga usuarios de rol 4 (clientes)
   cargarUsuarios(): void {
     this.usuarioServicio.findByRol(4).subscribe({
       next: (data) => {
         this.usuarios.set(data);
-        localStorage.setItem('clientes', JSON.stringify(data));
       },
       error: (err) => console.error('Error al obtener usuarios:', err),
     });
@@ -44,16 +42,16 @@ export default class ClientPage implements OnInit {
   abrirModalAgregar(): void {
     this.modo.set('agregar');
     this.usuarioSeleccionado.set({
-    dni_ruc: '',
-    correo: '',
-    contrasena: '',
-    nombre: '',
-    apellidos: '',
-    direccion: '',
-    sexo: 'Seleccione...',
-    telefono: '',
-    rol_usuario: 4, 
-  });
+      dni_ruc: '',
+      correo: '',
+      contrasena: '',
+      nombre: '',
+      apellidos: '',
+      direccion: '',
+      sexo: 'Seleccione...',
+      telefono: '',
+      rol_usuario: 4,
+    });
     this.modalState.open();
   }
 
@@ -114,6 +112,18 @@ export default class ClientPage implements OnInit {
         console.error('Error al eliminar usuario:', err);
         alert('No se pudo eliminar el usuario');
       },
+    });
+  }
+
+  /* PDF */
+  obtenerPDFGeneral(nombre: string) {
+    this.reporteService.descargarReporteGeneral(nombre).subscribe({
+      next: (data: Blob) => {
+        const file = new Blob([data], { type: 'application/pdf' });
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL, '_blank');
+      },
+      error: (err) => console.error('Error al mostrar PDF:', err),
     });
   }
 }

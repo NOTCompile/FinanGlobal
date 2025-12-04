@@ -11,11 +11,10 @@ import { ReporteService } from 'src/app/shared/services/Reporte.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class DashboardPageComponent {
-
   constructor(private reporteService: ReporteService) {}
 
   verPDF(nombre: string) {
-    this.reporteService.descargarReportePDF(nombre).subscribe({
+    this.reporteService.descargarReporteGeneral(nombre).subscribe({
       next: (data: Blob) => {
         const file = new Blob([data], { type: 'application/pdf' });
         const fileURL = URL.createObjectURL(file);

@@ -1,5 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Usuario } from 'src/app/shared/interfaces/Usuario-Interface';
+import { CuentaBancariaService } from 'src/app/shared/services/CuentaBancaria.service';
+import { EmpenoService } from 'src/app/shared/services/Empeno.service';
 import { usuarioService } from 'src/app/shared/services/Usuario.service';
 
 @Component({
@@ -10,12 +12,16 @@ import { usuarioService } from 'src/app/shared/services/Usuario.service';
 })
 export class StatsCardAdmin implements OnInit {
   private usuarioServicio = inject(usuarioService);
+  private cuentaBancariaServicio = inject(CuentaBancariaService);
+  private empenioService = inject(EmpenoService);
 
   // Estado reactivo
   usuarios = signal<Usuario[]>([]);
 
-  // Computed: total de usuarios
+  // Computed: totales
   totalUsuarios = computed(() => this.usuarios().length);
+  totalCuentasBancarias = this.cuentaBancariaServicio.totalCuentas;
+  totalEmpenios = this.empenioService.totalEmpenos;
 
   ngOnInit(): void {
     this.cargarUsuarios();
@@ -28,7 +34,7 @@ export class StatsCardAdmin implements OnInit {
       next: (data) => {
         this.usuarios.set(data);
       },
-      error: (err) => console.error('Error al obtener usuarios:', err),
+      error: (err) => console.error('Error al obtener total de clientes:', err),
     });
   }
 }
