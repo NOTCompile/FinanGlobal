@@ -32,6 +32,11 @@ export class TarjetaService {
     return this.http.get<Tarjeta[]>(`${this.apiUrl}/cuenta/${idCuenta}`);
   }
 
+  // Obtener cuentas por ID de usuario desde la data local
+  getByUsuarioLocal(idUsuario: number): Tarjeta[] {
+    return this.tarjetaBancaria().filter((cuenta) => cuenta.cuentaBancaria.id === idUsuario);
+  }
+
   // Crear tarjeta
   create(dto: TarjetaDTO): Observable<Tarjeta> {
     return this.http.post<Tarjeta>(this.apiUrl, dto).pipe(

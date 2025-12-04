@@ -21,11 +21,4 @@ export class ReporteService {
     const url = `${this.apiUrl}/usuario?nombre=${nombre}&idUsuario=${idUsuario}`;
     return this.http.get(url, { responseType: 'blob' });
   }
-
-  /*   descargarReportePDF(nombre: string): Observable<Blob> {
-    console.log('Reporte generado');
-    return this.http.get(`${this.apiUrl}/descargar?nombre=${nombre}`, {
-      responseType: 'blob',
-    });
-  } */
 }

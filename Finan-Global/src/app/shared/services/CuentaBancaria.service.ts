@@ -45,6 +45,10 @@ export class CuentaBancariaService {
   }
 
   /* Funciones Página */
+  // Obtener cuentas por ID de usuario desde la data local
+  getByUsuarioLocal(idUsuario: number): Cuenta_Bancaria[] {
+    return this.cuentasBancarias().filter((cuenta) => cuenta.usuario.id_usuario === idUsuario);
+  }
 
   // Total de Cuentas
   totalCuentas = computed(() => this.cuentasBancarias().length);
