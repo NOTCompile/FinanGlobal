@@ -10,10 +10,15 @@ export class ReporteService {
 
   constructor(private http: HttpClient) {}
 
-  descargarReportePDF(nombre: string): Observable<Blob> {
-    console.log('Reporte generado');
-    return this.http.get(`${this.apiUrl}/descargar?nombre=${nombre}`, {
-      responseType: 'blob',
-    });
+  // Reporte General
+  descargarReporteGeneral(nombre: string): Observable<Blob> {
+    const url = `${this.apiUrl}/generales?nombre=${nombre}`;
+    return this.http.get(url, { responseType: 'blob' });
+  }
+
+  // Reporte por usuario
+  descargarReportePorUsuario(nombre: string, idUsuario: number): Observable<Blob> {
+    const url = `${this.apiUrl}/usuario?nombre=${nombre}&idUsuario=${idUsuario}`;
+    return this.http.get(url, { responseType: 'blob' });
   }
 }

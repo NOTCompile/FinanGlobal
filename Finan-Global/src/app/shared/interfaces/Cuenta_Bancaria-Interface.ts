@@ -1,8 +1,10 @@
+import { Usuario } from './Usuario-Interface';
+
 export interface Cuenta_Bancaria {
   id: number;
-  n_cuenta: string;
+  ncuenta: string;
   n_intercuenta: string;
   nombre: string;
   saldo: number;
-  id_usuario: number;
+  usuario: Usuario;
 }

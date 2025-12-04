@@ -1,0 +1,68 @@
+@if (modalState.isOpen()) {
+<div class="modal fade show d-block animate-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog fade modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-3 border-0">
+      <!-- Modal Title -->
+      <div class="modal-header modal-finanglobal text-white">
+        <h5 class="modal-title">
+          {{ modo === 'editar' ? 'Editar Transferencia' : 'Nuevo Transferencia' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+      </div>
+      <!-- Modal Content -->
+      <div class="modal-body">
+        <form [formGroup]="formAddTransferencia" class="row g-3">
+          <div class="col-md-12">
+            <label class="form-label">Cliente Emisor:</label>
+            <select formControlName="nCuentaEmisora" class="form-select">
+              <option selected>Seleccione...</option>
+              @for (item of cuentaBancaria(); track item.id) {
+              <option value="{{ item.ncuenta }}">
+                {{ item.usuario.nombre }} {{ item.usuario.apellidos }} - {{ item.ncuenta }} -
+                {{ item.saldo }}
+              </option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-12 text-center d-flex justify-content-center align-items-center">
+            <i class="fa-solid fa-angles-down fs-3"></i>
+
+            <div class="col-md-4">
+              <label class="form-label">Monto: </label>
+              <input type="text" formControlName="monto" class="form-control" />
+            </div>
+            <i class="fa-solid fa-angles-down fs-3"></i>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Cliente Emisor:</label>
+            <select formControlName="nCuentaReceptora" class="form-select">
+              <option selected>Seleccione...</option>
+              @for (item of cuentaBancaria(); track item.id) {
+              <option value="{{ item.ncuenta }}">
+                {{ item.usuario.nombre }} {{ item.usuario.apellidos }} - {{ item.ncuenta }} -
+                {{ item.saldo }}
+              </option>
+              }
+            </select>
+          </div>
+        </form>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-outline-danger" (click)="cerrarModal()">Cancelar</button>
+        <button
+          class="btn btn-success"
+          [disabled]="formAddTransferencia.invalid"
+          (click)="onSubmit()"
+        >
+          Realizar Transferencia
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade show"></div>
+}

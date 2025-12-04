@@ -83,4 +83,21 @@ public class CuentaBancariaController {
         return ResponseEntity.noContent().build();
     }
 
+    // 6. BUSCAR POR NÚMERO DE CUENTA (Endpoint de depuración)
+    @GetMapping("/buscar/{nCuenta}")
+    public ResponseEntity<?> buscarPorNCuenta(@PathVariable String nCuenta) {
+        System.out.println("=== ENDPOINT DEBUG: Buscando cuenta por número ===");
+        System.out.println("Parámetro recibido: '" + nCuenta + "'");
+        System.out.println("Longitud: " + nCuenta.length());
+
+        java.util.Optional<CuentaBancaria> cuenta = cuentaBancariaService.findByNCuenta(nCuenta);
+
+        if (cuenta.isPresent()) {
+            return ResponseEntity.ok(cuenta.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontró cuenta con número: '" + nCuenta + "'");
+        }
+    }
+
 }

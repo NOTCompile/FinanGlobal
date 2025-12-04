@@ -1,0 +1,38 @@
+@if (modalState.isOpen()) {
+<div class="modal fade show d-block animate-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog fade modal modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-3 border-0">
+      <!-- Modal Title -->
+      <div class="modal-header modal-finanglobal text-white">
+        <h5 class="modal-title">
+          {{ modo === 'editar' ? 'Editar Tipo Documento' : 'Nuevo Tipo Documento' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+      </div>
+      <!-- Modal Content -->
+      <div class="modal-body">
+        <form [formGroup]="formAddtDocumento" class="row g-3">
+          <div class="col-md-12">
+            <label class="form-label">Tipo:</label>
+            <input type="text" formControlName="nombre" class="form-control" />
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Descripción:</label>
+            <input type="text" formControlName="descripcion" class="form-control" />
+          </div>
+        </form>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-outline-danger" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn btn-success" [disabled]="formAddtDocumento.invalid" (click)="onSubmit()">
+          {{ modo === 'editar' ? 'Actualizar Tipo Documento' : 'Agregar Tipo Documento' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade show"></div>
+}

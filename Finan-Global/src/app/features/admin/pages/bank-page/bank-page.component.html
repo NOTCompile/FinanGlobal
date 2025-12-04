@@ -3,10 +3,12 @@
     <div class="d-flex align-items-center justify-content-between mb-3 gap-4 p-2">
       <h5><i class="fa-solid fa-wallet me-2"></i>Gestión de Cuentas Bancarias</h5>
 
-      <div class="input-group w-50">
-        <input type="search" class="form-control" placeholder="Buscar cliente..." />
-        <button class="btn btn-outline-secondary" type="button" id="button-addon2">
-          <i class="fa-solid fa-magnifying-glass"></i>
+      <div class="input-group w-50 justify-content-center">
+        <button
+          class="btn btn-finanglobal"
+          (click)="obtenerPDFGeneral('Reporte_General_Cuentas_Bancarias')"
+        >
+          <i class="fa-solid fa-file-pdf me-2"></i>Reporte General de Cuentas Bancarias
         </button>
       </div>
 
@@ -28,17 +30,20 @@
       <tbody class="table-group-divider">
         @for (item of cuentaBancaria(); track $index) {
         <tr>
-          <th scope="row">{{ item.id_cuenta_bancaria }}</th>
-          <td>{{ item.id_usuario }}</td>
+          <th scope="row">{{ item.id }}</th>
+          <td>{{ item.usuario.nombre }} {{ item.usuario.apellidos }}</td>
           <td>{{ item.nombre }}</td>
-          <td>{{ item.n_cuenta }}</td>
-          <td>{{ item.saldo}} </td>
+          <td>{{ item.ncuenta }}</td>
+          <td>{{ item.saldo }}</td>
           <td>
-            <button (click)="null" class="btn btn-sm btn-outline-warning me-1 ms-1">
+            <button
+              (click)="abrirModalEditar(item)"
+              class="btn btn-sm btn-outline-warning me-1 ms-1"
+            >
               <i class="fa-solid fa-pen"></i>
             </button>
             <button
-              (click)="null"
+              (click)="eliminarCuentaBancaria(item.id)"
               class="btn btn-sm btn-outline-danger ms-1"
             >
               <i class="fa-solid fa-trash"></i>
@@ -50,3 +55,9 @@
     </table>
   </div>
 </div>
+
+<app-add-bank-admin
+  [modo]="modo()"
+  [cuentaBancaria]="cuentaSeleccionada()"
+  (guardar)="onGuardar($event)"
+></app-add-bank-admin>

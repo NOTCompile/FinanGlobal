@@ -1,0 +1,104 @@
+@if (modalEstado.isOpen()) { @if (modo === 'agregar') {
+<div class="modal fade show d-block animate-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog fade modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-3 border-0">
+      <!-- Modal Title -->
+      <div class="modal-header modal-finanglobal text-white">
+        <h5 class="modal-title">Nueva Tarjeta Bancaria</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+      </div>
+      <!-- Modal Content -->
+      <div class="modal-body">
+        <form [formGroup]="formAddTarjeta" class="row g-3">
+          <div class="col-md-12">
+            <label class="form-label">Cuenta Bancaria:</label>
+            <select formControlName="cuentaBancaria" class="form-select">
+              <option selected>Seleccione...</option>
+              @for (item of cuentasBancarias(); track item.id) {
+              <option value="{{ item.id }}">
+                {{ item.usuario.nombre }} {{ item.usuario.apellidos }} - {{ item.ncuenta }}
+              </option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Tipo Tarjeta:</label>
+            <select formControlName="tipoTarjeta" class="form-select">
+              <option selected>Seleccione...</option>
+              @for (item of tipoTarjetas(); track item.id) {
+              <option value="{{ item.id }}">{{ item.tipo }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Fecha de Caducidad: </label>
+            <input type="date" formControlName="fechaCaducidad" class="form-control" />
+          </div>
+        </form>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-outline-danger" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn btn-success" [disabled]="formAddTarjeta.invalid" (click)="onSubmit()">
+          Agregar Cuenta Bancaria
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+} @else {
+<div class="modal fade show d-block animate-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog fade modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-3 border-0">
+      <!-- Modal Title -->
+      <div class="modal-header modal-finanglobal text-white">
+        <h5 class="modal-title">Editar Tarjeta Bancaria</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+      </div>
+      <!-- Modal Content -->
+      <div class="modal-body">
+        <form [formGroup]="formAddTarjeta" class="row g-3">
+          <div class="col-md-12">
+            <label class="form-label">Cuenta Bancaria:</label>
+            <select formControlName="cuentaBancaria" class="form-select">
+              <option selected>Seleccione...</option>
+              @for (item of cuentasBancarias(); track item.id) {
+              <option value="{{ item.id }}">
+                {{ item.usuario.nombre }} {{ item.usuario.apellidos }} - {{ item.ncuenta }}
+              </option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Tipo Tarjeta:</label>
+            <select formControlName="tipoTarjeta" class="form-select">
+              <option selected>Seleccione...</option>
+              @for (item of tipoTarjetas(); track item.id) {
+              <option value="{{ item.id }}">{{ item.tipo }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Fecha de Caducidad: </label>
+            <input type="date" formControlName="fechaCaducidad" class="form-control" />
+          </div>
+        </form>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-outline-danger" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn btn-success" [disabled]="formAddTarjeta.invalid" (click)="onSubmit()">
+          Actualizar Cuenta Bancaria
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<div class="modal-backdrop fade show"></div>
+}
