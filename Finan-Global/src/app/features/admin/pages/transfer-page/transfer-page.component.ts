@@ -3,10 +3,13 @@ import { Tranferencia } from 'src/app/shared/interfaces/Transferencia-Interface'
 import { ReporteService } from 'src/app/shared/services/Reporte.service';
 import { TransferenciaService } from 'src/app/shared/services/Transferencia.service';
 import { ModalTransferenciaAdministrador } from '../../services/mmodalTransferencia.service';
+import { TranferenciaDTO } from 'src/app/shared/interfaces/DTO/TransferenciaDTO-Interface';
+import { AddTransferAdmin } from '../../components/modals/add-transfer-admin/add-transfer-admin';
 
 @Component({
   selector: 'app-transfer-page',
-  imports: [],
+  imports: [AddTransferAdmin],
+  providers: [ModalTransferenciaAdministrador],
   templateUrl: './transfer-page.component.html',
   styleUrl: './transfer-page.component.css',
 })
@@ -19,15 +22,15 @@ export default class TransferPageComponent implements OnInit {
   // Estado
   transferencia = this.transferenciaService.transferencias;
   modo = signal<'agregar' | 'editar'>('agregar');
-  transferenciaSeleccionada = signal<Partial<Tranferencia> | null>(null);
+  transferenciaSeleccionada = signal<Partial<TranferenciaDTO> | null>(null);
 
   ngOnInit(): void {
-    this.cargarTipoDocumentos();
+    this.cargarTransferenecias();
   }
 
   /* Cargar Datos */
   // Cargar Tipo Documentos
-  cargarTipoDocumentos(): void {
+  cargarTransferenecias(): void {
     this.transferenciaService.getAll().subscribe({
       next: () => {
         console.log('Tipo Documentos cargado');
@@ -36,22 +39,54 @@ export default class TransferPageComponent implements OnInit {
     });
   }
 
+  // Ordenar
+  private ordenarCuentas(): void {
+    const ordenadas = [...this.transferenciaService.transferencias()].sort((a, b) => a.id - b.id);
+    this.transferenciaService.transferencias.set(ordenadas);
+  }
+
   /* Funciones */
   abrirModalAgregar(): void {
     this.modo.set('agregar');
     this.transferenciaSeleccionada.set({
-      dni_ruc: '',
-      correo: '',
-      contrasena: '',
-      nombre: '',
-      apellidos: '',
-      direccion: '',
-      sexo: 'Seleccione...',
-      telefono: '',
-      rol_usuario: 0,
+      monto: 0,
+      nCuentaEmisora: '',
+      nCuentaReceptora: '',
+      idTipoTransferencia: 1,
     });
     this.modalService.open();
-    console.log('Modal Abierto');
+  }
+
+  abrirModalEditar(transferencia: Tranferencia) {
+    this.modo.set('editar');
+    this.transferenciaSeleccionada.set({
+      monto: transferencia.monto,
+      nCuentaEmisora: transferencia.cuentaEmisora.ncuenta,
+      nCuentaReceptora: transferencia.cuentaReceptora.ncuenta,
+      idTipoTransferencia: transferencia.tipoTransferencia.id,
+    });
+    this.modalService.open();
+  }
+
+  onGuardar(data: Partial<TranferenciaDTO>): void {
+    console.log('Datos recibidos del modal:', data);
+    // Convertimos a TranferenciaDTO porque el formulario ya asegura que no haya undefined
+    const dto: TranferenciaDTO = {
+      monto: data.monto!,
+      nCuentaEmisora: data.nCuentaEmisora!,
+      nCuentaReceptora: data.nCuentaReceptora!,
+      idTipoTransferencia: data.idTipoTransferencia!,
+    };
+
+    this.transferenciaService.realizar(dto).subscribe({
+      next: (nuevaTransferencia) => {
+        console.log('Transferencia realizada:', nuevaTransferencia);
+        this.modalService.close();
+      },
+      error: (err) => {
+        console.error('Error al realizar la transferencia:', err);
+      },
+    });
   }
 
   /* PDF */

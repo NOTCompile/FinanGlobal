@@ -28,7 +28,7 @@ export class AddBankAdmin implements OnInit {
   private usuarioServicio = inject(usuarioService);
 
   // Entradas
-  @Input() cuentaEscogida: Partial<Cuenta_Bancaria> | null = null;
+
   @Input() modo: 'agregar' | 'editar' = 'agregar';
   @Input() set cuentaBancaria(value: Partial<Cuenta_BancariaDTO> | null) {
     if (value) {

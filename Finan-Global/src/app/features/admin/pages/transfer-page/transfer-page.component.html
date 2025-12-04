@@ -12,7 +12,7 @@
         </button>
       </div>
 
-      <button class="btn btn-finanglobal" (click)="(null)">
+      <button class="btn btn-finanglobal" (click)="abrirModalAgregar()">
         <i class="fas fa-plus me-2"></i>Nueva Transferencia
       </button>
     </div>
@@ -43,17 +43,26 @@
               <p>Recibido: S/.{{ item.monto }}</p>
             </div>
           </td>
-          <td>
-            <button (click)="(null)" class="btn btn-sm btn-outline-warning me-1 ms-1">
+          <!-- <td>
+            <button
+              (click)="abrirModalEditar(item)"
+              class="btn btn-sm btn-outline-warning me-1 ms-1"
+            >
               <i class="fa-solid fa-pen"></i>
             </button>
             <button (click)="(item.id)" class="btn btn-sm btn-outline-danger ms-1">
               <i class="fa-solid fa-trash"></i>
             </button>
-          </td>
+          </td> -->
         </tr>
         }
       </tbody>
     </table>
   </div>
 </div>
+
+<app-add-transfer-admin
+  [modo]="modo()"
+  [transferencia]="transferenciaSeleccionada()"
+  (guardar)="onGuardar($event)"
+></app-add-transfer-admin>

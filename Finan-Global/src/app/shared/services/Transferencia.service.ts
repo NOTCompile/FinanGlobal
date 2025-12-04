@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { Tranferencia } from '../interfaces/Transferencia-Interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { TranferenciaDTO } from '../interfaces/DTO/TransferenciaDTO-Interface';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class TransferenciaService {
   }
 
   // Realizar transferencia
-  realizar(dto: Partial<Tranferencia>): Observable<Tranferencia> {
+  realizar(dto: TranferenciaDTO): Observable<Tranferencia> {
     return this.http.post<Tranferencia>(`${this.apiUrl}/realizar`, dto).pipe(
       tap((nueva) => {
         const actualizadas = [...this.transferencias(), nueva];

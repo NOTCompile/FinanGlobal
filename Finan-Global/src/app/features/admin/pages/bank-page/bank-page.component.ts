@@ -16,7 +16,6 @@ import { ReporteService } from 'src/app/shared/services/Reporte.service';
 })
 export default class BankPage implements OnInit {
   private cuentaBancariaServicio = inject(CuentaBancariaService);
-  private usuarioServicio = inject(usuarioService);
   private modalServicio = inject(ModalCuentaBancariaAdministrador);
   private reporteService = inject(ReporteService); // PDF
 
@@ -50,14 +49,6 @@ export default class BankPage implements OnInit {
   }
 
   /* Funciones */
-
-  // Cargar Nombre Persona de Cuenta Bancaria
-  obtenerNombreUsuario(id: number): string {
-    const usuarios = this.usuarioServicio.usuarios(); // signal ya cargado
-    const usuario = usuarios.find((u) => u.id_usuario === id);
-
-    return usuario ? `${usuario.nombre} ${usuario.apellidos}` : 'Sin cliente';
-  }
 
   // Ordenar
   private ordenarCuentas(): void {
