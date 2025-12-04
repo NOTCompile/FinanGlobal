@@ -20,21 +20,28 @@
     u.nombre_usuario,
     r.rol AS tipo_usuario,
     r.descripcion AS rol_descripcion,
+
+    -- Cantidad de cuentas
     COUNT(DISTINCT cb.id) AS total_cuentas,
+
+    -- Saldo total
     COALESCE(SUM(cb.saldo), 0) AS saldo_total,
+
+    -- Información adicional según el rol
     CASE
-        WHEN r.rol = 'Cliente' THEN 'Usuario activo del sistema'
         WHEN r.rol = 'Banco' THEN 'Entidad bancaria'
         WHEN r.rol = 'Administrador' THEN 'Gestión completa del sistema'
         WHEN r.rol = 'Agente' THEN 'Intermediario de empeños'
         WHEN r.rol = 'Soporte' THEN 'Asistencia técnica'
         ELSE 'Sin descripción'
     END AS perfil
+
 FROM t_usuario u
 JOIN rol_usuario r ON u.rol_usuario = r.id
 LEFT JOIN cuenta_bancaria cb ON cb.id_usuario = u.id_usuario
+WHERE r.rol != 'Cliente'
 GROUP BY u.id_usuario, u.nombre, u.apellidos, u.dni_ruc, u.sexo, u.correo, u.telefono, u.direccion, u.nombre_usuario, r.rol, r.descripcion
-ORDER BY r.rol, u.apellidos, u.nombre]]></query>
+ORDER BY r.rol, u.apellidos, u.nombre;]]></query>
     <field name="id_usuario" class="java.lang.Long"/>
     <field name="nombre_completo" class="java.lang.String"/>
     <field name="nombre" class="java.lang.String"/>
