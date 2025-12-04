@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -11,25 +12,23 @@ public class CuentaBancaria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "n_cuenta") // Mapea a la columna SQL "n_cuenta"
-    private String numero_cuenta;
+    @Column(name = "n_cuenta")
+    private String nCuenta;
 
-    @Column(name = "n_intercuenta") // Mapea a la columna SQL "n_intercuenta"
+    @Column(name = "n_intercuenta")
     private String n_intercuenta;
 
-    // Mapea a la columna SQL "nombre"
     private String nombre;
-
-    // ELIMINADAS: private String banco;
-    // ELIMINADAS: private String tipo_cuenta;
 
     private BigDecimal saldo;
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    @JsonIgnoreProperties({"contrasena", "nombre_usuario", "rol_usuario"})
     private Usuario usuario;
 
-    // Getters y Setters
+    // ===== Getters y Setters =====
+
     public Integer getId() {
         return id;
     }
@@ -38,16 +37,14 @@ public class CuentaBancaria {
         this.id = id;
     }
 
-    // Mapeo para n_cuenta
-    public String getNumero_cuenta() {
-        return numero_cuenta;
+    public String getNCuenta() {
+        return nCuenta;
     }
 
-    public void setNumero_cuenta(String numero_cuenta) {
-        this.numero_cuenta = numero_cuenta;
+    public void setNCuenta(String nCuenta) {
+        this.nCuenta = nCuenta;
     }
 
-    // Mapeo para n_intercuenta
     public String getN_intercuenta() {
         return n_intercuenta;
     }
@@ -56,7 +53,6 @@ public class CuentaBancaria {
         this.n_intercuenta = n_intercuenta;
     }
 
-    // Mapeo para nombre
     public String getNombre() {
         return nombre;
     }
@@ -64,8 +60,6 @@ public class CuentaBancaria {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
-    // El getter y setter para 'banco' y 'tipo_cuenta' DEBEN ser eliminados.
 
     public BigDecimal getSaldo() {
         return saldo;

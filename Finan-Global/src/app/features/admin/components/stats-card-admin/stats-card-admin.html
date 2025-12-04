@@ -1,10 +1,34 @@
-<div class="stat-card-finanglobal">
-  <div class="d-flex justify-content-between align-items-center mb-2">
-    <h6 class="text-muted mb-0">Total Clientes</h6>
-    <div class="icon-finanglobal-small icon-info">
-      <i class="fas fa-users"></i>
+<div class="mt-4">
+  <h3>Información</h3>
+  <div class="container row mt-4 mb-4 gap-3">
+    <div class="stat-card-finanglobal col-md-3 mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="text-muted mb-0">Total de Clientes</h6>
+        <div class="icon-finanglobal-small icon-info">
+          <i class="fas fa-users"></i>
+        </div>
+      </div>
+      <h2 class="mb-1 text-center">{{ totalUsuarios() }}</h2>
+    </div>
+
+    <div class="stat-card-finanglobal col-md-3 mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="text-muted mb-0">Total de Cuentas Bancarias</h6>
+        <div class="icon-finanglobal-small icon-info">
+          <i class="fas fa-solid fa-wallet"></i>
+        </div>
+      </div>
+      <h2 class="mb-1 text-center">{{ totalCuentasBancarias() }}</h2>
+    </div>
+
+    <div class="stat-card-finanglobal col-md-3 mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="text-muted mb-0">Total de Empeños Activos</h6>
+        <div class="icon-finanglobal-small icon-info">
+          <i class="fas fa-solid fa-shop"></i>
+        </div>
+      </div>
+      <h2 class="mb-1 text-center">{{ totalEmpenios() }}</h2>
     </div>
   </div>
-  <h2 class="mb-1">1,247</h2>
-  <small class="text-success"><i class="fas fa-arrow-up"></i> +12.5% este mes</small>
 </div>

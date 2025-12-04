@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -18,16 +19,17 @@ public class Solicitud {
     @Column(name = "fecha_fin")
     private LocalDate fechaFin;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_tipo")
     private TipoSolicitud tipoSolicitud;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_estado")
     private EstadoSolicitud estadoSolicitud;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_producto")
+    @JsonIgnoreProperties({"usuario", "tipoProducto"})
     private Producto producto;
 
     // Getters y Setters

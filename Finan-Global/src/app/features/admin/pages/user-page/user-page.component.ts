@@ -1,20 +1,22 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { AddUserAdmin } from '../../components/modals/add-user-admin/add-user-admin';
-import { Usuario } from 'src/app/shared/interfaces/UsuarioInterface';
-import { ModalStateService } from 'src/app/shared/services/function/modalState.service';
-import { usuarioService } from 'src/app/shared/services/usuarioService';
+import { Usuario } from 'src/app/shared/interfaces/Usuario-Interface';
+import { usuarioService } from 'src/app/shared/services/Usuario.service';
+import { ModalUsuarioAdministrador } from '../../services/modalUsuario.service';
+import { ReporteService } from 'src/app/shared/services/Reporte.service';
 
 @Component({
   selector: 'app-user-page',
   imports: [AddUserAdmin],
+  providers: [ModalUsuarioAdministrador],
   templateUrl: './user-page.component.html',
   styleUrl: './user-page.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class UserPageComponent {
   // Servicios
   private usuarioServicio = inject(usuarioService);
-  private modalState = inject(ModalStateService);
+  private modalService = inject(ModalUsuarioAdministrador);
+  private reporteService = inject(ReporteService); // PDF
 
   // Estado reactivo
   usuarios = signal<Usuario[]>([]);
@@ -36,40 +38,39 @@ export default class UserPageComponent {
         // Filtrar todos menos los del rol 4
         const filtrados = data.filter((usuario) => usuario.rol_usuario !== 4);
         this.usuarios.set(filtrados);
-        localStorage.setItem('usuarios', JSON.stringify(filtrados));
       },
       error: (err) => console.error('Error al obtener usuarios:', err),
     });
   }
 
-  /** Abrir modal para agregar nuevo cliente */
+  /* Abrir modal para agregar nuevo cliente */
   abrirModalAgregar(): void {
     this.modo.set('agregar');
     this.usuarioSeleccionado.set({
-    dni_ruc: '',
-    correo: '',
-    contrasena: '',
-    nombre: '',
-    apellidos: '',
-    direccion: '',
-    sexo: 'Seleccione...',
-    telefono: '',
-    rol_usuario: 0, 
-  });
-    this.modalState.open();
+      dni_ruc: '',
+      correo: '',
+      contrasena: '',
+      nombre: '',
+      apellidos: '',
+      direccion: '',
+      sexo: 'Seleccione...',
+      telefono: '',
+      rol_usuario: 0,
+    });
+    this.modalService.open();
+    console.log('Modal Abierto');
   }
-
-  demo(){}
 
   /** Abrir modal para editar cliente existente */
   abrirModalEditar(usuario: Usuario): void {
     this.modo.set('editar');
     this.usuarioSeleccionado.set(usuario);
-    this.modalState.open();
+    this.modalService.open();
   }
 
-  /** Guardar (crear o actualizar) usuario */
+  /* Guardar (crear o actualizar) usuario */
   onGuardar(usuarioData: Partial<Usuario>): void {
+    console.log('Datos usuario', usuarioData);
     const modoActual = this.modo();
 
     if (modoActual === 'agregar') {
@@ -83,7 +84,7 @@ export default class UserPageComponent {
         next: () => {
           alert('Usuario creado correctamente');
           this.cargarUsuarios(); // recarga sin reload
-          this.modalState.close();
+          this.modalService.close();
         },
         error: (err) => console.error('Error al crear cliente:', err),
       });
@@ -97,7 +98,7 @@ export default class UserPageComponent {
         next: () => {
           alert('Usuario actualizado correctamente');
           this.cargarUsuarios(); // recarga sin reload
-          this.modalState.close();
+          this.modalService.close();
         },
         error: (err) => console.error('Error al actualizar cliente:', err),
       });
@@ -117,6 +118,18 @@ export default class UserPageComponent {
         console.error('Error al eliminar usuario:', err);
         alert('No se pudo eliminar el usuario');
       },
+    });
+  }
+
+  /* PDF */
+  obtenerPDFGeneral(nombre: string) {
+    this.reporteService.descargarReporteGeneral(nombre).subscribe({
+      next: (data: Blob) => {
+        const file = new Blob([data], { type: 'application/pdf' });
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL, '_blank');
+      },
+      error: (err) => console.error('Error al mostrar PDF:', err),
     });
   }
 }

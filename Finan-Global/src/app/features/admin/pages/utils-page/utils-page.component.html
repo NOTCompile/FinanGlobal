@@ -1,0 +1,154 @@
+<div class="container">
+  <div class="card-finanglobal mt-4">
+    <div class="d-flex align-items-center justify-content-between mb-3 gap-4 p-2">
+      <h5><i class="fa-solid fa-shop me-2"></i>Tipo de Documentos</h5>
+
+      <div class="input-group w-50"></div>
+
+      <button class="btn btn-finanglobal" (click)="abrirTDocumentos()">
+        <i class="fas fa-plus me-2"></i>Nuevo Tipo
+      </button>
+    </div>
+    <table class="table text-center">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Descripción</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        @for (item of tipoDocumento(); track $index) {
+        <tr>
+          <th scope="row">{{ item.id }}</th>
+          <td>{{ item.tipo }}</td>
+          <td>{{ item.descripcion }}</td>
+          <td>
+            <button
+              (click)="editarTDocumentos(item)"
+              class="btn btn-sm btn-outline-warning me-1 ms-1"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button
+              (click)="onEliminarTDocumento(item.id)"
+              class="btn btn-sm btn-outline-danger ms-1"
+            >
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-finanglobal mt-4">
+    <div class="d-flex align-items-center justify-content-between mb-3 gap-4 p-2">
+      <h5><i class="fa-solid fa-shop me-2"></i>Tipo de Productos</h5>
+
+      <div class="input-group w-50"></div>
+
+      <button class="btn btn-finanglobal" (click)="abrirTProductos()">
+        <i class="fas fa-plus me-2"></i>Nuevo Tipo
+      </button>
+    </div>
+    <table class="table text-center">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Descripción</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        @for (item of tipoProducto(); track $index) {
+        <tr>
+          <th scope="row">{{ item.id }}</th>
+          <td>{{ item.nombre }}</td>
+          <td>{{ item.descripcion }}</td>
+          <td>
+            <button
+              (click)="editarTProductos(item)"
+              class="btn btn-sm btn-outline-warning me-1 ms-1"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button
+              (click)="onEliminarTProducto(item.id)"
+              class="btn btn-sm btn-outline-danger ms-1"
+            >
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-finanglobal mt-4">
+    <div class="d-flex align-items-center justify-content-between mb-3 gap-4 p-2">
+      <h5><i class="fa-solid fa-shop me-2"></i>Tipo de Transferencia</h5>
+
+      <div class="input-group w-50"></div>
+
+      <button class="btn btn-finanglobal" (click)="abrirTTransferencias()">
+        <i class="fas fa-plus me-2"></i>Nuevo Tipo
+      </button>
+    </div>
+    <table class="table text-center">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Descripción</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        @for (item of tipoTransferencia(); track $index) {
+        <tr>
+          <th scope="row">{{ item.id }}</th>
+          <td>{{ item.nombre }}</td>
+          <td>{{ item.descripcion }}</td>
+          <td>
+            <button
+              (click)="editarTTransferencias(item)"
+              class="btn btn-sm btn-outline-warning me-1 ms-1"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button
+              (click)="onEliminarTTransferencia(item.id)"
+              class="btn btn-sm btn-outline-danger ms-1"
+            >
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-add-tdocuments-admin
+  [modo]="modo()"
+  [tDocumento]="tipoDocumentoSeleccionado()"
+  (guardar)="onGuardarTDocumentos($event)"
+></app-add-tdocuments-admin>
+
+<app-add-tproducts-admin
+  [modo]="modo()"
+  [tProducto]="tipoProductoSeleccionado()"
+  (guardar)="onGuardarTProductos($event)"
+></app-add-tproducts-admin>
+
+<app-add-transferencia-admin
+  [modo]="modo()"
+  [tTransferencia]="tipoTransferenciaSeleccionado()"
+  (guardar)="onGuardarTTransferencia($event)"
+></app-add-transferencia-admin>

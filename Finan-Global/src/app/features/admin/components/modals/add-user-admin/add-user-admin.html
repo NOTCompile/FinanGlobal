@@ -1,10 +1,5 @@
-@if (modalState.state()) {
-<div
-  class="modal fade show d-block animate-modal"
-  tabindex="-1"
-  role="dialog"
-  style="animation: fadeIn 0.3s ease"
->
+@if (modalState.isOpen()) {
+<div class="modal fade show d-block animate-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog fade modal-xl modal-dialog-centered">
     <div class="modal-content shadow-lg rounded-3 border-0">
       <!-- Modal Title -->
@@ -58,13 +53,15 @@
             <label class="form-label">Teléfono:</label>
             <input type="number" formControlName="telefono" class="form-control" />
           </div>
+
           <div class="col-md-3">
             <label class="form-label">Rol:</label>
-            <select formControlName="sexo" class="form-select">
-              <option selected>Seleccione...</option>
-              <option value="1">Administrador</option>
-              <option value="2">Banco</option>
-              <option value="3">Empeño</option>
+            <select formControlName="rol_usuario" class="form-select">
+              <option [ngValue]="null" selected>Seleccione...</option>
+              <option [ngValue]="1">Administrador</option>
+              <option [ngValue]="2">Banco</option>
+              <option [ngValue]="3">Empeño</option>
+              <option [ngValue]="4">Cliente</option>
             </select>
           </div>
         </form>

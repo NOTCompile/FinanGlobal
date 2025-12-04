@@ -5,6 +5,7 @@ export const routes: Routes = [
   {
     path: 'index',
     loadComponent: () => import('./shared/pages/index-page/index-page.component'),
+    pathMatch: 'full',
   },
   {
     path: 'register',
@@ -44,6 +45,14 @@ export const routes: Routes = [
       {
         path: 'pawnshop',
         loadComponent: () => import('./features/admin/pages/pawnshop-page/pawnshop-page.component'),
+      },
+      {
+        path: 'utils',
+        loadComponent: () => import('./features/admin/pages/utils-page/utils-page.component'),
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./features/admin/pages/profile-page/profile-page'),
       },
       {
         path: '**',
@@ -154,6 +163,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    loadComponent: () => import('./shared/pages/not-found-page/not-found-page')
+    redirectTo: 'index',
+    /* loadComponent: () => import('./shared/pages/not-found-page/not-found-page'), */
   },
 ];

@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,18 +19,22 @@ public class Transferencia {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario_emisor")
+    @JsonIgnoreProperties({"contrasena", "nombre_usuario", "rol_usuario", "telefono", "direccion", "sexo"})
     private Usuario usuarioEmisor;
 
     @ManyToOne
     @JoinColumn(name = "id_cuenta_emisor")
+    @JsonIgnoreProperties({"usuario"})
     private CuentaBancaria cuentaEmisora;
 
     @ManyToOne
     @JoinColumn(name = "id_usuario_receptor")
+    @JsonIgnoreProperties({"contrasena", "nombre_usuario", "rol_usuario", "telefono", "direccion", "sexo"})
     private Usuario usuarioReceptor;
 
     @ManyToOne
     @JoinColumn(name = "id_cuenta_receptor")
+    @JsonIgnoreProperties({"usuario"})
     private CuentaBancaria cuentaReceptora;
 
     @ManyToOne

@@ -1,0 +1,269 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <!-- Profile Sidebar -->
+    <div class="col-lg-4">
+      <!-- Profile Card -->
+      <div class="card-finanglobal text-center mb-4">
+        <div class="position-relative d-inline-block mx-auto mb-3">
+          <div
+            class="user-avatar-finanglobal mx-auto"
+            style="width: 100px; height: 100px; font-size: 2.5rem"
+          >
+            {{ usuarioActual?.nombre?.charAt(0)?.toUpperCase()
+            }}{{ usuarioActual?.apellidos?.charAt(0)?.toUpperCase() }}
+          </div>
+        </div>
+        <h4 class="mb-1">{{ usuarioActual?.nombre }} {{ usuarioActual?.apellidos }}</h4>
+        <p class="text-muted mb-3">{{ usuarioActual?.correo }}</p>
+        <div class="row text-center">
+          <div class="col-6">
+            <h5 class="mb-0">3</h5>
+            <small class="text-muted">Cuentas</small>
+          </div>
+          <div class="col-6">
+            <h5 class="mb-0">2</h5>
+            <small class="text-muted">Tarjetas</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones Rápidas -->
+      <div class="card-finanglobal">
+        <h6 class="mb-3"><i class="fas fa-bolt me-2 text-warning"></i>Acciones Rápidas</h6>
+        <div class="d-grid gap-2">
+          <button class="btn btn-outline-secondary text-start">
+            <i class="fas fa-download me-2"></i>Descargar Estado de Cuenta
+          </button>
+          <button class="btn btn-outline-secondary text-start">
+            <i class="fas fa-file-pdf me-2"></i>Certificados Bancarios
+          </button>
+          <button class="btn btn-outline-secondary text-start">
+            <i class="fas fa-history me-2"></i>Historial de Transferencias
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detalles Perfil -->
+    <div class="col-lg-8">
+      <!-- Tabs -->
+      <div class="card-finanglobal">
+        <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="info-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#info"
+              type="button"
+            >
+              <i class="fas fa-user me-2"></i>Información Personal
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="security-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#security"
+              type="button"
+            >
+              <i class="fas fa-lock me-2"></i>Seguridad
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content p-4" id="profileTabsContent">
+          <!-- TAB - Información Personal -->
+          <div class="tab-pane fade show active" id="info" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5><i class="fas fa-user me-2"></i>Datos Personales</h5>
+              <button class="btn btn-finanglobal" id="btnEditInfo">
+                <i class="fas fa-edit me-2"></i>Editar
+              </button>
+            </div>
+
+            <form id="personalInfoForm">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label form-label-finanglobal">
+                    <i class="fas fa-id-card me-2"></i>DNI
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-finanglobal"
+                    value="{{ usuarioActual?.dni_ruc }}"
+                    disabled
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label form-label-finanglobal">
+                    <i class="fas fa-user me-2"></i>Nombre de Usuario
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-finanglobal"
+                    value="{{ usuarioActual?.nombre_usuario }}"
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label form-label-finanglobal">
+                    <i class="fas fa-user me-2"></i>Nombres
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-finanglobal"
+                    value="{{ usuarioActual?.nombre }}"
+                    disabled
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label form-label-finanglobal">
+                    <i class="fas fa-user me-2"></i>Apellidos
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-finanglobal"
+                    value="{{ usuarioActual?.apellidos }}"
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label form-label-finanglobal">
+                  <i class="fas fa-envelope me-2"></i>Correo Electrónico
+                </label>
+                <input
+                  type="email"
+                  class="form-control form-control-finanglobal"
+                  value="{{ usuarioActual?.correo }}"
+                  disabled
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label form-label-finanglobal">
+                  <i class="fas fa-phone me-2"></i>Número de Celular
+                </label>
+                <input
+                  type="tel"
+                  class="form-control form-control-finanglobal"
+                  value="{{ usuarioActual?.telefono }}"
+                  disabled
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label form-label-finanglobal">
+                  <i class="fas fa-map-marker-alt me-2"></i>Dirección
+                </label>
+                <input
+                  type="text"
+                  class="form-control form-control-finanglobal"
+                  value="{{ usuarioActual?.direccion }}"
+                  disabled
+                />
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label form-label-finanglobal">
+                    <i class="fas fa-city me-2"></i>Sexo
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-finanglobal"
+                    value="{{ usuarioActual?.sexo }}"
+                    disabled
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label form-label-finanglobal">
+                    <i class="fas fa-flag me-2"></i>Rol
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-finanglobal"
+                    value="{{ usuarioActual?.rol_usuario }}"
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div class="d-none" id="saveButtons">
+                <button type="submit" class="btn btn-finanglobal">
+                  <i class="fas fa-save me-2"></i>Guardar Cambios
+                </button>
+                <button type="button" class="btn btn-outline-secondary" id="btnCancelEdit">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- TAB - Seguridad -->
+          <div class="tab-pane fade" id="security" role="tabpanel">
+            <h5 class="mb-4"><i class="fas fa-lock me-2"></i>Seguridad y Contraseña</h5>
+
+            <!-- Cambio de contraseña -->
+            <div class="card-finanglobal-compact mb-4">
+              <h6 class="mb-3">Cambiar Contraseña</h6>
+              <form id="passwordForm">
+                <div class="mb-3">
+                  <label class="form-label form-label-finanglobal">Contraseña Actual</label>
+                  <input
+                    type="password"
+                    class="form-control form-control-finanglobal"
+                    placeholder="Ingresa tu contraseña actual"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label form-label-finanglobal">Nueva Contraseña</label>
+                  <input
+                    type="password"
+                    class="form-control form-control-finanglobal"
+                    placeholder="Ingresa tu nueva contraseña"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label form-label-finanglobal"
+                    >Confirmar Nueva Contraseña</label
+                  >
+                  <input
+                    type="password"
+                    class="form-control form-control-finanglobal"
+                    placeholder="Confirma tu nueva contraseña"
+                  />
+                </div>
+                <button type="submit" class="btn btn-finanglobal">
+                  <i class="fas fa-key me-2"></i>Actualizar Contraseña
+                </button>
+              </form>
+            </div>
+
+            <!-- Eliminar Cuenta -->
+            <div class="card-finanglobal mt-4">
+              <h5 class="text-danger mb-3">
+                <i class="fas fa-exclamation-triangle me-2"></i>Zona de Peligro
+              </h5>
+              <p class="text-muted">Estas acciones son permanentes y no se pueden deshacer.</p>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-danger">
+                  <i class="fas fa-pause me-2"></i>Suspender Cuenta
+                </button>
+                <button class="btn btn-danger">
+                  <i class="fas fa-trash me-2"></i>Eliminar Cuenta
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

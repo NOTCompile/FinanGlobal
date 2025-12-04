@@ -1,0 +1,228 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="reporte_cuentas_bancarias_general" language="java" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="PostgresBanco"/>
+    <property name="com.jaspersoft.studio.unit." value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+    <parameter name="NOMBRE_BANCO" class="java.lang.String">
+        <defaultValueExpression><![CDATA["FinanGlobal S.A.C"]]></defaultValueExpression>
+    </parameter>
+    <query language="sql"><![CDATA[SELECT
+    cb.id,
+    cb.nombre AS nombre_cuenta,
+    cb.n_cuenta AS numero_cuenta,
+    cb.n_intercuenta AS numero_interbancario,
+    cb.saldo,
+    CONCAT(u.nombre, ' ', u.apellidos) AS titular,
+    u.dni_ruc,
+    u.correo,
+    u.telefono,
+    u.direccion,
+    r.rol AS tipo_usuario,
+    CASE
+        WHEN cb.saldo >= 10000 THEN 'PREMIUM'
+        WHEN cb.saldo >= 5000 THEN 'STANDARD'
+        WHEN cb.saldo >= 1000 THEN 'BASICO'
+        ELSE 'MINIMO'
+    END AS categoria_cuenta
+FROM cuenta_bancaria cb
+JOIN t_usuario u ON cb.id_usuario = u.id_usuario
+JOIN rol_usuario r ON u.rol_usuario = r.id
+ORDER BY cb.saldo DESC]]></query>
+    <field name="id" class="java.lang.Long"/>
+    <field name="nombre_cuenta" class="java.lang.String"/>
+    <field name="numero_cuenta" class="java.lang.String"/>
+    <field name="numero_interbancario" class="java.lang.String"/>
+    <field name="saldo" class="java.math.BigDecimal"/>
+    <field name="titular" class="java.lang.String"/>
+    <field name="dni_ruc" class="java.lang.String"/>
+    <field name="correo" class="java.lang.String"/>
+    <field name="telefono" class="java.lang.String"/>
+    <field name="direccion" class="java.lang.String"/>
+    <field name="tipo_usuario" class="java.lang.String"/>
+    <field name="categoria_cuenta" class="java.lang.String"/>
+    <variable name="total_cuentas" calculation="Count" class="java.lang.Integer">
+        <expression><![CDATA[$F{id}]]></expression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="suma_saldos" calculation="Sum" class="java.math.BigDecimal">
+        <expression><![CDATA[$F{saldo}]]></expression>
+        <initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
+    </variable>
+    <variable name="promedio_saldo" class="java.math.BigDecimal">
+        <expression><![CDATA[$V{total_cuentas} > 0 ? $V{suma_saldos}.divide(new BigDecimal($V{total_cuentas}), 2, java.math.RoundingMode.HALF_UP) : new BigDecimal(0)]]></expression>
+    </variable>
+    <title height="100" splitType="Stretch">
+        <element kind="rectangle" uuid="2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e" x="0" y="0" width="802" height="100" backcolor="#1A3A5C">
+            <pen lineWidth="0.0"/>
+        </element>
+        <element kind="rectangle" uuid="3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f" x="0" y="0" width="802" height="5" backcolor="#10B981">
+            <pen lineWidth="0.0"/>
+        </element>
+        <element kind="rectangle" uuid="4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a" x="20" y="20" width="60" height="60" backcolor="#10B981">
+            <pen lineWidth="2.0" lineColor="#FFFFFF"/>
+        </element>
+        <element kind="staticText" uuid="5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b" x="25" y="35" width="50" height="30" forecolor="#FFFFFF" fontSize="20.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[💳]]></text>
+        </element>
+        <element kind="textField" uuid="6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c" x="90" y="20" width="700" height="25" forecolor="#10B981" fontSize="16.0" bold="true" vTextAlign="Middle">
+            <expression><![CDATA[$P{NOMBRE_BANCO}]]></expression>
+        </element>
+        <element kind="staticText" uuid="7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d" x="90" y="45" width="700" height="30" forecolor="#FFFFFF" fontSize="20.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+            <text><![CDATA[REPORTE GENERAL DE CUENTAS BANCARIAS]]></text>
+        </element>
+        <element kind="staticText" uuid="8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e" x="90" y="75" width="700" height="20" forecolor="#E0E0E0" fontSize="11.0" italic="true" hTextAlign="Left" vTextAlign="Middle">
+            <text><![CDATA[Listado completo de todas las cuentas bancarias del sistema]]></text>
+        </element>
+    </title>
+    <pageHeader height="70" splitType="Stretch">
+        <element kind="rectangle" uuid="9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f" x="0" y="0" width="802" height="70" backcolor="#F8F9FA">
+            <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+        </element>
+        <element kind="staticText" uuid="0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a" x="10" y="10" width="100" height="15" forecolor="#666666" fontSize="8.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Fecha de emisión:]]></text>
+        </element>
+        <element kind="textField" uuid="1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b" x="10" y="25" width="200" height="18" forecolor="#1A3A5C" fontSize="10.0" pattern="dd/MM/yyyy HH:mm:ss" bold="true" vTextAlign="Middle">
+            <expression><![CDATA[new java.util.Date()]]></expression>
+        </element>
+        <element kind="staticText" uuid="2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c" x="10" y="48" width="150" height="15" forecolor="#666666" fontSize="8.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Reporte generado por el sistema]]></text>
+        </element>
+        <element kind="textField" uuid="3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d" x="650" y="15" width="100" height="20" forecolor="#1A3A5C" fontSize="11.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+        <element kind="textField" uuid="4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e" x="750" y="15" width="50" height="20" forecolor="#1A3A5C" fontSize="11.0" evaluationTime="Report" bold="true" vTextAlign="Middle">
+            <expression><![CDATA[" / " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+        <element kind="line" uuid="5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f" x="0" y="68" width="802" height="1" forecolor="#1A3A5C">
+            <pen lineWidth="2.0"/>
+        </element>
+    </pageHeader>
+    <columnHeader height="40" splitType="Stretch">
+        <element kind="rectangle" uuid="6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a" x="0" y="0" width="802" height="40" backcolor="#1A3A5C">
+            <pen lineWidth="0.0"/>
+        </element>
+        <element kind="staticText" uuid="7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b" x="10" y="10" width="35" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[ID]]></text>
+        </element>
+        <element kind="staticText" uuid="8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c" x="55" y="10" width="110" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Cuenta / Titular]]></text>
+        </element>
+        <element kind="staticText" uuid="9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d" x="175" y="10" width="95" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[N° Cuenta]]></text>
+        </element>
+        <element kind="staticText" uuid="0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e" x="280" y="10" width="100" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[N° Interbancario]]></text>
+        </element>
+        <element kind="staticText" uuid="1c2d3e4f-5a6b-7c8d-9e0f-1a2b3c4d5e6f" x="390" y="10" width="85" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[Saldo]]></text>
+        </element>
+        <element kind="staticText" uuid="2d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a" x="485" y="10" width="110" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[Contacto]]></text>
+        </element>
+        <element kind="staticText" uuid="3e4f5a6b-7c8d-9e0f-1a2b-3c4d5e6f7a8b" x="605" y="10" width="90" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Categoría]]></text>
+        </element>
+        <element kind="staticText" uuid="4f5a6b7c-8d9e-0f1a-2b3c-4d5e6f7a8b9c" x="705" y="10" width="85" height="20" forecolor="#FFFFFF" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Tipo Usuario]]></text>
+        </element>
+    </columnHeader>
+    <detail>
+        <band height="65" splitType="Stretch">
+            <element kind="rectangle" uuid="5a6b7c8d-9e0f-1a2b-3c4d-5e6f7a8b9c0d" x="0" y="0" width="802" height="65" backcolor="#FAFAFA">
+                <printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
+                <pen lineWidth="0.0"/>
+            </element>
+            <element kind="textField" uuid="6b7c8d9e-0f1a-2b3c-4d5e-6f7a8b9c0d1e" x="10" y="10" width="35" height="15" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{id}]]></expression>
+            </element>
+            <element kind="textField" uuid="7c8d9e0f-1a2b-3c4d-5e6f-7a8b9c0d1e2f" x="55" y="8" width="110" height="15" fontSize="9.0" bold="true" vTextAlign="Middle">
+                <expression><![CDATA[$F{nombre_cuenta}]]></expression>
+            </element>
+            <element kind="textField" uuid="8d9e0f1a-2b3c-4d5e-6f7a-8b9c0d1e2f3a" x="55" y="23" width="110" height="12" forecolor="#666666" fontSize="7.0" vTextAlign="Middle">
+                <expression><![CDATA[$F{titular}]]></expression>
+            </element>
+            <element kind="textField" uuid="9e0f1a2b-3c4d-5e6f-7a8b-9c0d1e2f3a4b" x="55" y="35" width="110" height="10" forecolor="#999999" fontSize="6.5" vTextAlign="Middle">
+                <expression><![CDATA["DNI: " + $F{dni_ruc}]]></expression>
+            </element>
+            <element kind="textField" uuid="0f1a2b3c-4d5e-6f7a-8b9c-0d1e2f3a4b5c" x="175" y="15" width="95" height="18" fontSize="8.0" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{numero_cuenta}]]></expression>
+            </element>
+            <element kind="textField" uuid="1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d" x="280" y="15" width="100" height="18" forecolor="#666666" fontSize="7.5" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{numero_interbancario}]]></expression>
+            </element>
+            <element kind="textField" uuid="2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e" x="390" y="15" width="85" height="20" forecolor="#10B981" fontSize="10.0" pattern="S/ #,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{saldo}]]></expression>
+            </element>
+            <element kind="textField" uuid="3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f" x="485" y="8" width="110" height="12" fontSize="7.0" vTextAlign="Middle">
+                <expression><![CDATA["📞 " + $F{telefono}]]></expression>
+            </element>
+            <element kind="textField" uuid="4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a" x="485" y="22" width="110" height="12" fontSize="6.5" vTextAlign="Middle">
+                <expression><![CDATA["✉ " + $F{correo}]]></expression>
+            </element>
+            <element kind="textField" uuid="5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b" x="485" y="36" width="110" height="12" forecolor="#666666" fontSize="6.5" vTextAlign="Middle">
+                <expression><![CDATA["📍 " + $F{direccion}]]></expression>
+            </element>
+            <element kind="textField" uuid="6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c" x="605" y="15" width="90" height="20" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{categoria_cuenta}]]></expression>
+            </element>
+            <element kind="textField" uuid="7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d" x="705" y="15" width="85" height="20" fontSize="7.5" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{tipo_usuario}]]></expression>
+            </element>
+            <element kind="line" uuid="8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e" x="10" y="63" width="782" height="1" forecolor="#E0E0E0"/>
+        </band>
+    </detail>
+    <columnFooter splitType="Stretch"/>
+    <pageFooter height="40" splitType="Stretch">
+        <element kind="line" uuid="9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f" x="0" y="5" width="802" height="1" forecolor="#1A3A5C">
+            <pen lineWidth="1.5"/>
+        </element>
+        <element kind="staticText" uuid="0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a" x="10" y="12" width="400" height="15" forecolor="#666666" fontSize="8.0" vTextAlign="Middle">
+            <text><![CDATA[Sistema Bancario - Reporte generado automáticamente]]></text>
+        </element>
+        <element kind="textField" uuid="1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b" x="10" y="25" width="400" height="12" forecolor="#999999" fontSize="7.0" pattern="'Generado el' dd/MM/yyyy 'a las' HH:mm:ss" italic="true" vTextAlign="Middle">
+            <expression><![CDATA[new java.util.Date()]]></expression>
+        </element>
+        <element kind="textField" uuid="2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c" x="680" y="12" width="120" height="20" forecolor="#1A3A5C" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+        <element kind="staticText" uuid="3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d" x="420" y="25" width="380" height="12" forecolor="#CC0000" fontSize="7.0" bold="true" italic="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[DOCUMENTO CONFIDENCIAL - USO INTERNO]]></text>
+        </element>
+    </pageFooter>
+    <summary height="150" splitType="Stretch">
+        <element kind="line" uuid="4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e" x="0" y="10" width="802" height="1" forecolor="#1A3A5C">
+            <pen lineWidth="2.0"/>
+        </element>
+        <element kind="rectangle" uuid="5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f" x="0" y="20" width="802" height="120" backcolor="#E8F4F8">
+            <pen lineWidth="1.5" lineColor="#1A3A5C"/>
+        </element>
+        <element kind="staticText" uuid="6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a" x="20" y="30" width="350" height="25" forecolor="#1A3A5C" fontSize="14.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[📊 RESUMEN GENERAL DE CUENTAS]]></text>
+        </element>
+        <element kind="line" uuid="7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b" x="20" y="58" width="350" height="2" forecolor="#10B981">
+            <pen lineWidth="2.0"/>
+        </element>
+        <element kind="staticText" uuid="8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c" x="30" y="70" width="180" height="20" forecolor="#1A3A5C" fontSize="11.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[💳 Total de Cuentas:]]></text>
+        </element>
+        <element kind="textField" uuid="9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d" x="210" y="70" width="100" height="20" forecolor="#1A3A5C" fontSize="12.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA[$V{total_cuentas}]]></expression>
+        </element>
+        <element kind="staticText" uuid="0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e" x="30" y="95" width="180" height="20" forecolor="#1A3A5C" fontSize="11.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[💰 Suma Total de Saldos:]]></text>
+        </element>
+        <element kind="textField" uuid="1c2d3e4f-5a6b-7c8d-9e0f-1a2b3c4d5e6f" x="210" y="95" width="150" height="20" forecolor="#10B981" fontSize="13.0" pattern="S/ #,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA[$V{suma_saldos}]]></expression>
+        </element>
+        <element kind="staticText" uuid="2d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a" x="420" y="70" width="180" height="20" forecolor="#1A3A5C" fontSize="11.0" bold="true" vTextAlign="Middle">
+            <text><![CDATA[📈 Promedio de Saldo:]]></text>
+        </element>
+        <element kind="textField" uuid="3e4f5a6b-7c8d-9e0f-1a2b-3c4d5e6f7a8b" x="600" y="70" width="180" height="20" forecolor="#3B82F6" fontSize="12.0" pattern="S/ #,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA[$V{promedio_saldo}]]></expression>
+        </element>
+        <element kind="staticText" uuid="4f5a6b7c-8d9e-0f1a-2b3c-4d5e6f7a8b9c" x="420" y="95" width="370" height="15" forecolor="#666666" fontSize="8.0" italic="true" hTextAlign="Right" vTextAlign="Middle">
+            <text><![CDATA[Categorías: PREMIUM (≥S/10,000) | STANDARD (≥S/5,000) | BÁSICO (≥S/1,000) | MÍNIMO]]></text>
+        </element>
+    </summary>
+</jasperReport>

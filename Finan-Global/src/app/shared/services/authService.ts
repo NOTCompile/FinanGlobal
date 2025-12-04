@@ -1,8 +1,8 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Usuario } from '../interfaces/UsuarioInterface';
+import { Usuario } from '../interfaces/Usuario-Interface';
 import { HttpClient } from '@angular/common/http';
 import { switchMap, tap } from 'rxjs';
-import { usuarioService } from './usuarioService';
+import { usuarioService } from './Usuario.service';
 
 @Injectable({
   providedIn: 'root',

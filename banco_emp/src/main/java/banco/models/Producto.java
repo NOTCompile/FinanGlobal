@@ -1,5 +1,6 @@
 package banco.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
@@ -18,6 +19,11 @@ public class Producto {
     @ManyToOne
     @JoinColumn(name = "id_tipo")
     private TipoProducto tipoProducto;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    @JsonIgnoreProperties({"contrasena", "nombre_usuario", "rol_usuario", "telefono", "direccion", "sexo"})
+    private Usuario usuario;
 
     // Getters y Setters
 
@@ -51,5 +57,12 @@ public class Producto {
 
     public void setTipoProducto(TipoProducto tipoProducto) {
         this.tipoProducto = tipoProducto;
+    }
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

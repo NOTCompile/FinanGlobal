@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { Usuario } from '../interfaces/UsuarioInterface';
+import { Usuario } from '../interfaces/Usuario-Interface';
 
 @Injectable({
   providedIn: 'root',
@@ -14,46 +14,45 @@ export class usuarioService {
     this.inicializarData();
   }
 
-  // CRUD
-  /* Obtener todos los Usuarios */
+  /* CRUD */
+
+  // Obtener todos los Usuarios
   findAll(): Observable<Usuario[]> {
     return this.http
       .get<Usuario[]>(this.apiUrl)
       .pipe(tap((data) => this.guardarEnLocalStorage(data)));
   }
 
-  /*  Obtener usuario por ID - GET */
+  //  Obtener usuario por ID - GET
   getById(id: number): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/${id}`);
   }
 
-  /* Crear nuevo usuario - POST */
+  // Crear nuevo usuario - POST
   create(usuario: Usuario): Observable<Usuario> {
     return this.http.post<Usuario>(this.apiUrl, usuario).pipe(tap(() => this.cargarUsuarios()));
   }
 
-  /* Actualizar usuario existente - PUT */
+  // Actualizar usuario existente - PUT
   update(usuario: Partial<Usuario>): Observable<Usuario> {
     return this.http
       .put<Usuario>(`${this.apiUrl}/${usuario.id_usuario}`, usuario)
       .pipe(tap(() => this.cargarUsuarios()));
   }
 
-  /* Eliminar usuario - DELETE */
+  // Eliminar usuario - DELETE
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(tap(() => this.eliminarLocal(id)));
   }
 
-  /* Buscar usuario por correo - GET */
+  // Buscar usuario por correo - GET
   findByCorreo(correo: string): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/email/${correo}`);
   }
 
-  /* Filtrar usuarios por rol */
+  // Filtrar usuarios por rol
   findByRol(rol: number): Observable<Usuario[]> {
-    return this.http
-      .get<Usuario[]>(`${this.apiUrl}/tipo/${rol}`)
-      .pipe(tap((data) => this.guardarEnLocalStorage(data)));
+    return this.http.get<Usuario[]>(`${this.apiUrl}/tipo/${rol}`);
   }
 
   // PERSISTENCIA

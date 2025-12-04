@@ -1,7 +1,7 @@
 import { Component, effect, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Usuario } from 'src/app/shared/interfaces/UsuarioInterface';
-import { ModalStateService } from 'src/app/shared/services/function/modalState.service';
+import { Usuario } from 'src/app/shared/interfaces/Usuario-Interface';
+import { ModalUsuarioAdministrador } from '../../../services/modalUsuario.service';
 
 @Component({
   selector: 'app-add-user-admin',
@@ -36,7 +36,7 @@ export class AddUserAdmin {
 
   // Servicios e inyección de dependencias
   private fb = inject(FormBuilder);
-  modalState = inject(ModalStateService);
+  modalState = inject(ModalUsuarioAdministrador);
 
   // Formulario reactivo
   formAddUsuario: FormGroup = this.fb.group({
@@ -48,6 +48,7 @@ export class AddUserAdmin {
     direccion: [''],
     sexo: ['Seleccione...', Validators.required],
     telefono: ['', [Validators.required, Validators.minLength(9)]],
+    rol_usuario: 0,
   });
 
   // Cerrar modal
